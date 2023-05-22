@@ -1,0 +1,27 @@
+.header-container {
+    background-color: #343a40;
+
+    height: 8vh;
+
+    display: flex;
+
+    justify-content: space-between;
+
+}
+
+.header-item {
+    margin-top: auto;
+    margin-bottom: auto;
+
+    display: flex;
+
+}
+
+.link {
+    text-decoration: none;
+    color: #e6e7ea;
+
+    font-size: 2.5vh;
+
+    margin: 0 1vw 0 1vw;
+}
