@@ -6,10 +6,9 @@ import {DropDownOptions, KeyValuePair} from "./DropDownOptions";
 type DropdownProps = {
     options:DropDownOptions;
     type:string;
-    startValue:string;
 }
 
-function Dropdown({options, type, startValue=""}:DropdownProps) {
+function Dropdown({options, type}:DropdownProps) {
 
     const initialValue = "Select " + type;
 

@@ -38,8 +38,8 @@ function Header({admin}: HeaderProps) {
                 </div>
 
                 <div className={"header-item"}>
-                    <Dropdown options={options} type={"Game"} startValue={""}/>
-                    <Dropdown options={options} type={"Event"} startValue={""}/>
+                    <Dropdown options={options} type={"Game"} />
+                    <Dropdown options={options} type={"Event"} />
                 </div>
         </div>
     )
