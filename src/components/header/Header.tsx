@@ -5,10 +5,9 @@ import Dropdown from "../dropdown/Dropdown";
 import {DropDownOptions, KeyValuePair} from "../dropdown/DropDownOptions";
 
 type HeaderProps = {
-    admin: boolean
 }
 
-function Header({admin}: HeaderProps) {
+function Header({}: HeaderProps) {
 
     let options = new DropDownOptions(
         [new KeyValuePair("2023miliv", "Livonia"),
@@ -29,12 +28,10 @@ function Header({admin}: HeaderProps) {
         <div className={"header-container"}>
                 <div className={"header-item"}>
                     <Link className={"link"} to={"/"}>Overview</Link>
-                    <Link className={"link"} to={"/"}>Event</Link>
+                    <Link className={"link"} to={"/"}>Matches</Link>
                     <Link className={"link"} to={"/"}>Team</Link>
-                    {
-                        //Only display the admin page if the user is an admin
-                        {admin} ? <Link className={"link"} to={"/"}>Admin</Link> : <div></div>
-                    }
+                    <Link className={"link"} to={"/scheduler"}>Scheduling</Link>
+                    <Link className={"link"} to={"/"}>Config</Link>
                 </div>
 
                 <div className={"header-item"}>

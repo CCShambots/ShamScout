@@ -1,0 +1,19 @@
+.remove-icon-container {
+    border-radius: 12px;
+    border: 2px solid black;
+
+    background-color: white;
+    fill: red;
+
+    transition: 0.5s;
+}
+
+.remove-icon {
+    margin-top: 0.25vh;
+    margin-bottom: 0.25vh;
+}
+
+.remove-icon-container:hover {
+    fill: white;
+    background-color: red;
+}

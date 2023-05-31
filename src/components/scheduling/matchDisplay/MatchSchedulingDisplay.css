@@ -1,0 +1,56 @@
+
+
+.container {
+    border-radius: 10px;
+    border: 1px solid black;
+
+    margin:1vw;
+
+    width: 20vw;
+}
+
+.header {
+    text-align: center;
+
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+
+.table {
+    width: 20vw;
+}
+
+table, th, td {
+    margin:0;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.table-entry {
+    height: 5vh;
+}
+
+.left-and-right-borders {
+    border-right: 3px solid black;
+    border-left: 3px solid black;
+}
+
+.left-only-border {
+    border-left: 3px solid black;
+
+}
+
+.right-only-border {
+    border-right: 3px solid black;
+
+}
+
+.top-border {
+    border-top: 3px solid black;
+
+}
+
+.bottom-border {
+    border-bottom: 3px solid black;
+
+}

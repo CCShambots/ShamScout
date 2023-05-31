@@ -1,0 +1,17 @@
+.top {
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+}
+
+.bottom {
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+}
+
+.entry {
+    border-right: 3px solid black;
+    border-left: 3px solid black;
+    border-bottom: 2px solid lightgrey;
+
+    width: 5vh;
+}
