@@ -1,6 +1,3 @@
-import {stat} from "fs";
-import {resolveObjectURL} from "buffer";
-
 class Scouter {
     constructor(
         public readonly name:string,
@@ -21,12 +18,11 @@ class Schedule {
     }
 
     public checkShiftCombinations() {
-        console.log(this.shifts)
         this.shifts.forEach(e => {
             let solution = this.shifts.filter(check =>
                 check.scouter === e.scouter &&
                 check.station === e.station &&
-                e.matches[e.matches.length-1] - check.matches[0] === 1 &&
+                e.matches[e.matches.length-1] - check.matches[0] === -1 &&
                 check !== e)[0]
 
 
@@ -41,17 +37,24 @@ class Schedule {
 
         let thisStationShifts = this.shifts.filter(e => e.station === station && e.scouter.name === scouter)
 
+        let added = false
+
+        //Check if this match should be added to a shift instead of
         thisStationShifts.forEach(e => {
 
+
             //End the function early and append this match to an existing shift if it should be joined
-            if(e.isAbove(match) || e.isBelow(match)) {
+            if(!added && (e.isAbove(match) || e.isBelow(match))) {
                 e.add(match)
                 this.checkShiftCombinations()
-                return Object.create(this)
+                added = true
             }
         })
 
-        this.shifts.push(new Shift([match], station, this.scouters.filter(e => e.name === scouter)[0]))
+
+        if(!added) {
+            this.shifts.push(new Shift([match], station, this.scouters.filter(e => e.name === scouter)[0]))
+        }
 
         return Object.create(this)
     }
@@ -133,8 +136,6 @@ class Shift {
 
     public add(match:number) {
 
-        console.log(`Adding ${match} to ${this.matches}`)
-
         this.matches.push(match)
         this.resort()
     }
@@ -146,24 +147,20 @@ class Shift {
 
     public isBelow(match:number) {
         //The match number is one below the last match in this shift
-        return match - this.matches[this.matches.length-1] === -1
+        return match - this.matches[0] === -1
     }
 
     public combine(other:Shift) {
         if(other.scouter === this.scouter && other.station === this.station) {
 
-            console.log(other.matches + " combining into " + this.matches)
-
-            this.matches.concat(other.matches)
+            this.matches = this.matches.concat(other.matches)
 
             this.resort()
         }
     }
 
     public resort() {
-        console.log("sorting " + this.matches)
         this.matches = this.matches.sort((a, b) => a-b)
-        console.log("sorting " + this.matches)
     }
 }
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import "./GridEntry.css"
 import {DropDownOptions, Schedule} from "./ScheduleData";
 import {Dropdown, Popup} from "semantic-ui-react";
@@ -20,6 +20,8 @@ function GridEntry({match, station, schedule, setSchedule} :entryOptions) {
     let scoutOptions = schedule.scouters.map(e =>
          new DropDownOptions(e.name)
     )
+
+    let popupRef = useRef<HTMLElement>(null)
 
     let active = false;
     let top = false;
@@ -43,7 +45,7 @@ function GridEntry({match, station, schedule, setSchedule} :entryOptions) {
             }>
             <Popup
                 on={"click"}
-                pinned
+                hoverable
                 trigger={
                     <div className={"content"}>
                         {
