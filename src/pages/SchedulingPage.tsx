@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../components/header/Header";
 import MatchSchedulingDisplay from "../components/scheduling/matchDisplay/MatchSchedulingDisplay";
 import {Schedule} from "../components/scheduling/matchDisplay/ScheduleData";
 import ScouterDisplay from "../components/scheduling/scouterDisplay/ScouterDisplay";
+
+import "./SchedulingPage.css"
 
 function SchedulingPage() {
 
@@ -12,31 +14,42 @@ function SchedulingPage() {
             "Quals 2",
             "Quals 3",
             "Quals 4",
-            "Quals 5"
+            "Quals 5",
+            "Quals 6",
+            "Quals 7",
+            "Quals 8",
+            "Quals 9",
+            "Quals 10",
+            "Quals 11",
+            "Quals 12",
+            "Quals 13",
+            "Quals 14",
+            "Quals 15",
+            "Quals 16",
+            "Quals 17",
+            "Quals 18",
+            "Quals 19",
+            "Quals 20",
+            "Quals 21",
+            "Quals 22",
         ],
-        [],
-        []
-    ));
-
-
-
-    schedule.addScouters(
-        [
-            "Barta",
+        ["Barta",
             "Voth",
             "Wolfe",
             "Harrison",
             "Brodzinski",
-            "Dobson"
-        ]
-    )
+            "Dobson"],
+        []
+    ));
+
 
     return(
         <div>
             <Header/>
-
-            <MatchSchedulingDisplay schedule={schedule}/>
-            <ScouterDisplay scouters={schedule.scouters}/>
+            <div className={"scheduling-page-container"}>
+                <MatchSchedulingDisplay schedule={schedule} setSchedule={setSchedule}/>
+                <ScouterDisplay schedule={schedule} setSchedule={setSchedule}/>
+            </div>
 
         </div>
     )

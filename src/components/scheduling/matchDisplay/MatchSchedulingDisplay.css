@@ -1,15 +1,21 @@
 
 
-.container {
+.scheduling-container {
     border-radius: 10px;
-    border: 1px solid black;
+    border: 3px solid black;
 
-    margin:1vw;
+    margin: 1vh;
 
-    width: 20vw;
+    width: 48vw;
+
+    max-height: 89vh;
+
+    align-self: flex-start;
+
+    overflow: auto;
 }
 
-.header {
+.scheduling-header {
     text-align: center;
 
     margin-top: 1vh;
@@ -17,7 +23,11 @@
 }
 
 .table {
-    width: 20vw;
+    width: 46vw;
+    /*margin: 0 1vw;*/
+}
+
+.table-header {
 }
 
 table, th, td {
@@ -27,7 +37,7 @@ table, th, td {
 }
 
 .table-entry {
-    height: 5vh;
+    height: 10vh;
 }
 
 .left-and-right-borders {

@@ -8,10 +8,36 @@
     border-bottom-right-radius: 24px;
 }
 
-.entry {
+.grid-entry {
     border-right: 3px solid black;
     border-left: 3px solid black;
     border-bottom: 2px solid lightgrey;
 
-    width: 5vh;
+    width: 10vh;
+
+    /*display: flex;*/
+
+    transition: 0.5s;
+}
+
+
+.add {
+    border-radius: 10px;
+    border: 5px dashed lightgray;
+
+    margin: 0.5vh;
+
+    height: 8vh;
+
+    transition: 0.25s;
+}
+
+.add:hover {
+    background-color: lightgray;
+}
+
+.content {
+    display: flex;
+
+    flex-direction: column;
 }

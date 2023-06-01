@@ -1,42 +1,100 @@
-import React, {useState} from "react";
-import {Scouter} from "../matchDisplay/ScheduleData";
+import React, {createRef, useEffect, useRef, useState} from "react";
+import {Schedule, Scouter} from "../matchDisplay/ScheduleData";
 import "./ScouterDisplay.css"
 import RemoveIcon from "./RemoveIcon";
+import {Button, Grid, Icon, Input, Popup, Progress} from "semantic-ui-react";
 
 type displayOptions = {
-    scouters:Scouter[]
+    schedule:Schedule,
+    setSchedule:(e:Schedule) => void
 }
 
-function ScouterDisplay({scouters}: displayOptions) {
+function ScouterDisplay({schedule, setSchedule}: displayOptions) {
 
+    let [names, setNames] = useState(schedule.scouters.map(e => e.name))
+
+    let [adding, setAdding] = useState("")
+
+    let inputRef = useRef<Input>(null)
+    let handleClick = () =>  {
+        inputRef.current?.focus()
+    }
 
     return(
-        <div className={"container"}>
-            <h1 className={"header"}>Scouters</h1>
-                {
-                    scouters.map(e => {
-                            return  <ScouterEntry e={e}/>
-                        }
-                    )
-                }
+        <div className={"scouter-container"}>
+            <div className={"scouter-header"}>
+                <h1>Scouters</h1>
+                <Popup
+                    trigger={
+                        <Button onClick={handleClick}>
+                            <Icon name={"add"}/>
+                        </Button>
+                    }
+                   on={"click"}
+                >
+                    <Popup.Header>Create new Scouter</Popup.Header>
+                    <Popup.Content>
+                        <Input
+                            ref={inputRef}
+                            placeholder={"Enter new Scout Name..."}
+                            value={adding}
+                            onChange={(e) => setAdding(e.target.value)}
+                            error={names.indexOf(adding) !== -1}
+                        />
+                        <Button onClick={() => {
+                            if(names.map(e => e.toLowerCase()).indexOf(adding.toLowerCase())  === -1) {
+                                let newSchedule = schedule.addScouter(adding)
+                                setSchedule(newSchedule)
+
+                                setNames(newSchedule.scouters.map(e => e.name))
+
+                                setAdding("")
+                            }
+                            //Only add to the scouter list if the current entry is not in the list of names
+                        }}>Create</Button>
+                    </Popup.Content>
+                </Popup>
+
+            </div>
+                <Grid columns={3}>
+                    {
+                        names.map(n => {
+                                let scouter = schedule.scouters.filter(e => e.name === n)[0];
+                                return  <ScouterEntry e={scouter} key={n} removeSelf={() => {
+                                    setSchedule(schedule.removeScouter(n))
+                                    setNames(names.filter(e => e !== n))
+                                }}
+                                />
+                            }
+                        )
+                    }
+                </Grid>
         </div>
     )
 }
 
 type EntryOptions = {
-    e:Scouter
+    e:Scouter,
+    removeSelf:() => void
 }
-function ScouterEntry({e}:EntryOptions) {
+function ScouterEntry({e, removeSelf}:EntryOptions) {
     let [highlighted, setHighlighted] = useState(false)
 
-    return <div
+    return <Grid.Row
         className={"scouter-entry-container"}
         style={{backgroundColor: e.color}} key={e.name}>
-        <div className={"scouter-entry"}>
+
+        <Grid.Column>
             <p className={"entry-text " + (highlighted ? "highlighted" : "")}>{e.name}</p>
-            <RemoveIcon setActive={setHighlighted}/>
-        </div>
-    </div>
+        </Grid.Column>
+        <Grid.Column>
+            <Progress value={'2'} total={'5'} progress={'ratio'} indicating />
+        </Grid.Column>
+        <Grid.Column>
+            <RemoveIcon setActive={setHighlighted} triggerClick={removeSelf}/>
+        </Grid.Column>
+
+    </Grid.Row>
 }
 
 export default ScouterDisplay;

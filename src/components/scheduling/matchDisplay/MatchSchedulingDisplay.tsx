@@ -4,15 +4,16 @@ import GridEntry from "./GridEntry";
 import {Schedule} from "./ScheduleData";
 
 type MatchSchedulingDisplayOptions = {
-    schedule:Schedule
+    schedule:Schedule,
+    setSchedule:(e:Schedule) => void
 }
 
-function MatchSchedulingDisplay({schedule}: MatchSchedulingDisplayOptions) {
+function MatchSchedulingDisplay({schedule, setSchedule}: MatchSchedulingDisplayOptions) {
 
 
     return(
-        <div className={"container"}>
-            <h1 className={"header"}>Matches</h1>
+        <div className={"scheduling-container"}>
+            <h1 className={"scheduling-header"}>Matches</h1>
             <table className={"table"}>
                 <tbody>
                     <tr className={"table-header bottom-border"}>
@@ -29,14 +30,14 @@ function MatchSchedulingDisplay({schedule}: MatchSchedulingDisplayOptions) {
 
                             let index = schedule.matches.indexOf(e);
 
-                           return  <tr className={"table-entry"}>
+                           return  <tr className={"table-entry"} key={e}>
                                 <td>{e}</td>
-                                <GridEntry match={index} station={0} shifts={schedule.shifts}/>
-                                <GridEntry match={index} station={1} shifts={schedule.shifts}/>
-                                <GridEntry match={index} station={2} shifts={schedule.shifts}/>
-                                <GridEntry match={index} station={3} shifts={schedule.shifts}/>
-                                <GridEntry match={index} station={4} shifts={schedule.shifts}/>
-                                <GridEntry match={index} station={5} shifts={schedule.shifts}/>
+                                <GridEntry match={index} station={0} schedule={schedule} setSchedule={setSchedule}/>
+                                <GridEntry match={index} station={1} schedule={schedule} setSchedule={setSchedule}/>
+                                <GridEntry match={index} station={2} schedule={schedule} setSchedule={setSchedule}/>
+                                <GridEntry match={index} station={3} schedule={schedule} setSchedule={setSchedule}/>
+                                <GridEntry match={index} station={4} schedule={schedule} setSchedule={setSchedule}/>
+                                <GridEntry match={index} station={5} schedule={schedule} setSchedule={setSchedule}/>
                             </tr>
                             }
                         )
