@@ -1,4 +1,4 @@
-import React, {createRef, useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {Schedule, Scouter} from "../matchDisplay/ScheduleData";
 import "./ScouterDisplay.css"
 import RemoveIcon from "./RemoveIcon";
@@ -62,7 +62,7 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
                                 let scouter = schedule.scouters.filter(e => e.name === n)[0];
                                 return  <ScouterEntry e={scouter} key={n}
                                                       numScheduled={schedule.getNumMatchesForScout(scouter)}
-                                                      targetNumScheduled={5}
+                                                      targetNumScheduled={Math.round(schedule.totalMatchesToScout() / names.length)}
                                                       removeSelf={() => {
                                     setSchedule(schedule.removeScouter(n))
                                     setNames(names.filter(e => e !== n))

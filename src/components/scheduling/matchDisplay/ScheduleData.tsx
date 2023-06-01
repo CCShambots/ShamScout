@@ -17,6 +17,10 @@ class Schedule {
         this.addScouters(scouterNames)
     }
 
+    public totalMatchesToScout():number {
+        return this.matches.length * 6
+    }
+
     public getNumMatchesForScout(scouter:Scouter):number {
         return this.shifts.filter(e => e.scouter === scouter).map(e => e.matches.length)
             .reduce((accumulator, current) => accumulator + current, 0)
@@ -36,6 +40,34 @@ class Schedule {
                 this.shifts = this.shifts.filter(removeCheck => removeCheck !== solution)
             }
         })
+    }
+
+    //Swap the scouter for a shift
+    public swapShiftScouter(scouterName:any, station:number, match:number):Schedule {
+
+        //Change the scouter for a shift
+       this.shifts.filter(e => e.includes(match, station).active)[0].scouter
+            = this.getScouterFromName(scouterName)
+
+        return Object.create(this)
+    }
+
+
+    public modifyShift(scouterName:any, station:number, match:number):Schedule {
+
+        let shiftToChange = this.shifts.filter(e => e.includes(match, station).active)[0]
+
+        if(shiftToChange) {
+
+            this.shifts = this.shifts.filter(e => e !== shiftToChange)
+
+            this.shifts = this.shifts.concat(shiftToChange.splitShift(this.getScouterFromName(scouterName), match))
+
+            this.checkShiftCombinations()
+
+        }else this.createShift(scouterName, station, match)
+
+        return Object.create(this)
     }
 
     public createShift(scouterName:any, station:number, match:number):Schedule {
@@ -59,10 +91,14 @@ class Schedule {
 
         if(!added) {
             if(this.shifts.filter(e => e.scouter.name === scouterName && e.station === station && e.matches.indexOf(match) !== -1).length === 0)
-            this.shifts.push(new Shift([match], station, this.scouters.filter(e => e.name === scouterName)[0]))
+            this.shifts.push(new Shift([match], station, this.getScouterFromName(scouterName)))
         }
 
         return Object.create(this)
+    }
+
+    public getScouterFromName(name:any) {
+        return this.scouters.filter(e => e.name === name)[0]
     }
 
     public removeScouter(scout:string):Schedule {
@@ -123,9 +159,25 @@ class Shift {
     constructor(
         public matches:number[], //Indices of matches
         public readonly station:number, //Index of the alliance station (red 1 = 0, up to blue 3 = 5)
-        public readonly scouter:Scouter
+        public scouter:Scouter
 
     ) {
+    }
+
+    //Splice a new shift into an existing shift
+    public splitShift(newScout:Scouter, match:number):Shift[] {
+
+        let earlierMatches = this.matches.filter(e => e < match)
+        let laterMatches = this.matches.filter(e => e > match)
+
+        let newShifts: Shift[] = []
+
+        if (earlierMatches.length > 0) newShifts.push(new Shift(earlierMatches, this.station, this.scouter))
+        if (laterMatches.length > 0) newShifts.push(new Shift(laterMatches, this.station, this.scouter))
+
+        newShifts.push(new Shift([match], this.station, newScout))
+
+        return newShifts
     }
 
 

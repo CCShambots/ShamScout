@@ -1,8 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./GridEntry.css"
 import {DropDownOptions, RowCol, Schedule} from "./ScheduleData";
 import {Button, Checkbox, Dropdown, Popup} from "semantic-ui-react";
-import {stat} from "fs";
 
 type entryOptions = {
     match:number, //index of match number
@@ -49,6 +48,7 @@ function GridEntry({match, station, schedule, setSchedule,
     
     let [mounted, setMounted] = useState(false)
 
+    let [switchNameSelection, setSwitchNameSelection] = useState("")
     let [wholeShift, setWholeShift] = useState(true)
     
     useEffect(() => {
@@ -69,7 +69,7 @@ function GridEntry({match, station, schedule, setSchedule,
         match >= topLeftCorner.row &&
         match <= bottomRightCorner.row) {
 
-            setSchedule(schedule.createShift(multiSelectName, station, match))
+            setSchedule(schedule.modifyShift(multiSelectName, station, match))
 
             setIsMultiSelectOrigin(false)
             setHovering(false)
@@ -126,7 +126,8 @@ function GridEntry({match, station, schedule, setSchedule,
                 if(!multiSelect) setHovering(false)
             }}
 
-            onMouseDown={() => {
+            onContextMenu={(e) => {
+                e.preventDefault()
                 if(!multiSelect && active) {
                     setIsMultiSelectOrigin(true)
                     setMultiSelect(true)
@@ -136,7 +137,6 @@ function GridEntry({match, station, schedule, setSchedule,
                     setTopLeftCorner(new RowCol(match, station))
                     setBottomRightCorner(new RowCol(match, station))
 
-                    console.log("enabling multi-select")
                 }
             }}
             >
@@ -157,6 +157,7 @@ function GridEntry({match, station, schedule, setSchedule,
                     selection
                     options={scoutOptions}
                     onChange={(e, data) => {
+
                         setSchedule(schedule.createShift(data.value, station, match))}
 
                     }
@@ -176,18 +177,21 @@ function GridEntry({match, station, schedule, setSchedule,
                         fluid
                         selection
                         options={scoutOptions}
-                        onChange={(e, data) => {
-                            setSchedule(schedule.createShift(data.value, station, match))}
-
-                        }
+                        onChange={(e, data) => setSwitchNameSelection(data.value as string)}
                     />
-                    <Checkbox defaultChecked
+                    <Checkbox
                         onChange={(e, data) => setWholeShift(data.checked?data.checked : false)}
                         checked={wholeShift}
                     />
                     <p>Whole shift?</p>
 
-                    <Button></Button>
+                    <Button onClick={(e, data) => {
+
+                        if(wholeShift) setSchedule(schedule.swapShiftScouter(switchNameSelection, station, match))
+                        else setSchedule(schedule.modifyShift(switchNameSelection, station, match))
+
+                    }
+                    }>Apply Change</Button>
 
                 </Popup>
             : <div/>}
