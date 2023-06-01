@@ -15,9 +15,12 @@
 
     width: 10vh;
 
-    /*display: flex;*/
-
     transition: 0.5s;
+    user-select: none;
+
+    font-size: 2vh;
+
+    word-wrap: anywhere;
 }
 
 
@@ -32,7 +35,7 @@
     transition: 0.25s;
 }
 
-.add:hover {
+.add-hovering {
     background-color: lightgray;
 }
 
@@ -40,4 +43,9 @@
     display: flex;
 
     flex-direction: column;
+}
+
+.multi-select-origin {
+    border: 10px solid blue;
+    border-radius: 25px;
 }

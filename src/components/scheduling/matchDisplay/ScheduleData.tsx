@@ -17,6 +17,11 @@ class Schedule {
         this.addScouters(scouterNames)
     }
 
+    public getNumMatchesForScout(scouter:Scouter):number {
+        return this.shifts.filter(e => e.scouter === scouter).map(e => e.matches.length)
+            .reduce((accumulator, current) => accumulator + current, 0)
+    }
+
     public checkShiftCombinations() {
         this.shifts.forEach(e => {
             let solution = this.shifts.filter(check =>
@@ -33,9 +38,9 @@ class Schedule {
         })
     }
 
-    public createShift(scouter:any, station:number, match:number):Schedule {
+    public createShift(scouterName:any, station:number, match:number):Schedule {
 
-        let thisStationShifts = this.shifts.filter(e => e.station === station && e.scouter.name === scouter)
+        let thisStationShifts = this.shifts.filter(e => e.station === station && e.scouter.name === scouterName)
 
         let added = false
 
@@ -53,7 +58,8 @@ class Schedule {
 
 
         if(!added) {
-            this.shifts.push(new Shift([match], station, this.scouters.filter(e => e.name === scouter)[0]))
+            if(this.shifts.filter(e => e.scouter.name === scouterName && e.station === station && e.matches.indexOf(match) !== -1).length === 0)
+            this.shifts.push(new Shift([match], station, this.scouters.filter(e => e.name === scouterName)[0]))
         }
 
         return Object.create(this)
@@ -102,7 +108,10 @@ class Schedule {
         let colors:string[] = [
             "red",
             "lightgreen",
-            "lightblue"
+            "lightblue",
+            "yellow",
+            "cyan",
+            "teal"
         ]
 
         let nextIndex = colors.indexOf(previousColor)+1
@@ -179,9 +188,32 @@ class DropDownOptions {
     }
 }
 
+class RowCol {
+    constructor(
+        public row:number,
+        public col:number
+
+    ) {
+    }
+
+    public updateRow(row:number):RowCol {
+        this.row = row;
+
+        return Object.create(this)
+    }
+
+    public updateCol(col:number):RowCol {
+        this.col = col;
+
+        return Object.create(this)
+    }
+
+}
+
 export {
     Scouter,
     Schedule,
     Shift,
-    DropDownOptions
+    DropDownOptions,
+    RowCol
 }

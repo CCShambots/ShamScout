@@ -60,7 +60,10 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
                     {
                         names.map(n => {
                                 let scouter = schedule.scouters.filter(e => e.name === n)[0];
-                                return  <ScouterEntry e={scouter} key={n} removeSelf={() => {
+                                return  <ScouterEntry e={scouter} key={n}
+                                                      numScheduled={schedule.getNumMatchesForScout(scouter)}
+                                                      targetNumScheduled={5}
+                                                      removeSelf={() => {
                                     setSchedule(schedule.removeScouter(n))
                                     setNames(names.filter(e => e !== n))
                                 }}
@@ -75,9 +78,11 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
 
 type EntryOptions = {
     e:Scouter,
-    removeSelf:() => void
+    removeSelf:() => void,
+    numScheduled:number,
+    targetNumScheduled:number
 }
-function ScouterEntry({e, removeSelf}:EntryOptions) {
+function ScouterEntry({e, removeSelf, numScheduled, targetNumScheduled}:EntryOptions) {
     let [highlighted, setHighlighted] = useState(false)
 
     return <Grid.Row
@@ -88,7 +93,9 @@ function ScouterEntry({e, removeSelf}:EntryOptions) {
             <p className={"entry-text " + (highlighted ? "highlighted" : "")}>{e.name}</p>
         </Grid.Column>
         <Grid.Column>
-            <Progress value={'2'} total={'5'} progress={'ratio'} indicating />
+            <Progress value={numScheduled} total={targetNumScheduled} progress={'ratio'} indicating style={{marginBottom: "1vh"}}/>
+            {numScheduled > targetNumScheduled ? <p className={"over-scheduled-warning"}>Overscheduled!</p> : <div/>}
+
         </Grid.Column>
         <Grid.Column>
             <RemoveIcon setActive={setHighlighted} triggerClick={removeSelf}/>
