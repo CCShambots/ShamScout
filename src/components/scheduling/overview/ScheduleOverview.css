@@ -4,7 +4,7 @@
 
     margin: 1vh;
 
-    width: 24vw;
+    width: 30vw;
 
     max-height: 89vh;
 
@@ -26,7 +26,10 @@
 
 .qr-code-window {
     width: 35vw;
-    height: 50vh;
+    max-height: 65vh;
+
+    padding: 2vh;
+    /*height: 65vh;*/
 
     color:black;
 
@@ -75,4 +78,8 @@
 .qr-code-stats {
     display: flex;
     justify-content: center;
+}
+
+.scout-qr-code {
+    height: 20vh;
 }
