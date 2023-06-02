@@ -1,8 +1,9 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Schedule, Scouter} from "../matchDisplay/ScheduleData";
 import "./ScouterDisplay.css"
 import RemoveIcon from "./RemoveIcon";
-import {Button, Grid, Icon, Input, Popup, Progress} from "semantic-ui-react";
+import {Button, Dimmer, Grid, Icon, Input, Popup, Progress} from "semantic-ui-react";
+import {HexColorPicker} from "react-colorful";
 
 type displayOptions = {
     schedule:Schedule,
@@ -14,46 +15,75 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
     let [names, setNames] = useState(schedule.scouters.map(e => e.name))
 
     let [adding, setAdding] = useState("")
+    let [newColor, setNewColor] = useState("#aabbcc")
+
+    let [dimmerActive, setDimmerActive] = useState(false)
 
     let inputRef = useRef<Input>(null)
     let handleClick = () =>  {
         inputRef.current?.focus()
     }
 
+    useEffect(() => {setNewColor(schedule.getNextColor())}, [adding])
+
+    let handleCreationClick = () => {
+        if(names.map(e => e.toLowerCase()).indexOf(adding.toLowerCase())  === -1) {
+            let newSchedule = schedule.createScouter(adding, newColor)
+            setSchedule(newSchedule)
+
+            setNames(newSchedule.scouters.map(e => e.name))
+
+            setAdding("")
+        }
+        //Only add to the scouter list if the current entry is not in the list of names
+
+    }
+
     return(
         <div className={"scouter-container"}>
             <div className={"scouter-header"}>
                 <h1>Scouters ({schedule.scouters.length})</h1>
-                <Popup
-                    trigger={
-                        <Button onClick={handleClick}>
-                            <Icon name={"add"}/>
-                        </Button>
-                    }
-                   on={"click"}
-                >
-                    <Popup.Header>Create new Scouter</Popup.Header>
-                    <Popup.Content>
+                <Button animated={"vertical"} onClick={() => {
+                    setDimmerActive(true)
+
+                    setNewColor(schedule.getNextColor())
+                }}>
+                    <Button.Content visible><Icon name={"add"}/></Button.Content>
+                    <Button.Content hidden>Create</Button.Content>
+                </Button>
+                <Dimmer page active={dimmerActive} onClickOutside={() => setDimmerActive(false)}>
+                    <div className={"create-scout-dimmer"}>
+                        <h1>Create new Scouter</h1>
+
                         <Input
                             ref={inputRef}
                             placeholder={"Enter new Scout Name..."}
                             value={adding}
                             onChange={(e) => setAdding(e.target.value)}
-                            error={names.indexOf(adding) !== -1}
+                            error={names.indexOf(adding) !== -1 && adding !== ""}
                         />
-                        <Button onClick={() => {
-                            if(names.map(e => e.toLowerCase()).indexOf(adding.toLowerCase())  === -1) {
-                                let newSchedule = schedule.addScouter(adding)
-                                setSchedule(newSchedule)
 
-                                setNames(newSchedule.scouters.map(e => e.name))
+                        <hr/>
 
-                                setAdding("")
-                            }
-                            //Only add to the scouter list if the current entry is not in the list of names
-                        }}>Create</Button>
-                    </Popup.Content>
-                </Popup>
+                        <HexColorPicker
+                            color={newColor}
+                            onChange={setNewColor}
+                        />
+
+                        <hr/>
+
+                        <Button.Group>
+                            <Button primary onClick={() => {
+                                handleCreationClick()
+                                setDimmerActive(false)
+                            }}>Create and Close</Button>
+                            <Button.Or></Button.Or>
+                            <Button color={"green"} onClick={handleCreationClick}>Create</Button>
+                            <Button.Or></Button.Or>
+                            <Button color={"red"} onClick={() => setDimmerActive(false)}>Cancel</Button>
+                        </Button.Group>
+                    </div>
+                </Dimmer>
 
             </div>
                 <Grid columns={3}>

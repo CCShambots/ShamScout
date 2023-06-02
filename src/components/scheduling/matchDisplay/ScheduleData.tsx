@@ -5,6 +5,22 @@ class Scouter {
     }
 }
 
+const colors:string[] = [
+    "#00ff00",
+    "#c0c0c0",
+    "#8a2be2",
+    "#5f9ea0",
+    "#90ee90",
+    "#6495ed",
+    "#008b8b",
+    "#006400",
+    "#8fbc8f",
+    "#00ced1",
+    "#00bfff",
+    "#adff2f",
+    "#add8e6"
+]
+
 class Schedule {
 
     public scouters:Scouter[] = []
@@ -234,13 +250,19 @@ class Schedule {
         return Object.create(this)
     }
 
+    public createScouter(name:string, color:string):Schedule {
+        this.scouters.push(new Scouter(name, color))
+
+        return Object.create(this)
+    }
+
     public addScouter(name:string):Schedule {
 
         if(this.scouters.length > 0) {
             this.scouters.push(
                 new Scouter(
                     name,
-                    this.getColor(this.scouters[this.scouters.length-1].color)
+                    this.getNextColor()
                 )
             )
         } else {
@@ -257,19 +279,11 @@ class Schedule {
 
     }
 
-    private getColor(previousColor:string):string {
-        let colors:string[] = [
-            "red",
-            "lightgreen",
-            "lightblue",
-            "yellow",
-            "cyan",
-            "teal"
-        ]
+    public getNextColor():string {
 
-        let nextIndex = colors.indexOf(previousColor)+1
-        return colors[nextIndex === colors.length ? 0 : nextIndex]
+        return colors[(this.scouters.length)%colors.length]
     }
+
 }
 
 class Shift {
@@ -390,5 +404,6 @@ export {
     Schedule,
     Shift,
     DropDownOptions,
-    RowCol
+    RowCol,
+    colors
 }

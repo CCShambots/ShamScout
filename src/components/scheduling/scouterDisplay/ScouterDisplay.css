@@ -72,6 +72,18 @@
     text-align: center;
 }
 
-.center-progress-bar {
+.create-scout-dimmer {
+    background-color: white;
+    border-radius: 5vh;
+
+    padding: 3vh 3vw;
+
+    color: black;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
 }
 
