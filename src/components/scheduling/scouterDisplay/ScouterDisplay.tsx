@@ -1,8 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Schedule, Scouter} from "../matchDisplay/ScheduleData";
 import "./ScouterDisplay.css"
-import RemoveIcon from "./RemoveIcon";
-import {Button, Dimmer, Grid, Icon, Input, Popup, Progress, Ref, Sticky} from "semantic-ui-react";
+import {Button, Dimmer, Grid, Icon, Input, Progress} from "semantic-ui-react";
 import {HexColorPicker} from "react-colorful";
 
 type displayOptions = {
@@ -19,7 +18,7 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
 
     let [dimmerActive, setDimmerActive] = useState(false)
 
-    useEffect(() => {setNewColor(schedule.getNextColor())}, [adding])
+    useEffect(() => {setNewColor(schedule.getNextColor())}, [adding, schedule])
 
     let handleCreationClick = () => {
         if(names.map(e => e.toLowerCase()).indexOf(adding.toLowerCase())  === -1) {
