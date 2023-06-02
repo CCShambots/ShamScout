@@ -29,7 +29,6 @@ function MatchSchedulingDisplay({schedule, setSchedule}: MatchSchedulingDisplayO
             <h1 className={"scheduling-header"}>Matches</h1>
             <table className={"table"}
                 onMouseUp={() => {
-                    console.log("Mouse up")
                     setMultiSelect(false)
                 }}>
                 <tbody>
