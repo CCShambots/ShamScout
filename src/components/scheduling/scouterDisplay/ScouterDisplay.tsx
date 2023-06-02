@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Schedule, Scouter} from "../matchDisplay/ScheduleData";
 import "./ScouterDisplay.css"
 import RemoveIcon from "./RemoveIcon";
-import {Button, Dimmer, Grid, Icon, Input, Popup, Progress} from "semantic-ui-react";
+import {Button, Dimmer, Grid, Icon, Input, Popup, Progress, Ref, Sticky} from "semantic-ui-react";
 import {HexColorPicker} from "react-colorful";
 
 type displayOptions = {
@@ -18,11 +18,6 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
     let [newColor, setNewColor] = useState("#aabbcc")
 
     let [dimmerActive, setDimmerActive] = useState(false)
-
-    let inputRef = useRef<Input>(null)
-    let handleClick = () =>  {
-        inputRef.current?.focus()
-    }
 
     useEffect(() => {setNewColor(schedule.getNextColor())}, [adding])
 
@@ -40,7 +35,10 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
     }
 
     return(
-        <div className={"scouter-container"}>
+        <div className={"scouter-container"} onKeyDown={(e) => {
+            if(e.key === "Enter" && dimmerActive) handleCreationClick()
+        }}
+        >
             <div className={"scouter-header"}>
                 <h1>Scouters ({schedule.scouters.length})</h1>
                 <Button animated={"vertical"} onClick={() => {
@@ -56,7 +54,6 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
                         <h1>Create new Scouter</h1>
 
                         <Input
-                            ref={inputRef}
                             placeholder={"Enter new Scout Name..."}
                             value={adding}
                             onChange={(e) => setAdding(e.target.value)}
@@ -86,22 +83,23 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
                 </Dimmer>
 
             </div>
-                <Grid columns={3}>
-                    {
-                        names.map(n => {
-                                let scouter = schedule.scouters.filter(e => e.name === n)[0];
-                                return  <ScouterEntry e={scouter} key={n}
-                                                      numScheduled={schedule.getNumMatchesForScout(scouter)}
-                                                      targetNumScheduled={Math.round(schedule.totalMatchesToScout() / names.length)}
-                                                      removeSelf={() => {
-                                    setSchedule(schedule.removeScouter(n))
-                                    setNames(names.filter(e => e !== n))
-                                }}
-                                />
-                            }
-                        )
-                    }
-                </Grid>
+            <Grid columns={3}>
+                {
+                    names.map(n => {
+                            let scouter = schedule.scouters.filter(e => e.name === n)[0];
+                            return  <ScouterEntry e={scouter} key={n}
+                                                  numScheduled={schedule.getNumMatchesForScout(scouter)}
+                                                  targetNumScheduled={Math.round(schedule.totalMatchesToScout() / names.length)}
+                                                  removeSelf={() => {
+                                setSchedule(schedule.removeScouter(n))
+                                setNames(names.filter(e => e !== n))
+                            }}
+                            />
+                        }
+                    )
+                }
+            </Grid>
+
         </div>
     )
 }
