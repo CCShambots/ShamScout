@@ -43,7 +43,7 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
                     indicating
                 />
 
-                <Statistic.Group>
+                <Statistic.Group className={"schedule-overview-stats"}>
                     <Statistic>
                         <Statistic.Value>{schedule.getTargetMatchesPerScout()}</Statistic.Value>
                         <Statistic.Label>Matches Per Scout</Statistic.Label>
