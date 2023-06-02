@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
 import "./GridEntry.css"
-import {DropDownOptions, RowCol, Schedule} from "./ScheduleData";
+import {DropDownOptions, Schedule} from "./ScheduleData";
 import {Button, Checkbox, Dropdown, Popup} from "semantic-ui-react";
+import {stat} from "fs";
+import {Rectangle, RowCol} from "./MultiSelect";
 
 type entryOptions = {
     match:number, //index of match number
@@ -9,15 +11,9 @@ type entryOptions = {
     
     schedule:Schedule,
     setSchedule:(e:Schedule) => void,
-    
-    topLeftCorner:RowCol,
-    setTopLeftCorner:(e:RowCol) => void,
-    
-    bottomRightCorner:RowCol,
-    setBottomRightCorner:(e:RowCol) => void,
 
-    multiSelectOrigin:RowCol,
-    setMultiSelectOrigin: (e:RowCol) => void
+    multiSelectRect:Rectangle,
+    setMultiSelectRect:(e:Rectangle) => void,
 
     multiSelect:boolean,
     setMultiSelect:(e:boolean) => void,
@@ -28,10 +24,9 @@ type entryOptions = {
 }
 
 function GridEntry({match, station, schedule, setSchedule,
-                       topLeftCorner, setTopLeftCorner,
-                       bottomRightCorner, setBottomRightCorner,
-                       multiSelect, setMultiSelect, multiSelectName, setMultiSelectName,
-                        multiSelectOrigin, setMultiSelectOrigin} :entryOptions) {
+                       multiSelectRect, setMultiSelectRect,
+                       multiSelect, setMultiSelect, multiSelectName, setMultiSelectName
+                    } :entryOptions) {
 
     let activeShift = schedule.shifts
         .map((e) => e.includes(match, station)) //get information about whether something is active for a given shift
@@ -52,6 +47,10 @@ function GridEntry({match, station, schedule, setSchedule,
     let [wholeShift, setWholeShift] = useState(true)
     
     useEffect(() => {
+
+        let topLeftCorner = multiSelectRect.getTopLeft()
+        let bottomRightCorner = multiSelectRect.getBottomRight()
+
         if( multiSelect &&
             station >= topLeftCorner.col &&
             station <= bottomRightCorner.col &&
@@ -59,9 +58,13 @@ function GridEntry({match, station, schedule, setSchedule,
             match <= bottomRightCorner.row
         ) setHovering(true)
         else if(multiSelect) setHovering(false)
-    }, [topLeftCorner, bottomRightCorner, station, multiSelect, match])
+    }, [multiSelectRect, station, multiSelect, match])
 
     useEffect(() => {
+
+
+        let topLeftCorner = multiSelectRect.getTopLeft()
+        let bottomRightCorner = multiSelectRect.getBottomRight()
 
         if(!multiSelect && mounted &&
         station >= topLeftCorner.col &&
@@ -73,13 +76,15 @@ function GridEntry({match, station, schedule, setSchedule,
 
             setIsMultiSelectOrigin(false)
             setHovering(false)
-        } else if(!multiSelect) {
+        }
+        if(!multiSelect) {
+            setIsMultiSelectOrigin(false)
 
             setHovering(false)
-            setIsMultiSelectOrigin(false)
         }
+
     }, [multiSelect])
-    
+
     useEffect(() => {
         setMounted(true)
     }, [])
@@ -112,18 +117,8 @@ function GridEntry({match, station, schedule, setSchedule,
             
             onMouseEnter={() => {
                     setHovering(true)
-                    
-                    if(station < multiSelectOrigin.col) setTopLeftCorner(topLeftCorner.updateCol(station))
-                    if(station > multiSelectOrigin.col) setBottomRightCorner(bottomRightCorner.updateCol(station))
 
-                    if(match < multiSelectOrigin.row) setTopLeftCorner(topLeftCorner.updateRow(match))
-                    if(match > multiSelectOrigin.row) setBottomRightCorner(bottomRightCorner.updateRow(match))
-
-                    if(station === multiSelectOrigin.col &&
-                        match === multiSelectOrigin.row) {
-                        setTopLeftCorner(new RowCol(match, station))
-                        setBottomRightCorner(new RowCol(match, station))
-                    }
+                    setMultiSelectRect(multiSelectRect.update(new RowCol(match, station)))
                 }
             }
             onMouseLeave={() => {
@@ -132,14 +127,13 @@ function GridEntry({match, station, schedule, setSchedule,
 
             onContextMenu={(e) => {
                 e.preventDefault()
+
                 if(!multiSelect && active) {
                     setIsMultiSelectOrigin(true)
                     setMultiSelect(true)
                     setMultiSelectName(name)
 
-                    setMultiSelectOrigin(new RowCol(match, station))
-                    setTopLeftCorner(new RowCol(match, station))
-                    setBottomRightCorner(new RowCol(match, station))
+                    setMultiSelectRect(new Rectangle(new RowCol(match, station), 0, 0))
 
                 }
             }}
@@ -189,10 +183,13 @@ function GridEntry({match, station, schedule, setSchedule,
                     />
                     <p>Whole shift?</p>
 
-                    <Button onClick={(e, data) => {
-
-                        if(wholeShift) setSchedule(schedule.swapShiftScouter(switchNameSelection, station, match))
-                        else setSchedule(schedule.modifyShift(switchNameSelection, station, match))
+                    <Button
+                        disabled={schedule.scouters.map(e => e.name).indexOf(switchNameSelection) === -1}
+                        onClick={(e, data) => {
+                        if(schedule.scouters.map(e => e.name).indexOf(switchNameSelection) !== -1) {
+                            if(wholeShift) setSchedule(schedule.swapShiftScouter(switchNameSelection, station, match))
+                            else setSchedule(schedule.modifyShift(switchNameSelection, station, match))
+                        }
 
                     }
                     }>Apply Change</Button>

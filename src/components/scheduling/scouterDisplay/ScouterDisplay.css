@@ -28,7 +28,9 @@
 .scouter-entry-container {
     height: 7vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+
+    padding: 1vh 1vw;
 
     justify-content: space-between;
 
@@ -51,6 +53,8 @@
 .entry-text {
     margin-top: auto;
     margin-bottom: auto;
+
+    margin-left: 0.5vw;
 
     transition: 0.5s;
 

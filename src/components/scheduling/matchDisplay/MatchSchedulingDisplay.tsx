@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import "./MatchSchedulingDisplay.css"
 import GridEntry from "./GridEntry";
-import {RowCol, Schedule} from "./ScheduleData";
+import {Schedule} from "./ScheduleData";
+import {Rectangle, RowCol} from "./MultiSelect";
 
 type MatchSchedulingDisplayOptions = {
     schedule:Schedule,
@@ -10,20 +11,16 @@ type MatchSchedulingDisplayOptions = {
 
 function MatchSchedulingDisplay({schedule, setSchedule}: MatchSchedulingDisplayOptions) {
 
-    let [topLeftCorner, setTopLeftCorner] = useState(new RowCol(0,0))
-    let [bottomRightCorner, setBottomRightCorner] = useState(new RowCol(0,0))
-    let [multiSelectOrigin, setMultiSelectOrigin] = useState(new RowCol(0, 0))
+    let [multiSelectRect, setMultiSelectRect] = useState(new Rectangle(new RowCol(0, 0), 0, 0))
 
     let [multiSelect, setMultiSelect] = useState(false)
     let [multiSelectName, setMultiSelectName] = useState("")
 
     const generateGridEntry = (match:number, station:number) => {
         return <GridEntry match={match} station={station} schedule={schedule} setSchedule={setSchedule}
-                   topLeftCorner={topLeftCorner} setTopLeftCorner={setTopLeftCorner}
-                   bottomRightCorner={bottomRightCorner} setBottomRightCorner={setBottomRightCorner}
+                   multiSelectRect={multiSelectRect} setMultiSelectRect={setMultiSelectRect}
                    multiSelect={multiSelect} setMultiSelect={setMultiSelect}
                   multiSelectName={multiSelectName} setMultiSelectName={setMultiSelectName}
-                    multiSelectOrigin={multiSelectOrigin} setMultiSelectOrigin={setMultiSelectOrigin}
         />
     }
 
@@ -32,10 +29,8 @@ function MatchSchedulingDisplay({schedule, setSchedule}: MatchSchedulingDisplayO
             <h1 className={"scheduling-header"}>Matches</h1>
             <table className={"table"}
                 onMouseUp={() => {
-
+                    console.log("Mouse up")
                     setMultiSelect(false)
-                    // setTopLeftCorner(new RowCol(0,0))
-                    // setBottomRightCorner(new RowCol(0,0))
                 }}>
                 <tbody>
                     <tr className={"table-header bottom-border"}>

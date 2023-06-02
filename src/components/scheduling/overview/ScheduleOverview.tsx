@@ -112,7 +112,7 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
                         <div className={"center-qr-info"}>
                             <TextTransition className={"qr-options-text"}>{schedule.scouters[currentQRCodeIndex-1]?.name}</TextTransition>
                             <Dropdown selection
-                                      value={schedule.scouters[currentQRCodeIndex].name}
+                                      value={schedule.scouters[currentQRCodeIndex]?.name}
                                       options={scoutOptions}
                                       onChange={
                                 (e, data) =>

@@ -66,8 +66,6 @@ class Schedule {
 
         scouterMatches = scouterMatches.sort((a, b) => a-b)
 
-        console.log(scouterMatches)
-
         scouterMatches.forEach(e => {
 
             if(e-lastMatch === 1) {
@@ -84,14 +82,17 @@ class Schedule {
     }
 
     public generateScouterCode(scouter:Scouter) {
-        let code = scouter.name + ":"
+        if(scouter) {
 
-        //Generate the code for the user
-        return this.shifts.filter(e => e.scouter === scouter)
-            .sort((a, b) => a.matches[0]-b.matches[0])
-            .reduce((acc, ele) =>
-                acc+
-                `s${ele.station}m${ele.matches.length > 1 ? ele.matches[0] + "-" + ele.matches[ele.matches.length-1] : ele.matches[0]}`, code)
+            let code = scouter.name + ":"
+
+            //Generate the code for the user
+            return this.shifts.filter(e => e.scouter === scouter)
+                .sort((a, b) => a.matches[0]-b.matches[0])
+                .reduce((acc, ele) =>
+                    acc+
+                    `s${ele.station}m${ele.matches.length > 1 ? ele.matches[0] + "-" + ele.matches[ele.matches.length-1] : ele.matches[0]}`, code)
+        } else return ""
     }
 
     public generateSchedule(targetContinuousLength:number):Schedule {
@@ -377,33 +378,10 @@ class DropDownOptions {
     }
 }
 
-class RowCol {
-    constructor(
-        public row:number,
-        public col:number
-
-    ) {
-    }
-
-    public updateRow(row:number):RowCol {
-        this.row = row;
-
-        return Object.create(this)
-    }
-
-    public updateCol(col:number):RowCol {
-        this.col = col;
-
-        return Object.create(this)
-    }
-
-}
-
 export {
     Scouter,
     Schedule,
     Shift,
     DropDownOptions,
-    RowCol,
     colors
 }

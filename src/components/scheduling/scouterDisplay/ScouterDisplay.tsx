@@ -37,6 +37,7 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
     return(
         <div className={"scouter-container"} onKeyDown={(e) => {
             if(e.key === "Enter" && dimmerActive) handleCreationClick()
+            else if(e.key ==="Escape" && dimmerActive) setDimmerActive(false)
         }}
         >
             <div className={"scouter-header"}>
@@ -91,8 +92,10 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
                                                   numScheduled={schedule.getNumMatchesForScout(scouter)}
                                                   targetNumScheduled={Math.round(schedule.totalMatchesToScout() / names.length)}
                                                   removeSelf={() => {
-                                setSchedule(schedule.removeScouter(n))
-                                setNames(names.filter(e => e !== n))
+                                if(schedule.scouters.length>1) {
+                                    setSchedule(schedule.removeScouter(n))
+                                    setNames(names.filter(e => e !== n))
+                                }
                             }}
                             />
                         }
@@ -126,7 +129,7 @@ function ScouterEntry({e, removeSelf, numScheduled, targetNumScheduled}:EntryOpt
 
         </Grid.Column>
         <Grid.Column>
-            <RemoveIcon setActive={setHighlighted} triggerClick={removeSelf}/>
+            <Button onClick={removeSelf}><Icon name={"minus"}/>Remove</Button>
         </Grid.Column>
 
     </Grid.Row>
