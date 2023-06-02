@@ -88,7 +88,9 @@ function GridEntry({match, station, schedule, setSchedule,
     let top = false;
     let bottom=  false;
     let name = "";
-    let color = ""
+    let color = "";
+    //Whether the same person is scouting twice in one match
+    let doubleScouted = false
 
     if(activeShift) {
         active =  activeShift.active
@@ -96,6 +98,8 @@ function GridEntry({match, station, schedule, setSchedule,
         bottom = activeShift.bottom
         name = activeShift.scouter.name
         color = activeShift.scouter.color
+
+        doubleScouted = schedule.isDoubleScouted(name, match, station)
     }
 
     return(
@@ -103,7 +107,7 @@ function GridEntry({match, station, schedule, setSchedule,
             style={{backgroundColor: active ? color : ""}}
             className={
                 (active ? "active " : " ") + (top ? "top " : " ") + (bottom ? "bottom" : "")
-                + " grid-entry " + (isMultiSelectOrigin ? " multi-select-origin " : "")
+                + " grid-entry " + (isMultiSelectOrigin ? " multi-select-origin " : "") + (doubleScouted ? " double-scouted " : "")
             }
             
             onMouseEnter={() => {

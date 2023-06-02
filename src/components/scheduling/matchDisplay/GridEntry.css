@@ -49,3 +49,16 @@
     border: 10px solid blue;
     border-radius: 25px;
 }
+
+.double-scouted {
+
+    animation: double-flash 1s infinite;
+}
+
+@keyframes double-flash {
+    0% {background-color: red}
+    50% {background-color: white}
+    100% {background-color: red}
+
+
+}

@@ -17,8 +17,125 @@ class Schedule {
         this.addScouters(scouterNames)
     }
 
+    public getLongestBreak(scouter:Scouter) {
+        let scouterMatches = this.shifts.filter(e => e.scouter === scouter).reduce((acc, ele) => acc.concat(ele.matches), [-1])
+
+        scouterMatches = scouterMatches.filter(e => e >= 0);
+
+        let longestBreak = 0
+        let lastMatch = -1
+
+        scouterMatches = scouterMatches.sort((a, b) => a-b)
+
+        scouterMatches.forEach(e => {
+
+            if(e-lastMatch > 1 && e-lastMatch > longestBreak) {
+                longestBreak = e-lastMatch-1
+            }
+
+            lastMatch = e
+        })
+
+        return longestBreak
+    }
+
+    public getMostConsecutiveMatches(scouter:Scouter) {
+        let scouterMatches = this.shifts.filter(e => e.scouter === scouter).reduce((acc, ele) => acc.concat(ele.matches), [-1])
+
+        scouterMatches = scouterMatches.filter(e => e >= 0);
+
+        let mostConsecutive = 0
+        let currentConsecutive = 0
+        let lastMatch = -1
+
+        scouterMatches = scouterMatches.sort((a, b) => a-b)
+
+        console.log(scouterMatches)
+
+        scouterMatches.forEach(e => {
+
+            if(e-lastMatch === 1) {
+                if(currentConsecutive === 0) currentConsecutive++
+                currentConsecutive++
+            } else currentConsecutive = 0
+
+            if(currentConsecutive > mostConsecutive) mostConsecutive = currentConsecutive
+
+            lastMatch = e
+        })
+
+        return mostConsecutive
+    }
+
+    public generateScouterCode(scouter:Scouter) {
+        let code = scouter.name + ":"
+
+        //Generate the code for the user
+        return this.shifts.filter(e => e.scouter === scouter)
+            .sort((a, b) => a.matches[0]-b.matches[0])
+            .reduce((acc, ele) =>
+                acc+
+                `s${ele.station}m${ele.matches.length > 1 ? ele.matches[0] + "-" + ele.matches[ele.matches.length-1] : ele.matches[0]}`, code)
+    }
+
+    public generateSchedule(targetContinuousLength:number):Schedule {
+
+        this.shifts = []
+
+        let numMatchesPerScout = this.totalMatchesToScout() / this.scouters.length;
+
+        if(targetContinuousLength > numMatchesPerScout) targetContinuousLength=numMatchesPerScout
+
+        let currentScoutPool = this.scouters;
+
+       for(let match = 0; match<this.matches.length; match ++) {
+
+            for(let station = 0; station<6; station++) {
+
+                //Generate 0 to 5 for stations
+                let thisScout = Math.floor(Math.random() * currentScoutPool.length)
+
+                while(this.isDoubleScouted(currentScoutPool[thisScout].name, match, station)) {
+                    //Regen the scout if the current match would have a person double scout
+                    thisScout = Math.floor(Math.random() * currentScoutPool.length)
+                }
+
+                this.createShift(currentScoutPool[thisScout].name, station, match)
+
+                currentScoutPool = currentScoutPool.filter(e => e !== currentScoutPool[thisScout])
+
+                if(currentScoutPool.length === 0) currentScoutPool = this.scouters
+
+            }
+        }
+
+
+        return Object.create(this)
+    }
+
+    public isDoubleScouted(scouterName:any, match:number, station:number):boolean {
+        let scouter = this.getScouterFromName(scouterName)
+
+        return this.shifts.filter(e => e.scouter === scouter && e.station !== station && e.matches.indexOf(match) !== -1).length>0
+
+    }
+
+    public getTargetMatchesPerScout():number {
+        return Math.round(this.totalMatchesToScout()/this.scouters.length)
+    }
+
+    public getScoutsOverScouting():number {
+        let target = this.getTargetMatchesPerScout()
+
+        return this.scouters.filter(e => this.getNumMatchesForScout(e) > target).length
+    }
+
     public totalMatchesToScout():number {
         return this.matches.length * 6
+    }
+
+    public totalMatchesInShifts():number {
+        return this.shifts.map(e => e.matches).reduce((acc, val) => acc + val.length, 0)
     }
 
     public getNumMatchesForScout(scouter:Scouter):number {
@@ -158,10 +275,16 @@ class Schedule {
 class Shift {
     constructor(
         public matches:number[], //Indices of matches
-        public readonly station:number, //Index of the alliance station (red 1 = 0, up to blue 3 = 5)
+        public station:number, //Index of the alliance station (red 1 = 0, up to blue 3 = 5)
         public scouter:Scouter
 
     ) {
+    }
+
+    public swapStation(other:Shift) {
+        let temp = this.station
+        this.station = other.station
+        other.station = temp
     }
 
     //Splice a new shift into an existing shift

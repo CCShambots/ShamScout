@@ -5,6 +5,7 @@ import {Schedule} from "../components/scheduling/matchDisplay/ScheduleData";
 import ScouterDisplay from "../components/scheduling/scouterDisplay/ScouterDisplay";
 
 import "./SchedulingPage.css"
+import ScheduleOverview from "../components/scheduling/overview/ScheduleOverview";
 
 function SchedulingPage() {
 
@@ -38,7 +39,15 @@ function SchedulingPage() {
             "Wolfe",
             "Harrison",
             "Brodzinski",
-            "Dobson"],
+            "Dobson",
+            "Dankert",
+            "Guo",
+            "Harvey",
+            "Ibegbu",
+            "Naida",
+            "Schenk",
+            "Terhaar",
+        ],
         []
     ));
 
@@ -49,6 +58,7 @@ function SchedulingPage() {
             <div className={"scheduling-page-container"}>
                 <MatchSchedulingDisplay schedule={schedule} setSchedule={setSchedule}/>
                 <ScouterDisplay schedule={schedule} setSchedule={setSchedule}/>
+                <ScheduleOverview schedule={schedule} setSchedule={setSchedule}/>
             </div>
 
         </div>

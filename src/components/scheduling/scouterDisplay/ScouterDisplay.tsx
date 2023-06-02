@@ -23,7 +23,7 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
     return(
         <div className={"scouter-container"}>
             <div className={"scouter-header"}>
-                <h1>Scouters</h1>
+                <h1>Scouters ({schedule.scouters.length})</h1>
                 <Popup
                     trigger={
                         <Button onClick={handleClick}>
@@ -93,7 +93,7 @@ function ScouterEntry({e, removeSelf, numScheduled, targetNumScheduled}:EntryOpt
             <p className={"entry-text " + (highlighted ? "highlighted" : "")}>{e.name}</p>
         </Grid.Column>
         <Grid.Column>
-            <Progress value={numScheduled} total={targetNumScheduled} progress={'ratio'} indicating style={{marginBottom: "1vh"}}/>
+            <Progress value={numScheduled} total={targetNumScheduled} progress={'value'} indicating style={{marginBottom: "1vh"}}/>
             {numScheduled > targetNumScheduled ? <p className={"over-scheduled-warning"}>Overscheduled!</p> : <div/>}
 
         </Grid.Column>
