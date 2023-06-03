@@ -124,11 +124,17 @@ function ScouterEntry({e, removeSelf, numScheduled, targetNumScheduled}:EntryOpt
         </Grid.Column>
         <Grid.Column>
             <Progress value={numScheduled} total={targetNumScheduled} progress={'value'} indicating style={{marginBottom: "1vh"}}/>
-            {numScheduled > targetNumScheduled ? <p className={"over-scheduled-warning"}>Overscheduled!</p> : <div/>}
 
         </Grid.Column>
         <Grid.Column>
-            <Button onClick={removeSelf}><Icon name={"minus"}/>Remove</Button>
+            <Button animated={"vertical"} onClick={removeSelf}>
+                <Button.Content visible>
+                    <Icon name={"minus"}/>
+                </Button.Content>
+                <Button.Content hidden>
+                    Remove
+                </Button.Content>
+            </Button>
         </Grid.Column>
 
     </Grid.Row>

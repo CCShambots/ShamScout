@@ -1,0 +1,25 @@
+.config-content {
+    padding: 1vw;
+
+    width: 30vw;
+}
+
+.api-list-header {
+    display: flex;
+}
+
+.center-api-remove-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.inline {
+    display: flex;
+    align-items: flex-start;
+}
+
+.give-text-padding {
+    padding: 1vh;
+}
