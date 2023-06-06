@@ -9,3 +9,24 @@
 .item-type-title {
     background-color: lightblue;
 }
+
+.config-qr-code-window {
+    width: 75vw;
+    max-height: 100vh;
+
+    padding: 2vh;
+
+    color:black;
+
+    background-color: white;
+    border-radius: 5vh;
+}
+
+.config-qr-code-header-text {
+    width: 75vw;
+}
+
+.qr-code-big {
+    height: 85vh;
+    width: 85vh;
+}

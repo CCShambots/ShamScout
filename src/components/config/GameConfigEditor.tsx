@@ -72,9 +72,9 @@ export default function GameConfigEditor(
             </Table>
 
             <Dimmer page active={qrDimmer} onClickOutside={() => setQRDimmer(false)}>
-                <div className={"qr-code-window"}>
+                <div className={"config-qr-code-window"}>
                     <div className={"qr-code-header"}>
-                        <h1 className={"qr-code-header-text"}>Config QR Code</h1>
+                        <h1 className={"config-qr-code-header-text"}>Config QR Code</h1>
                         <Button className={"qr-code-close-button"} animated={"vertical"} onClick={() => setQRDimmer(false)}>
                             <Button.Content hidden>Close</Button.Content>
                             <Button.Content visible><Icon name={"x"}/></Button.Content>
@@ -98,7 +98,7 @@ function QRDisplay(props: {
 
     return(
         <div>
-            <QRCode value={code} className={"qr-code"}/>
+            <QRCode value={code} className={"qr-code-big"}/>
             <p>{code}</p>
 
         </div>
