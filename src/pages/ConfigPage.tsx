@@ -1,21 +1,54 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../components/header/Header";
-import {Button, Dropdown, Form, Icon, Table} from "semantic-ui-react";
+import {Dropdown} from "semantic-ui-react";
 import {DropDownOptions} from "../components/scheduling/matchDisplay/ScheduleData";
 import "./ConfigPage.css"
 import {useLocalStorage} from "usehooks-ts";
+import APIOptionsTable from "../components/config/APIOptionsTable";
+import GameConfigsDisplay from "../components/config/GameConfigsDisplay";
+import {GameConfig} from "../components/config/GameConfig";
+import {Pull} from "../util/APIUtil";
+import GameConfigEditor from "../components/config/GameConfigEditor";
+
 
 function ConfigPage() {
 
     let [APIs, setAPIs] = useLocalStorage("apis", ["localhost:3000"])
-    let [activeChoice, setActiveChoice] = useLocalStorage("activeAPI", "localhost:3000")
+    let [activeAPIChoice, setActiveChoice] = useLocalStorage("activeAPI", "localhost:3000")
 
     let [addAPI, setAddAPI] = useState("")
+
+    let [gameConfigs, setGameGameConfigs] = useState<GameConfig[]>([])
+    let [activeConfig, setActiveConfig] = useState<GameConfig>(new GameConfig("none", 2000, []));
+
+
+    let handleNewActiveConfig = (newItem:GameConfig) => {
+
+        gameConfigs[gameConfigs.indexOf(activeConfig)] = newItem
+
+        setGameGameConfigs(Object.create(gameConfigs))
+
+        setActiveConfig(newItem)
+    }
+
+    useEffect(() => {
+        Pull(activeAPIChoice, "game-configs", (e) => {
+
+            let newConfigs:GameConfig[] = []
+
+            e.configs.forEach((e:any) => {
+                newConfigs.push(GameConfig.fromJson(e))
+            })
+
+
+            setGameGameConfigs(newConfigs);
+        })
+    }, [activeAPIChoice])
 
     let options = APIs.map(e => new DropDownOptions(e))
 
     let handleAddAPIOption = () => {
-        if(addAPI !== "" && APIs.indexOf(addAPI) === -1) {
+        if(addAPI !== "" && APIs.indexOf(`http://${addAPI}`) === -1) {
 
             let toAdd = addAPI;
 
@@ -31,62 +64,29 @@ function ConfigPage() {
             <Header/>
 
             <div className={"config-content"}>
-                <div className={"inline"}>
-                    <h3 className={"give-text-padding"}>Current API Source</h3>
-                    <Dropdown
-                        floating
-                        labeled
-                        options={options}
-                        selection
-                        clearable
-                        value={activeChoice}
-                        onChange={(e,data) => setActiveChoice(data.value as string)}
-                        placeholder={"Select API Source"}
-                    />
+                <div className={"left-column"}>
+                    <div className={"inline"}>
+                        <h3 className={"give-text-padding"}>Current API Source</h3>
+                        <Dropdown
+                            floating
+                            labeled
+                            options={options}
+                            selection
+                            clearable
+                            value={activeAPIChoice}
+                            onChange={(e, data) => setActiveChoice(data.value as string)}
+                            placeholder={"Select API Source"}
+                        />
+                    </div>
+
+                    <APIOptionsTable onSubmit={handleAddAPIOption} addAPI={addAPI} setAddAPI={setAddAPI}
+                                     setAPIOptions={setAPIs} apiOptions={APIs}/>
+
+                    <GameConfigsDisplay configs={gameConfigs} activeConfig={activeConfig} setActiveConfig={handleNewActiveConfig}/>
                 </div>
-
-                <Table className={"api-options-table"}>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell>API Options</Table.HeaderCell>
-                            <Table.HeaderCell>
-                                <div className={"api-list-header"}>
-                                    <Form onSubmit={handleAddAPIOption}>
-                                        <Form.Input onChange={(e, data) => setAddAPI(data.value)}
-                                               placeholder={"Enter New API"}
-                                        />
-                                    </Form>
-                                    <div/>
-                                </div>
-                            </Table.HeaderCell>
-                        </Table.Row>
-
-                        {
-                            APIs.map((e) =>
-                                <Table.Row>
-                                    <Table.Cell>{e}</Table.Cell>
-                                    <Table.Cell className={"center-api-remove-button"}>
-                                        <Button color={"red"} animated={"vertical"}
-                                            onClick={() => {
-                                                if(APIs.length > 1) {
-                                                    setAPIs(APIs.filter((element) => element !== e))
-                                                }
-                                            }}
-                                        >
-                                            <Button.Content visible>
-                                                <Icon name={"minus"}/>
-                                            </Button.Content>
-                                            <Button.Content hidden>
-                                                Remove
-                                            </Button.Content>
-                                        </Button>
-                                    </Table.Cell>
-                                </Table.Row>
-                            )
-                        }
-
-                    </Table.Header>
-                </Table>
+                <div className={"middle-column"}>
+                    <GameConfigEditor config={activeConfig} setConfig={handleNewActiveConfig}/>
+                </div>
             </div>
         </div>
     )

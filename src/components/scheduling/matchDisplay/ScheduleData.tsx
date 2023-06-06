@@ -84,14 +84,14 @@ class Schedule {
     public generateScouterCode(scouter:Scouter) {
         if(scouter) {
 
-            let code = scouter.name + ":"
+            let code = "sch:" + scouter.name + ":"
 
             //Generate the code for the user
             return this.shifts.filter(e => e.scouter === scouter)
                 .sort((a, b) => a.matches[0]-b.matches[0])
                 .reduce((acc, ele) =>
                     acc+
-                    `s${ele.station}m${ele.matches.length > 1 ? ele.matches[0] + "-" + ele.matches[ele.matches.length-1] : ele.matches[0]}`, code)
+                    `s${ele.station}m${ele.matches.length > 1 ? ele.matches[0] + "-" + ele.matches[ele.matches.length-1] : ele.matches[0]},`, code)
         } else return ""
     }
 
@@ -270,7 +270,7 @@ class Schedule {
             this.scouters.push(
                 new Scouter(
                     name,
-                    "red"
+                    colors[0]
                 )
             )
 
@@ -378,10 +378,27 @@ class DropDownOptions {
     }
 }
 
+class DropDownOptionsAltText {
+
+    public readonly key:string
+    public readonly text:string
+    public readonly value:string
+
+    constructor(
+        value:string,
+        display:string
+    ) {
+        this.key = value
+        this.text = display
+        this.value = value
+    }
+}
+
 export {
     Scouter,
     Schedule,
     Shift,
     DropDownOptions,
+    DropDownOptionsAltText,
     colors
 }

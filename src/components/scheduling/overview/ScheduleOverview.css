@@ -46,7 +46,6 @@
 
 .qr-code-header {
     display: flex;
-    /*justify-content: center;*/
     text-align: center;
 }
 
@@ -87,6 +86,6 @@
     justify-content: center;
 }
 
-.scout-qr-code {
+.qr-code {
     height: 20vh;
 }

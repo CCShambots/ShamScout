@@ -146,7 +146,7 @@ function QRCodeDisplay({scouter, schedule}:qrCodeOptions) {
     return(
         <div className={"qr-display"}>
             <h1>{scouter.name}</h1>
-            <QRCode value={code} className={"scout-qr-code"}/>
+            <QRCode value={code} className={"qr-code"}/>
             <p>{code}</p>
             <Statistic.Group className={"qr-code-stats"}>
                 <Statistic>
