@@ -65,7 +65,7 @@ export default function GameConfigEditor(
                 <Table.Body>
                         {
                             props.config.items.map(e => {
-                                return <FormItem item={e} options={options} config={props.config} setConfig={props.setConfig}/>
+                                return <FormItem key={props.config.items.indexOf(e)} item={e} options={options} config={props.config} setConfig={props.setConfig}/>
                             })
                         }
                 </Table.Body>

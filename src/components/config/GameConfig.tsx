@@ -75,7 +75,7 @@ class ConfigItem {
 
     generateJSON():string {
         return `{
-            "type": "${this.type}",
+            "type": "${this.type.toLowerCase().replace(" ", "_")}",
             "label": "${this.label}"
             ${this.min !== -1 ? `, "min": ${this.min}` : ``}
             ${this.max !== -1 ? `, "max": ${this.max}`: ``}
