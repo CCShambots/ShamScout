@@ -27,7 +27,7 @@ class GameConfig {
     }
 
     public generateJSON():string {
-        return `cfg:{"title": "${this.title}", "year": ${this.year}, "items": [
+        return `cfg:{"title":"${this.title}","year": ${this.year},"items": [
             ${this.items.reduce((acc, val) => 
                     acc + val.generateJSON() + (this.items.indexOf(val) !== this.items.length-1 ? "," : ""), "")}
                 ]}`
@@ -75,10 +75,10 @@ class ConfigItem {
 
     generateJSON():string {
         return `{
-            "type": "${this.type.toLowerCase().replace(" ", "_")}",
-            "label": "${this.label}"
-            ${this.min !== -1 ? `, "min": ${this.min}` : ``}
-            ${this.max !== -1 ? `, "max": ${this.max}`: ``}
+            "type":"${this.type.toLowerCase().replace(" ", "_")}",
+            "label":"${this.label}"
+            ${this.min !== -1 ? `,"min": ${this.min}` : ``}
+            ${this.max !== -1 ? `,"max": ${this.max}`: ``}
         }`
     }
 

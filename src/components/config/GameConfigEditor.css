@@ -11,7 +11,7 @@
 }
 
 .config-qr-code-window {
-    width: 75vw;
+    width: 55vw;
     max-height: 100vh;
 
     padding: 2vh;
@@ -27,6 +27,6 @@
 }
 
 .qr-code-big {
-    height: 85vh;
-    width: 85vh;
+    height: 50vh;
+    width: 50vh;
 }
