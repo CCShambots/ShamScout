@@ -28,6 +28,7 @@ function Header({}: HeaderProps) {
         <div className={"header-container"}>
                 <div className={"header-item"}>
                     <Link className={"link"} to={"/"}>Overview</Link>
+                    <Link className={"link"} to={"/scan"}>Scan</Link>
                     <Link className={"link"} to={"/matches"}>Matches</Link>
                     <Link className={"link"} to={"/team"}>Team</Link>
                     <Link className={"link"} to={"/scheduler"}>Scheduling</Link>
