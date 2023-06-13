@@ -1,11 +1,12 @@
 .config-content {
     padding: 1vw;
 
-    width: 30vw;
+    width: 100vw;
 
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+    justify-content: space-between;
 }
 
 .api-list-header {
