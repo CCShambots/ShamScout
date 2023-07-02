@@ -89,3 +89,8 @@
 .qr-code {
     height: 20vh;
 }
+
+.vertical-center {
+    display: flex;
+    flex-direction: column;
+}

@@ -1,10 +1,12 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./ScheduleOverview.css"
 import {DropDownOptions, Schedule, Scouter} from "../matchDisplay/ScheduleData";
 import {Button, Dimmer, Dropdown, Icon, Input, Progress, Statistic} from "semantic-ui-react";
 
 import QRCode from "react-qr-code"
 import TextTransition from "react-text-transition";
+import {Post, Pull} from "../../../util/APIUtil";
+import {useLocalStorage} from "usehooks-ts";
 
 type scheduleOverviewOptions = {
     schedule:Schedule,
@@ -13,7 +15,7 @@ type scheduleOverviewOptions = {
 
 function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
 
-    let [sequentialPreference, setSequentialPreference] = useState(10)
+    let [currentEvent] = useLocalStorage("current-event", "")
 
     let [warningDimmerActive, setWarningDimmerActive] = useState(false)
 
@@ -21,9 +23,12 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
 
     let [currentQRCodeIndex, setCurrentQRCodeIndex] = useState(0)
 
+    let [saveScheduleDimmerActive, setSaveScheduleDimmerActive] = useState(false);
+    let [saveSuccess, setSaveSuccess] = useState(true);
+
     let handleClick = () => {
         if(schedule.shifts.length > 0) setWarningDimmerActive(true)
-        else setSchedule(schedule.generateSchedule(sequentialPreference))
+        else setSchedule(schedule.generateSchedule())
     }
 
     let scoutOptions = schedule.scouters.map(e =>
@@ -57,19 +62,22 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
                         <Statistic.Label>Uptime per Scout</Statistic.Label>
                     </Statistic>
                 </Statistic.Group>
+                <p/>
 
-                <h4>Enter Preferred Maximum Number of Matches Scouted in a Row</h4>
-                <Input
-                    onChange={(e, data) => {setSequentialPreference(Number.parseInt(data.value))}}
-                    value={sequentialPreference}
-                />
-                <Button onClick={handleClick}>Generate Schedule</Button>
-
-                <hr/>
+                <Button onClick={handleClick}><Icon name={"random"}/>Generate Schedule</Button>
 
                 <Button onClick={() => setQRCodeDimmerActive(true)}><Icon name={"qrcode"}/>Generate QR Codes</Button>
-                <Button><Icon name={"save"}/>Save</Button>
-                <Button><Icon name={"x"}/>Cancel</Button>
+
+                <Button.Group>
+                    <Button color={"green"} onClick={() => {
+                        //Post this schedule to the API
+                        Post("schedules/submit", schedule.generateJson(currentEvent)).then(r => {
+                            setSaveScheduleDimmerActive(true);
+                            setSaveSuccess(r);
+                        })
+                    }}><Icon name={"save"}/>Save</Button>
+                    <Button color={"red"}><Icon name={"x"}/>Cancel</Button>
+                </Button.Group>
 
             </div>
 
@@ -79,7 +87,7 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
                 <Button.Group size={"big"}>
                     <Button onClick={() => {
                         setWarningDimmerActive(false)
-                        setSchedule(schedule.generateSchedule(sequentialPreference))
+                        setSchedule(schedule.generateSchedule())
                     }}
                         primary
                     >I understand, generate a new schedule</Button>
@@ -128,6 +136,15 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
                     </div>
 
 
+                </div>
+            </Dimmer>
+
+            <Dimmer active={saveScheduleDimmerActive} onClickOutside={() => setSaveScheduleDimmerActive(false)} page>
+                <div className={"vertical-center"}>
+                    <div>
+                        <Icon name={saveSuccess ? "check" : "delete"} color={saveSuccess ? "green" : "red"} size={"massive"}/>
+                    </div>
+                    <h1>{saveSuccess ? "Save success!" : "Save Failure! :("}</h1>
                 </div>
             </Dimmer>
 

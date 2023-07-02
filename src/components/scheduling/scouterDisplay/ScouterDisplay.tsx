@@ -20,6 +20,8 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
 
     useEffect(() => {setNewColor(schedule.getNextColor())}, [adding, schedule])
 
+    useEffect(() => {setNames(schedule.scouters.map(e => e.name))}, [schedule])
+
     let handleCreationClick = () => {
         if(names.map(e => e.toLowerCase()).indexOf(adding.toLowerCase())  === -1) {
             let newSchedule = schedule.createScouter(adding, newColor)
@@ -115,7 +117,7 @@ type EntryOptions = {
 function ScouterEntry({e, removeSelf, numScheduled, targetNumScheduled}:EntryOptions) {
     let [highlighted, setHighlighted] = useState(false)
 
-    return <Grid.Row
+    return e ? <Grid.Row
         className={"scouter-entry-container"}
         style={{backgroundColor: e.color}} key={e.name}>
 
@@ -137,7 +139,7 @@ function ScouterEntry({e, removeSelf, numScheduled, targetNumScheduled}:EntryOpt
             </Button>
         </Grid.Column>
 
-    </Grid.Row>
+    </Grid.Row> : <div/>
 }
 
 export default ScouterDisplay;

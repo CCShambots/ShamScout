@@ -17,6 +17,11 @@
 
 }
 
+.header-text {
+    color: white;
+    padding-right: 2vw;
+}
+
 .link {
     text-decoration: none;
     color: #e6e7ea;

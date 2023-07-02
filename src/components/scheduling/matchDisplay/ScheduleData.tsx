@@ -33,6 +33,38 @@ class Schedule {
         this.addScouters(scouterNames)
     }
 
+    public static fromJson(data:any, numQuals:number):Schedule {
+
+        let scoutNames = new Set<string>();
+
+        data.shifts.forEach((e:any) => {
+            scoutNames.add(e.scouter);
+        })
+
+        let matchArray = []
+
+        for(let i = 1; i<=numQuals; i++) {
+            matchArray.push(`Quals ${i}`)
+        }
+
+        let schedule = new Schedule(matchArray, Array.from(scoutNames.values()), [])
+
+        data.shifts.forEach((e:any) => {
+            for(let i:number = e["match_start"]; i<=e["match_end"]; i++) {
+                schedule.createShift(e.scouter, e.station, i)
+            }
+        })
+
+        return schedule;
+    }
+
+    public generateJson(event:string):string {
+        return `{
+            "event":"${event}",
+            "shifts":[${this.shifts.reduce((acc, e) => acc + e.toJson() + (this.shifts[this.shifts.length-1] === e ? "" : ","), "")}]
+        }`
+    }
+
     public getLongestBreak(scouter:Scouter) {
         let scouterMatches = this.shifts.filter(e => e.scouter === scouter).reduce((acc, ele) => acc.concat(ele.matches), [-1])
 
@@ -95,13 +127,9 @@ class Schedule {
         } else return ""
     }
 
-    public generateSchedule(targetContinuousLength:number):Schedule {
+    public generateSchedule():Schedule {
 
         this.shifts = []
-
-        let numMatchesPerScout = this.totalMatchesToScout() / this.scouters.length;
-
-        if(targetContinuousLength > numMatchesPerScout) targetContinuousLength=numMatchesPerScout
 
         let currentScoutPool = this.scouters;
 
@@ -294,6 +322,10 @@ class Shift {
         public scouter:Scouter
 
     ) {
+    }
+
+    public toJson():string {
+        return `{"scouter":"${this.scouter.name}", "station":${this.station}, "match_start":${Math.min.apply(Math, this.matches)}, "match_end":${Math.max.apply(Math, this.matches)}}`
     }
 
     public swapStation(other:Shift) {
