@@ -10,7 +10,6 @@ import {
     Popup,
     SegmentInline,
     Table,
-    Transition
 } from "semantic-ui-react";
 import "./GameConfigEditor.css"
 import {DropDownOptionsAltText} from "../scheduling/matchDisplay/ScheduleData";
@@ -19,8 +18,8 @@ import {splitString} from "../../util/QRUtil";
 
 export default function GameConfigEditor(
     props: {
-        config:GameConfig,
-        setConfig:(e:GameConfig) => void
+        template:GameConfig,
+        setTemplate:(e:GameConfig) => void
     }
     ) {
 
@@ -31,7 +30,7 @@ export default function GameConfigEditor(
     }
 
     for (const value of enumKeys(ItemType)) {
-        options.push(new DropDownOptionsAltText(ItemType[value], ItemType[value]))
+        options.push(new DropDownOptionsAltText(value, value.replace("_", " ")))
     }
 
     let [qrDimmer, setQRDimmer] = useState(false)
@@ -42,7 +41,7 @@ export default function GameConfigEditor(
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell colSpan={"3"}>
-                            {props.config.title}
+                            {props.template.name}
                         </Table.HeaderCell>
                         <Table.HeaderCell>
                             <Button animated={"vertical"} onClick={() => setQRDimmer(true)}>
@@ -53,9 +52,9 @@ export default function GameConfigEditor(
                         <Table.HeaderCell>
                             <Button animated={"vertical"} onClick={() => {
 
-                                props.config.items.push(new ConfigItem("title"))
+                                props.template.items.push(new ConfigItem("title"))
 
-                                props.setConfig(Object.create(props.config))
+                                props.setTemplate(Object.create(props.template))
                             }}>
                                 <Button.Content visible> <Icon name={"add"}/></Button.Content>
                                 <Button.Content hidden>Create</Button.Content>
@@ -65,8 +64,8 @@ export default function GameConfigEditor(
                 </Table.Header>
                 <Table.Body>
                         {
-                            props.config.items.map(e => {
-                                return <FormItem key={props.config.items.indexOf(e)} item={e} options={options} config={props.config} setConfig={props.setConfig}/>
+                            props.template.items.map(e => {
+                                return <FormItem key={props.template.items.indexOf(e)} item={e} options={options} config={props.template} setConfig={props.setTemplate}/>
                             })
                         }
                 </Table.Body>
@@ -82,7 +81,7 @@ export default function GameConfigEditor(
                         </Button>
                     </div>
 
-                    <QRDisplay config={props.config}/>
+                    <QRDisplay config={props.template}/>
 
                 </div>
             </Dimmer>
@@ -123,7 +122,7 @@ function FormItem(props: {
     let [useMin, setUseMin] = useState(props.item.min !== -1)
     let [useMax, setUseMax] = useState(props.item.max !== -1)
 
-    return <Table.Row className={(props.item.type === ItemType.title ? " item-type-title " : "")}>
+    return <Table.Row className={(props.item.type === ItemType.Title ? " item-type-title " : "")}>
         <Table.Cell>
             <Button icon={"trash alternate"} color={"red"} onClick={() => {
 
@@ -133,7 +132,7 @@ function FormItem(props: {
         <Table.Cell className={"item-type-dropdown"}>
             <Dropdown
                 options={props.options}
-                value={props.item.type}
+                value={ItemType[props.item.type]}
                 selection
                 // clearable
                 onChange={(event, {value}) => {
@@ -157,7 +156,7 @@ function FormItem(props: {
         </Table.Cell>
         <Table.Cell>
             {
-                props.item.type === ItemType.rating ?
+                props.item.type === ItemType.Rating ?
                     <Popup
                         pinned
                         on={"click"}

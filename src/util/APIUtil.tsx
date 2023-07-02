@@ -1,9 +1,10 @@
 
-export function Pull(api:string, endpoint:string, callback:(e:any) => void) {
+export async function Pull(endpoint:string, callback:(e:any) => void):Promise<void> {
     try {
-        fetch(api + "/" + endpoint)
+        await fetch("http://localhost:8080/" + endpoint)
             .then(response => { return response.json()})
             .then(callback)
             .catch(() => {})
-    }catch (e) {}
+    }catch (e) {
+    }
 }

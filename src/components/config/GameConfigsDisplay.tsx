@@ -3,9 +3,9 @@ import {Table} from "semantic-ui-react";
 import {GameConfig} from "./GameConfig";
 
 export default function GameConfigsDisplay(props: {
-    configs:GameConfig[],
-    activeConfig:GameConfig,
-    setActiveConfig:(e:GameConfig) => void
+    templates:GameConfig[],
+    activeTemplate:GameConfig,
+    setActiveTemplate:(e:GameConfig) => void
 }) {
 
     return(
@@ -18,13 +18,13 @@ export default function GameConfigsDisplay(props: {
 
             <Table.Body>
                 {
-                    props.configs.map(e => {
+                    props.templates.map(e => {
 
-                        let active = e === props.activeConfig;
+                        let active = e === props.activeTemplate;
 
-                        return <Table.Row key={e.title} onClick={() => props.setActiveConfig(e)} >
+                        return <Table.Row key={`${e.name}`} onClick={() => props.setActiveTemplate(e)} >
                             <Table.Cell className={"game-config-cell " + (active ? "active-config-cell" : "")}>
-                                <p>{e.title}</p>
+                                <p>{e.name}</p>
                                 <p>{e.year}</p>
                                 <p>{e.getNumberInputFields()} Input Fields</p>
                             </Table.Cell>
