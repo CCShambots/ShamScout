@@ -10,11 +10,18 @@ import {useLocalStorage} from "usehooks-ts";
 
 function ConfigPage() {
 
+    let [activeTemplateKey, setActiveTemplateKey] = useLocalStorage("active-template", "")
+
     let [templates, setTemplates] = useState<GameConfig[]>([]);
-    let [activeTemplate, setActiveTemplate] = useState<GameConfig>(new GameConfig("", 0, []));
+    let [activeTemplate, updateActiveTemplate] = useState<GameConfig>(new GameConfig("", 0, []));
 
     let [event, setEvent] = useLocalStorage("current-event", "");
     let [TBAKey, setTBAKey] = useLocalStorage("tba-key", "");
+
+    let setActiveTemplate = (newItem:GameConfig) => {
+        updateActiveTemplate(newItem)
+        setActiveTemplateKey(newItem.name)
+    }
 
     let handleNewActiveTemplate = (newItem:GameConfig) => {
 
@@ -39,6 +46,12 @@ function ConfigPage() {
             ))
 
             setTemplates(newTemplates)
+
+            let activeTemplates = newTemplates.filter(e => e.name === activeTemplateKey)
+
+            if(activeTemplates.length > 0) {
+                setActiveTemplate(activeTemplates[0])
+            }
 
         }).then(() => {
         })

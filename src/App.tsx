@@ -5,7 +5,7 @@ import {HashRouter, NavLink, Route, Routes} from "react-router-dom";
 import OverviewPage from "./pages/MainPage";
 import SchedulingPage from "./pages/SchedulingPage";
 import MatchPage from "./pages/MatchPage";
-import TeamPage from "./pages/TeamPage";
+import TeamsPage from "./pages/TeamPage";
 import ConfigPage from "./pages/ConfigPage";
 import ScanPage from "./pages/ScanPage";
 
@@ -16,7 +16,7 @@ function App() {
             <Route path='' element={ <OverviewPage /> } />
             <Route path='/scan' element={ <ScanPage/>} />
             <Route path='/matches' element={ <MatchPage /> } />
-            <Route path='/team' element={ <TeamPage /> } />
+            <Route path='/teams' element={ <TeamsPage /> } />
             <Route path='/scheduler' element={ <SchedulingPage /> } />
             <Route path='/config' element={ <ConfigPage /> } />
 

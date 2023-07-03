@@ -16,7 +16,7 @@ function Header({}: HeaderProps) {
                     <Link className={"link"} to={"/"}>Overview</Link>
                     <Link className={"link"} to={"/scan"}>Scan</Link>
                     <Link className={"link"} to={"/matches"}>Matches</Link>
-                    <Link className={"link"} to={"/team"}>Teams</Link>
+                    <Link className={"link"} to={"/teams"}>Teams</Link>
                     <Link className={"link"} to={"/scheduler"}>Scheduling</Link>
                     <Link className={"link"} to={"/config"}>Config</Link>
                 </div>

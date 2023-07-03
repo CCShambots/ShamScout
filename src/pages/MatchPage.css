@@ -1,0 +1,25 @@
+.page {
+    max-height: 100vh;
+}
+
+.match-table {
+    overflow: auto;
+    height: 92vh;
+    font-size: 1.75vh;
+}
+
+.match-display {
+    font-weight: bold;
+}
+
+.blue-team {
+    background-color: lightblue;
+}
+
+.red-team {
+    background-color: lightcoral;
+}
+
+.error-team {
+    background-color: red;
+}
