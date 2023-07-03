@@ -1,0 +1,56 @@
+:root {
+    --team-display-border: 3vh;
+}
+
+.team-display-image {
+    border-radius: var(--team-display-border);
+    height: 100%;
+    width: 100%;
+
+    object-fit: cover;
+
+    position: relative;
+}
+
+.team-display-container {
+    position: relative;
+
+    height: 15vw;
+    width: 15vw;
+
+    margin: 1vh;
+
+}
+
+
+.team-display-info {
+    background: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.75) 10%, rgba(0, 0, 0, 0.75) 90%, transparent 100%);
+
+
+    position: absolute;
+    bottom: 0;
+
+    width: 100%;
+    height: 5vh;
+
+    border-radius: 0 0 var(--team-display-border) var(--team-display-border);
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 0.5vh 10%;
+
+    overflow: hidden;
+}
+
+.team-display-text {
+    opacity: 100%;
+
+    margin: 0;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+}

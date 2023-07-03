@@ -23,3 +23,8 @@
 .error-team {
     background-color: red;
 }
+
+.team-link {
+    color: blue;
+    text-decoration: underline;
+}

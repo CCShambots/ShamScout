@@ -1,0 +1,25 @@
+.top-row-info {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 1vh;
+
+}
+
+.teams-title {
+
+    font-size: 3vh;
+}
+
+.main-teams-display-grid {
+    padding: 1vh;
+
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.main-teams-display-list {
+    padding: 1vh;
+
+}

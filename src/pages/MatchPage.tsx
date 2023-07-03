@@ -4,6 +4,8 @@ import {Popup, Table} from "semantic-ui-react";
 import {Pull, PullTBA} from "../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import "./MatchPage.css"
+import {Link} from "react-router-dom";
+import GenericForm from "../components/GenericForm";
 
 function MatchPage() {
     
@@ -74,52 +76,6 @@ function MatchPage() {
     )
 }
 
-class GenericForm {
-    constructor(
-        public scouter:string,
-        public team:number,
-        public match_number:number,
-        public event:string
-    ) {
-    }
-
-    public static fromJson(data:any):GenericForm {
-        return new GenericForm(
-            data.scouter,
-            data.team,
-            data.match_number,
-            data.event
-        )
-    }
-
-    public static getDisplayNameForPopup(forms:GenericForm[]):string {
-
-        type output = {
-            name:string,
-            multiples:number
-        }
-
-        let results:output[] = []
-
-        forms.forEach(e => {
-            let filterForName = results.filter(ele => ele.name === e.scouter)
-
-            if(filterForName.length > 0) {
-                filterForName[0].multiples += 1
-            } else {
-                results.push({name:e.scouter, multiples: 1})
-            }
-
-        })
-
-        return results.reduce((acc, ele) => {
-            let shouldComma = results.indexOf(ele) !== results.length - 1
-
-            return acc + ele.name + (ele.multiples > 1 ? " (x" + ele.multiples + ")" : "") + (shouldComma ? ", " : "")
-        }, "")
-    }
-}
-
 function TeamDisplay(props: {teamNum:number, match:number, redAlliance:boolean, submittedForms:GenericForm[]}) {
 
     let thisTeamForms = props.submittedForms
@@ -129,12 +85,14 @@ function TeamDisplay(props: {teamNum:number, match:number, redAlliance:boolean, 
 
     return(
         <Table.Cell className={(props.redAlliance ? "red-team " : "blue-team ") + (isMissing ? "error-team" : "")}>
-            <Popup
-                header="Forms"
-                content={GenericForm.getDisplayNameForPopup(thisTeamForms)}
-                trigger={<p>{props.teamNum} {thisTeamForms.length > 0 ? `(${thisTeamForms.length})` : ""}</p>}
-                inverted
-            />
+            <Link to={`/team?number=${props.teamNum}`}>
+                <Popup
+                    header="Forms"
+                    content={GenericForm.getDisplayNameForPopup(thisTeamForms)}
+                    trigger={<p className={"team-link"}>{props.teamNum} {thisTeamForms.length > 0 ? `(${thisTeamForms.length})` : ""}</p>}
+                    inverted
+                />
+            </Link>
         </Table.Cell>
     )
 }

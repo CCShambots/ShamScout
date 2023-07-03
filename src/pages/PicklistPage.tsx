@@ -1,14 +1,13 @@
 import React from "react";
 import Header from "../components/header/Header";
 
-function TeamPage() {
+function PicklistPage() {
 
-    return(
+    return (
         <div>
             <Header/>
         </div>
     )
 }
 
-export default TeamPage
-
+export default PicklistPage;
