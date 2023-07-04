@@ -4,12 +4,12 @@ import {Button, Icon, Table} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import "./TeamsPage.css"
 import TeamPreviewDisplay from "../components/teams/TeamPreviewDisplay";
-import {Pull, PullTBA} from "../util/APIUtil";
+import {Pull} from "../util/APIUtil";
 import GenericForm from "../components/GenericForm";
 import TeamListDisplay from "../components/teams/TeamListDisplay";
 
 type team = {
-    num:number,
+    number:number,
     name:string
 }
 
@@ -18,23 +18,9 @@ function TeamsPage() {
     let [currentEvent] = useLocalStorage("current-event", "");
 
     let [listView, setListView] = useLocalStorage("teams-list-view", false)
-    let [teams, setTeams] = useState<team[]>([]);
+    let [teams] = useLocalStorage<team[]>(`teams-${currentEvent}`, []);
 
     let [submittedForms, setSubmittedForms] = useState<GenericForm[]>([])
-
-    useEffect(() => {
-        PullTBA(`event/${currentEvent}/teams/simple`, (data) => {
-            let newTeams:team[] = []
-
-            data.forEach((e:any) => {
-                newTeams.push({num: parseInt(e.key.substring(3)), name: e.nickname})
-            })
-
-            newTeams.sort((e1, e2) => e1.num-e2.num)
-
-            setTeams([...newTeams])
-        })
-    }, [currentEvent])
 
     useEffect(() => {
 
@@ -76,14 +62,14 @@ function TeamsPage() {
                                     </Table.Row>
 
                                     {
-                                        teams.map(e => <TeamListDisplay key={e.num} teamNum={e.num} teamName={e.name} submittedForms={submittedForms}/>)
+                                        teams.map(e => <TeamListDisplay key={e.number} teamNum={e.number} teamName={e.name} submittedForms={submittedForms}/>)
                                     }
                                 </Table.Header>
                             </Table>
                         </div>
                     : <div className={"main-teams-display-grid"}>
                         {
-                            teams.map(e => <TeamPreviewDisplay key={e.num} teamName={e.name} teamNum={e.num}/>)
+                            teams.map(e => <TeamPreviewDisplay key={e.number} teamName={e.name} teamNum={e.number}/>)
                         }
                     </div>
                 }

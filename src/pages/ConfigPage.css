@@ -49,6 +49,13 @@
 }
 
 .middle-column {
+    min-width: 23vw;
+
+    max-height: 85vh;
+    overflow: scroll;
+}
+
+.right-column {
     min-width: 30vw;
 
     display: flex;

@@ -1,0 +1,90 @@
+.picklist-flex {
+    display: flex;
+}
+
+.picklist-column {
+    width: 50vw;
+    margin: 0.5vh 0.5vw;
+
+    max-height: 91vh;
+    overflow: scroll;
+}
+
+.picklist-title {
+    text-align: center;
+
+    font-size: 3vh;
+}
+
+.picklist-item-display {
+    border: 1px solid gray;
+
+    background-color: darkgray;
+
+    border-radius: 1vh;
+
+    padding: 0.5vh 0.5vw;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.picklist-text {
+    margin-top: 0;
+    margin-bottom: 0;
+
+    user-select: none;
+}
+
+.picklist-item-flex {
+    display: flex;
+    width: auto;
+}
+
+.picklist-check {
+    margin-top: auto;
+    margin-bottom: auto;
+
+    margin-right: 0.75vw;
+    width: 0.75vw;
+}
+
+.picklist-item-content {
+    display: flex;
+    justify-content: space-between;
+
+    width: 45vw;
+
+    position: relative;
+}
+
+.picklist-item-crossoff {
+    position: absolute;
+    width: 0;
+    height: 0.3vh;
+    background-color: black;
+
+    top: 50%;
+
+    transition: 0.5s;
+}
+
+.crossed-off {
+    width: 100%;
+}
+
+.accept {
+    background-color: lime;
+}
+
+.decline {
+    background-color: red;
+}
+
+.privacy-button {
+    position: absolute;
+
+    right: 1vw;
+    bottom: 1vw;
+}
+

@@ -3,10 +3,12 @@ import Header from "../components/header/Header";
 import "./ConfigPage.css"
 import GameConfigsDisplay from "../components/config/GameConfigsDisplay";
 import {GameConfig} from "../components/config/GameConfig";
-import {Pull} from "../util/APIUtil";
+import {Pull, PullTBA} from "../util/APIUtil";
 import GameConfigEditor from "../components/config/GameConfigEditor";
-import {Input} from "semantic-ui-react";
+import {Button, Dimmer, Icon, Input, Segment, Table} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
+import TeamLink from "../components/team-link/TeamLink";
+import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
 
 function ConfigPage() {
 
@@ -17,6 +19,7 @@ function ConfigPage() {
 
     let [event, setEvent] = useLocalStorage("current-event", "");
     let [TBAKey, setTBAKey] = useLocalStorage("tba-key", "");
+
 
     let setActiveTemplate = (newItem:GameConfig) => {
         updateActiveTemplate(newItem)
@@ -68,6 +71,9 @@ function ConfigPage() {
                     <GameConfigsDisplay templates={templates} activeTemplate={activeTemplate} setActiveTemplate={setActiveTemplate}/>
                 </div>
                 <div className={"middle-column"}>
+                    <TeamsInEventDisplay/>
+                </div>
+                <div className={"right-column"}>
                     <GameConfigEditor template={activeTemplate} setTemplate={handleNewActiveTemplate}/>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Header from "../components/header/Header";
-import {Popup, Table} from "semantic-ui-react";
+import {Button, Popup, Table} from "semantic-ui-react";
 import {Pull, PullTBA} from "../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import "./MatchPage.css"
@@ -11,23 +11,21 @@ function MatchPage() {
     
     let [currentEvent] = useLocalStorage("current-event", "")
     
-    let [matches, setMatches] = useState<Match[]>([])
+    let [matches, setMatches] = useLocalStorage<Match[]>(`matches-${currentEvent}`, [])
     let [submittedForms, setSubmittedForms] = useState<GenericForm[]>([])
     
-    useEffect(() => {
-        PullTBA(`event/${currentEvent}/matches/simple`, (data) => {
-            setMatches(data.filter((e:any) => e.key.indexOf(currentEvent+"_qm") !== -1).map((e:any):Match => {
+    const syncMatches = () => PullTBA(`event/${currentEvent}/matches/simple`, (data) => {
+        setMatches(data.filter((e:any) => e.key.indexOf(currentEvent+"_qm") !== -1).map((e:any):Match => {
 
-                let redAllianceKeys = e.alliances.red.team_keys;
-                let blueAllianceKeys = e.alliances.blue.team_keys;
+            let redAllianceKeys = e.alliances.red.team_keys;
+            let blueAllianceKeys = e.alliances.blue.team_keys;
 
-                let redAllianceNumbers = redAllianceKeys.map((e:any) => parseInt(e.substring(3)));
-                let blueAllianceNumbers = blueAllianceKeys.map((e:any) => parseInt(e.substring(3)));
+            let redAllianceNumbers = redAllianceKeys.map((e:any) => parseInt(e.substring(3)));
+            let blueAllianceNumbers = blueAllianceKeys.map((e:any) => parseInt(e.substring(3)));
 
-                return new Match(parseInt(e.key.substring(e.key.lastIndexOf("_qm")+3)), redAllianceNumbers, blueAllianceNumbers)
-            }).sort((e1:Match, e2:Match) => e1.match-e2.match))
-        })
-    }, [currentEvent])
+            return new Match(parseInt(e.key.substring(e.key.lastIndexOf("_qm")+3)), redAllianceNumbers, blueAllianceNumbers)
+        }).sort((e1:Match, e2:Match) => e1.match-e2.match))
+    })
 
     useEffect(() => {
 
@@ -72,6 +70,15 @@ function MatchPage() {
                     </Table.Body>
                 </Table>
             </div>
+
+            <Popup content={"Sync matches from TBA"} size={"huge"} inverted trigger={
+                <Button
+                    className={"sync-matches"}
+                    size={"massive"} icon={"sync"} color={"blue"}
+                    onClick={syncMatches}
+                />
+            }/>
+
         </div>
     )
 }
