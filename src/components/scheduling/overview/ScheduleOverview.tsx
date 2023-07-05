@@ -71,7 +71,7 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
                 <Button.Group>
                     <Button color={"green"} onClick={() => {
                         //Post this schedule to the API
-                        Post("schedules/submit", schedule.generateJson(currentEvent)).then(r => {
+                        Post(`schedules/${currentEvent}/submit`, schedule.generateJson(currentEvent)).then(r => {
                             setSaveScheduleDimmerActive(true);
                             setSaveSuccess(r);
                         })

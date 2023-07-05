@@ -27,4 +27,16 @@ module.exports = {
       config: {},
     },
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'CCShambots',
+          name: 'ShamScout'
+        },
+        prerelease: true
+      }
+    }
+  ]
 };

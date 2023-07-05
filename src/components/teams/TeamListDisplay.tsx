@@ -1,10 +1,10 @@
 import React from "react";
 import {Table} from "semantic-ui-react";
-import GenericForm from "../GenericForm";
+import {ScoutForm} from "../ScoutForm";
 import {Link} from "react-router-dom";
 import {useLocalStorage} from "usehooks-ts";
 
-function TeamListDisplay(props: {teamNum:number, teamName:string, submittedForms:GenericForm[]}) {
+function TeamListDisplay(props: {teamNum:number, teamName:string, submittedForms:ScoutForm[]}) {
     let [currentEvent] = useLocalStorage("current-event", "")
 
     //Forms for this team

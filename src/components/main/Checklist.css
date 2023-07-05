@@ -1,0 +1,63 @@
+.checklist-item {
+    display: flex;
+    flex-direction: row;
+    margin: 1vh 1vw;
+
+    position: relative;
+
+    height: 2vh;
+}
+
+.checklist-checkbox {
+    align-self: center;
+    margin-right: 0.25vw;
+}
+
+.checklist-text {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.child-checklist {
+    margin-left: 2vw;
+    height: auto;
+
+    transition: 0.5s;
+}
+
+.child-checklist-hidden {
+    height: 0;
+    display: none;
+    overflow: hidden;
+}
+
+.checklist-info {
+    position: relative;
+
+    transition: 0.5s;
+    color: black;
+}
+
+.checklist-info-active {
+    color: gray;
+}
+
+.checklist-cross-off {
+    position: absolute;
+
+    height: 0.3vh;
+    width: 0;
+
+    transition: 0.3s;
+
+    background-color: black;
+    top: 46%;
+}
+
+.checklist-cross-off-active {
+    width: 100%;
+
+    background-color: gray;
+}
+
+

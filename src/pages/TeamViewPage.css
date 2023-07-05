@@ -1,0 +1,32 @@
+.team-view-pic {
+    border-radius: var(--team-display-border);
+    height: 15vw;
+    width: 15vw;
+
+    object-fit: cover;
+
+    position: relative;
+
+    border: 2px solid black;
+}
+
+.top-row {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 1vw;
+}
+
+.banners {
+    display: flex;
+    justify-content: space-between;
+}
+
+.top-text {
+    text-align: center;
+    align-self: center;
+}
+
+.table-manager {
+    display: flex;
+}

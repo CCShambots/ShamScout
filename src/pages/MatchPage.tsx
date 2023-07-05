@@ -5,14 +5,14 @@ import {Pull, PullTBA} from "../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import "./MatchPage.css"
 import {Link} from "react-router-dom";
-import GenericForm from "../components/GenericForm";
+import {ScoutForm} from "../components/ScoutForm";
 
 function MatchPage() {
     
     let [currentEvent] = useLocalStorage("current-event", "")
     
     let [matches, setMatches] = useLocalStorage<Match[]>(`matches-${currentEvent}`, [])
-    let [submittedForms, setSubmittedForms] = useState<GenericForm[]>([])
+    let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
     
     const syncMatches = () => PullTBA(`event/${currentEvent}/matches/simple`, (data) => {
         setMatches(data.filter((e:any) => e.key.indexOf(currentEvent+"_qm") !== -1).map((e:any):Match => {
@@ -31,7 +31,7 @@ function MatchPage() {
 
         Pull(`template/test/get?event=${currentEvent}`, (data) => {
             setSubmittedForms(data.map((e:any) =>
-                GenericForm.fromJson(e)
+                ScoutForm.fromJson(e)
             ))
         }).then(() => {})
     }, [matches, currentEvent])
@@ -83,7 +83,7 @@ function MatchPage() {
     )
 }
 
-function TeamDisplay(props: {teamNum:number, match:number, redAlliance:boolean, submittedForms:GenericForm[]}) {
+function TeamDisplay(props: {teamNum:number, match:number, redAlliance:boolean, submittedForms:ScoutForm[]}) {
 
     let thisTeamForms = props.submittedForms
         .filter(e => e.team === props.teamNum && e.match_number === props.match)
@@ -95,7 +95,7 @@ function TeamDisplay(props: {teamNum:number, match:number, redAlliance:boolean, 
             <Link to={`/team?number=${props.teamNum}`}>
                 <Popup
                     header="Forms"
-                    content={GenericForm.getDisplayNameForPopup(thisTeamForms)}
+                    content={ScoutForm.getDisplayNameForPopup(thisTeamForms)}
                     trigger={<p className={"team-link"}>{props.teamNum} {thisTeamForms.length > 0 ? `(${thisTeamForms.length})` : ""}</p>}
                     inverted
                 />

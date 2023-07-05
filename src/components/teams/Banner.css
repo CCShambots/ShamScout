@@ -1,0 +1,87 @@
+.banner {
+    background: #0f4bcb;
+    color: #fff;
+    display: inline-block;
+    height: 170px;
+    line-height: 1.2;
+    margin: 0 1vw;
+    padding: 8px;
+    position: relative;
+    text-align: center;
+    vertical-align: top;
+    white-space: normal;
+    width: 140px
+
+}
+
+.banner img {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    max-height: 45px;
+    width: 75px
+}
+
+.banner:after {
+    border-bottom: 70px solid #0f4bcb;
+    border-color: #0f4bcb #0f4bcb transparent;
+    border-style: solid;
+    border-width: 5px 70px 20px;
+    content: "";
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 100%
+}
+
+.banner .award-name,.banner .award-name-long {
+    display: table;
+    font-weight: bolder;
+    height: 35px;
+    margin: 3px 0;
+    width: 100%
+}
+
+.banner .award-name span,.banner .award-name-long span {
+    display: table-cell;
+    font-style: italic;
+    text-transform: uppercase;
+    vertical-align: middle
+}
+
+.banner .award-name-long span {
+    font-size: 85%
+}
+
+.banner .award-event,.banner .award-event-long {
+    display: table;
+    height: 50px;
+    text-transform: uppercase;
+    width: 100%
+}
+
+.banner .award-event span,.banner .award-event-long span {
+    display: table-cell;
+    max-width: 124px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle
+}
+
+.banner .award-event {
+    font-size: 85%;
+    line-height: 130%
+}
+
+.banner .award-event-long {
+    font-size: 75%;
+    line-height: 110%
+}
+
+.banner,.banner:after {
+    -webkit-filter: drop-shadow(0 5px 5px rgba(0,0,0,.1));
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,.1))
+}
+
+.banner.black {
+    background: #000
+}

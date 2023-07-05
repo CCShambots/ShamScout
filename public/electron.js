@@ -2,13 +2,24 @@ const electron = require("electron");
 const path = require("path");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
+const Tray = electron.Tray;
+
 let mainWindow;
+
+// run this as early in the main process as possible
+if (require('electron-squirrel-startup')) app.quit();
+
+//Auto updater code
+require('update-electron-app')()
+
 function createWindow() {
+    const appIcon = new Tray("favicon.ico")
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: { nodeIntegration: true, contextIsolation: false },
+        icon: 'favicon.ico'
     });
     // and load the index.html of the app.
     console.log(__dirname);

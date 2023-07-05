@@ -5,7 +5,7 @@ import {useLocalStorage} from "usehooks-ts";
 import "./TeamsPage.css"
 import TeamPreviewDisplay from "../components/teams/TeamPreviewDisplay";
 import {Pull} from "../util/APIUtil";
-import GenericForm from "../components/GenericForm";
+import {ScoutForm} from "../components/ScoutForm";
 import TeamListDisplay from "../components/teams/TeamListDisplay";
 
 type team = {
@@ -20,13 +20,13 @@ function TeamsPage() {
     let [listView, setListView] = useLocalStorage("teams-list-view", false)
     let [teams] = useLocalStorage<team[]>(`teams-${currentEvent}`, []);
 
-    let [submittedForms, setSubmittedForms] = useState<GenericForm[]>([])
+    let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
 
     useEffect(() => {
 
         Pull(`template/test/get`, (data) => {
             setSubmittedForms(data.map((e:any) =>
-                GenericForm.fromJson(e)
+                ScoutForm.fromJson(e)
             ))
         }).then(() => {})
     }, [currentEvent])
