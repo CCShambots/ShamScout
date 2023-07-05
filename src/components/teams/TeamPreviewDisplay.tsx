@@ -1,5 +1,6 @@
 import React from "react";
 import Picture from "../../resources/2056.jpg"
+
 import "./TeamPreviewDisplay.css"
 import {Link} from "react-router-dom";
 

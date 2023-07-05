@@ -6,7 +6,7 @@
     width: 50vw;
     margin: 0.5vh 0.5vw;
 
-    max-height: 91vh;
+    max-height: 91.5vh;
     overflow: scroll;
 }
 
@@ -19,11 +19,11 @@
 .picklist-item-display {
     border: 1px solid gray;
 
-    background-color: darkgray;
+    background-color: #e7e6e6;
 
     border-radius: 1vh;
 
-    padding: 0.5vh 0.5vw;
+    padding: 0.25vh 0.5vw;
 
     display: flex;
     justify-content: space-between;

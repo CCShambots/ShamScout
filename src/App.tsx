@@ -13,9 +13,9 @@ import PicklistPage from "./pages/PicklistPage";
 
 function App() {
   return (
-      <HashRouter basename={`/`}>
+      <HashRouter>
         <Routes>
-            <Route path='' element={ <OverviewPage /> } />
+            <Route path='/' element={ <OverviewPage /> } />
             <Route path='/scan' element={ <ScanPage/>} />
             <Route path='/matches' element={ <MatchPage /> } />
             <Route path='/teams' element={ <TeamsPage /> } />

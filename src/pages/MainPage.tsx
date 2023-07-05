@@ -5,6 +5,7 @@ function MainPage() {
     return (
         <div>
             <Header/>
+            <p>WElcone</p>
         </div>
     )
 }

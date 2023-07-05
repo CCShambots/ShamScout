@@ -1,6 +1,6 @@
 {
-  "name": "5907-scouting-manager",
-  "productName": "5907 Scouting Manager",
+  "name": "sham-scout",
+  "productName": "ShamScout",
   "description": "Application for managing FRC 5907 scouting data during events",
   "version": "2023.0.1",
   "main": "public/electron.js",
@@ -17,6 +17,8 @@
     "@types/node": "^16.18.31",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
+    "electron-squirrel-startup": "^1.0.0",
+    "file-loader": "^6.2.0",
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0",
@@ -29,15 +31,18 @@
     "semantic-ui-css": "^2.5.0",
     "sortablejs": "^1.15.0",
     "typescript": "^4.9.5",
+    "url-loader": "^4.1.1",
     "usehooks-ts": "^2.9.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "electron-forge start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "cbuild": "craco build",
-    "estart": "electron ."
+    "estart": "electron .",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "eslintConfig": {
     "extends": [
@@ -58,12 +63,16 @@
     ]
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.2.1",
     "@types/react-color": "^3.0.6",
     "@types/sortablejs": "^1.15.1",
-    "electron-packager": "^17.1.1",
-    "electron-winstaller": "^5.1.0",
+    "concurrently": "^8.2.0",
+    "cross-env": "^7.0.3",
+    "electron": "^25.2.0",
+    "electron-is-dev": "^2.0.0",
     "react-router-dom": "^6.11.2",
     "semantic-ui-react": "^2.1.4",
+    "wait-on": "^7.0.1",
     "webpack-node-externals": "^3.0.0"
   }
 }
