@@ -24,3 +24,4 @@ yarn-error.log*
 
 /release-builds
 .idea/
+out/

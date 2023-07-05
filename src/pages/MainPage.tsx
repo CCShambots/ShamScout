@@ -5,7 +5,7 @@ function MainPage() {
     return (
         <div>
             <Header/>
-            <p>WElcone</p>
+            <p>Weclame</p>
         </div>
     )
 }

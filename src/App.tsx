@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import {HashRouter, NavLink, Route, Routes} from "react-router-dom";
 import OverviewPage from "./pages/MainPage";
