@@ -2,7 +2,6 @@ const electron = require("electron");
 const path = require("path");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-const Tray = electron.Tray;
 
 let mainWindow;
 
@@ -13,7 +12,6 @@ if (require('electron-squirrel-startup')) app.quit();
 require('update-electron-app')()
 
 function createWindow() {
-    const appIcon = new Tray("favicon.ico")
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 800,
