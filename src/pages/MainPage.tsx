@@ -7,6 +7,10 @@ function MainPage() {
         <div>
             <Header/>
             <p>Test to make sure text exists</p>
+            <p>Test to make sure text exists</p>
+            <p>Test to make sure text exists</p>
+            <p>Test to make sure text exists</p>
+            <p>Test to make sure text exists</p>
             <Checklist/>
         </div>
     )

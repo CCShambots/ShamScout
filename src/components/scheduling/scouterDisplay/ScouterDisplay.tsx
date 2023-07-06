@@ -115,7 +115,7 @@ type EntryOptions = {
     targetNumScheduled:number
 }
 function ScouterEntry({e, removeSelf, numScheduled, targetNumScheduled}:EntryOptions) {
-    let [highlighted, setHighlighted] = useState(false)
+    let [highlighted] = useState(false)
 
     return e ? <Grid.Row
         className={"scouter-entry-container"}

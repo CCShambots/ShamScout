@@ -1,4 +1,4 @@
-import React, {createRef, useEffect, useRef, useState} from "react";
+import React, {createRef, useEffect, useState} from "react";
 import Header from "../components/header/Header";
 import {useSearchParams} from "react-router-dom";
 import {useLocalStorage} from "usehooks-ts";

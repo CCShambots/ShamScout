@@ -3,11 +3,10 @@ import Header from "../components/header/Header";
 import "./ConfigPage.css"
 import GameConfigsDisplay from "../components/config/GameConfigsDisplay";
 import {GameConfig} from "../components/config/GameConfig";
-import {Pull, PullTBA} from "../util/APIUtil";
+import {Pull} from "../util/APIUtil";
 import GameConfigEditor from "../components/config/GameConfigEditor";
-import {Button, Dimmer, Icon, Input, Segment, Table} from "semantic-ui-react";
+import {Input} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
-import TeamLink from "../components/team-link/TeamLink";
 import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
 
 function ConfigPage() {

@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import "./ScheduleOverview.css"
 import {DropDownOptions, Schedule, Scouter} from "../matchDisplay/ScheduleData";
-import {Button, Dimmer, Dropdown, Icon, Input, Progress, Statistic} from "semantic-ui-react";
+import {Button, Dimmer, Dropdown, Icon, Progress, Statistic} from "semantic-ui-react";
 
 import QRCode from "react-qr-code"
 import TextTransition from "react-text-transition";
-import {Post, Pull} from "../../../util/APIUtil";
+import {Post} from "../../../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 
 type scheduleOverviewOptions = {
