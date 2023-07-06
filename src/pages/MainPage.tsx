@@ -6,6 +6,7 @@ function MainPage() {
     return (
         <div>
             <Header/>
+            <p>Test to make sure text exists</p>
             <Checklist/>
         </div>
     )

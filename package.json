@@ -2,7 +2,7 @@
   "name": "sham-scout",
   "productName": "ShamScout",
   "description": "Application for managing FRC scouting data during events developed by FRC 5907",
-  "version": "2023.0.1",
+  "version": "2023.0.2",
   "main": "public/electron.js",
   "homepage": "./",
   "author": "Jacob Barta",
