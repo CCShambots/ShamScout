@@ -4,7 +4,6 @@ import {DropDownOptions, Schedule, Scouter} from "../matchDisplay/ScheduleData";
 import {Button, Dimmer, Dropdown, Icon, Progress, Statistic} from "semantic-ui-react";
 
 import QRCode from "react-qr-code"
-import TextTransition from "react-text-transition";
 import {Post} from "../../../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 
@@ -118,7 +117,6 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
                         ><Icon name={"arrow left"}/></Button>
 
                         <div className={"center-qr-info"}>
-                            <TextTransition className={"qr-options-text"}>{schedule.scouters[currentQRCodeIndex-1]?.name}</TextTransition>
                             <Dropdown selection
                                       value={schedule.scouters[currentQRCodeIndex]?.name}
                                       options={scoutOptions}
@@ -126,7 +124,6 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
                                 (e, data) =>
                                     setCurrentQRCodeIndex(schedule.scouters.indexOf(schedule.getScouterFromName(data.value)))}
                             />
-                            <TextTransition className={"qr-options-text"}>{schedule.scouters[currentQRCodeIndex+1]?.name}</TextTransition>
                         </div>
 
                         <Button
@@ -162,9 +159,9 @@ function QRCodeDisplay({scouter, schedule}:qrCodeOptions) {
 
     return(
         <div className={"qr-display"}>
-            <h1>{scouter.name}</h1>
+            <h1>User: {scouter.name}</h1>
             <QRCode value={code} className={"qr-code"}/>
-            <p>{code}</p>
+            <p className={"wrap-code"}>{code}</p>
             <Statistic.Group className={"qr-code-stats"}>
                 <Statistic>
                     <Statistic.Value>{schedule.getNumMatchesForScout(scouter)}</Statistic.Value>

@@ -51,6 +51,8 @@
 
 .qr-code-header-text {
     width: 35vw;
+
+    margin-bottom: 0;
 }
 
 .qr-code-close-button {
@@ -78,7 +80,7 @@
 }
 
 .qr-display {
-    margin: 3vh 0
+    margin: 1vh 0
 }
 
 .qr-code-stats {
@@ -88,6 +90,10 @@
 
 .qr-code {
     height: 20vh;
+}
+
+.wrap-code {
+    overflow-wrap: break-word;
 }
 
 .vertical-center {

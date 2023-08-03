@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import "./GridEntry.css"
 import {DropDownOptions, Schedule} from "./ScheduleData";
 import {Button, Checkbox, Dropdown, Popup} from "semantic-ui-react";
-import {stat} from "fs";
 import {Rectangle, RowCol} from "./MultiSelect";
 
 type entryOptions = {
@@ -97,12 +96,13 @@ function GridEntry({match, station, schedule, setSchedule,
     //Whether the same person is scouting twice in one match
     let doubleScouted = false
 
+
     if(activeShift) {
         active =  activeShift.active
         top = activeShift.top
         bottom = activeShift.bottom
-        name = activeShift.scouter.name
-        color = activeShift.scouter.color
+        name = activeShift.scouter!.name ?? "unknown"
+        color = activeShift.scouter!.color ?? "ffffff"
 
         doubleScouted = schedule.isDoubleScouted(name, match, station)
     }

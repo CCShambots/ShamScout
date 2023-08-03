@@ -18,7 +18,7 @@ function TeamListDisplay(props: {teamNum:number, teamName:string, submittedForms
     return(
         <Table.Row>
             <Table.Cell><Link to={`/team?number=${props.teamNum}`}>{props.teamNum}</Link></Table.Cell>
-            <Table.Cell>{props.teamName}</Table.Cell>
+            <Table.Cell><Link to={`/team?number=${props.teamNum}`}>{props.teamName}</Link></Table.Cell>
             <Table.Cell>{thisTeamForms.length}</Table.Cell>
             <Table.Cell>{thisEventForms.length}</Table.Cell>
             <Table.Cell></Table.Cell>

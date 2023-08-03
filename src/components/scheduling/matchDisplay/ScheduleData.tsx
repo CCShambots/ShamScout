@@ -1,7 +1,75 @@
 class Scouter {
+    public unavailableMatches:number[] = []
+
     constructor(
         public readonly name:string,
         public readonly color:string) {
+    }
+
+    public getUnavailableString():string {
+        this.unavailableMatches = this.unavailableMatches.sort((e1, e2) => e1-e2)
+
+        this.unavailableMatches = Array.from(new Set(this.unavailableMatches))
+
+        let message = ""
+
+        //Negative 2 so that it's definitely not close to zero
+        let lastNumber = -2
+        let start = -2
+        let end = -2
+
+        for(let i = 0; i<this.unavailableMatches.length; i++) {
+            let curVal = this.unavailableMatches[i]
+
+            //Gap of more than one match
+            if(curVal - lastNumber > 1) {
+                if(end-start > 1) {
+                    message += (start+1) + "-" + (end+1) + ", "
+                    message += (curVal+1) + ", "
+                } else if(this.unavailableMatches[i+1] - curVal > 1) {
+                    message += (curVal+1) + ", "
+                }
+
+                start = curVal
+
+            } else {
+                end = curVal
+            }
+
+            lastNumber = curVal
+        }
+
+        if(end-start > 1) {
+            message += (start+1) + "-" + (end+1) + ", "
+        }
+
+        return message.substring(0, message.length-2)
+
+    }
+
+    public parseUnavailableMatches(val:string) {
+        let items:string[] = val.split(",")
+
+        let unavailablilites:number[] = []
+
+        items.forEach((e) => {
+            if(e.indexOf("-") !== -1) {
+                let start = e.substring(0, e.indexOf("-"))
+                let end = e.substring(e.indexOf("-"))
+
+                let startNum = parseInt(start)
+                //The dash looks like a negative num to it
+                let endNum = Math.abs(parseInt(end))
+
+                for(let i = startNum; i<=endNum; i++) {
+                    unavailablilites.push(i-1)
+                }
+            } else {
+                unavailablilites.push(parseInt(e)-1)
+            }
+        })
+
+        this.unavailableMatches = unavailablilites
     }
 }
 
@@ -26,7 +94,7 @@ class Schedule {
     public scouters:Scouter[] = []
 
     constructor(
-        public readonly matches:string[],
+        public matches:string[],
         scouterNames:string[],
         public shifts:Shift[]
     ) {
@@ -41,11 +109,7 @@ class Schedule {
             scoutNames.add(e.scouter);
         })
 
-        let matchArray = []
-
-        for(let i = 1; i<=numQuals; i++) {
-            matchArray.push(`Quals ${i}`)
-        }
+        let matchArray = Schedule.generateMatchLabels(numQuals)
 
         let schedule = new Schedule(matchArray, Array.from(scoutNames.values()), [])
 
@@ -64,6 +128,24 @@ class Schedule {
             "shifts":[${this.shifts.reduce((acc, e) => acc + e.toJson() + (this.shifts[this.shifts.length-1] === e ? "" : ","), "")}]
         }`
     }
+
+    public setNumMatches(numberOfMatches:number) {
+
+        this.matches = Schedule.generateMatchLabels(numberOfMatches)
+    }
+
+    public static generateMatchLabels(number:number):string[] {
+        let arr:string[] = []
+
+        for(let i = 1; i<=number; i++) {
+            arr.push(`Quals ${i}`)
+        }
+
+        return arr;
+    }
+
+
+
 
     public getLongestBreak(scouter:Scouter) {
         let scouterMatches = this.shifts.filter(e => e.scouter === scouter).reduce((acc, ele) => acc.concat(ele.matches), [-1])
@@ -131,26 +213,43 @@ class Schedule {
 
         this.shifts = []
 
-        let currentScoutPool = this.scouters;
+        let currentScoutPool:Scouter[] = []
+
+        for(let i= 0; i< this.getTargetMatchesPerScout(); i++) {
+            currentScoutPool.push(...this.scouters)
+        }
+
+        console.log(currentScoutPool)
 
        for(let match = 0; match<this.matches.length; match ++) {
 
             for(let station = 0; station<6; station++) {
 
                 //Generate 0 to 5 for stations
-                let thisScout = Math.floor(Math.random() * currentScoutPool.length)
+                let thisScoutIndex = Math.floor(Math.random() * currentScoutPool.length)
 
-                while(this.isDoubleScouted(currentScoutPool[thisScout].name, match, station)) {
-                    //Regen the scout if the current match would have a person double scout
-                    thisScout = Math.floor(Math.random() * currentScoutPool.length)
+                let thisRerolls = 0
+
+                while(this.isDoubleScouted(currentScoutPool[thisScoutIndex].name, match, station)
+                    || currentScoutPool[thisScoutIndex].unavailableMatches.includes(match)) {
+
+                    thisRerolls++
+
+                    if(thisRerolls > 10) {
+                        currentScoutPool.push(...this.scouters)
+                    }
+
+                    //Regen the scout if the current match would have a person double scout or the person is unavailable
+                    thisScoutIndex = Math.floor(Math.random() * currentScoutPool.length)
                 }
 
-                this.createShift(currentScoutPool[thisScout].name, station, match)
+                this.createShift(currentScoutPool[thisScoutIndex].name, station, match)
 
-                currentScoutPool = currentScoutPool.filter(e => e !== currentScoutPool[thisScout])
+                // currentScoutPool = currentScoutPool.filter(e => e !== currentScoutPool[thisScoutIndex])
+                currentScoutPool.splice(thisScoutIndex, 1)
 
+                //If we run out of scout options for some reason, reschedule something
                 if(currentScoutPool.length === 0) currentScoutPool = this.scouters
-
             }
         }
 

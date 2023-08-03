@@ -1,3 +1,5 @@
+import Match from "./scheduling/matchDisplay/Match";
+import {Schedule} from "./scheduling/matchDisplay/ScheduleData";
 
 type HeaderType = {
     label: string,
@@ -12,6 +14,46 @@ class ScoutForm {
         public event:string,
         public fields:Field[]
     ) {
+    }
+
+    public static getMissingMatches(matches:Match[], forms:ScoutForm[], schedule:Schedule):MissingMatch[] {
+        let missingArr:MissingMatch[] = []
+
+        matches.forEach(e => {
+
+            let teamNumbers = ScoutForm.getTeamNumbers(e)
+
+            teamNumbers.forEach(teamNum => {
+                    let missing = ScoutForm.isMissing(teamNum, e.match_number, forms)
+
+                //TODO: Make schedule 1-indexed instead of zero indexed
+                let scoutName = schedule.shifts
+                    .map((shift) => shift.includes(e.match_number-1, teamNumbers.indexOf(teamNum))) //get information about whether something is active for a given shift
+                    .filter(e => e.active)[0]?.scouter.name ?? "Someone"
+
+                    if (missing) missingArr.push(new MissingMatch(e.match_number, teamNum, scoutName))
+                })
+            }
+        )
+
+        return missingArr
+    }
+
+    public static getTeamNumbers(match:Match):number[] {
+        return [
+            match.red1,
+            match.red2,
+            match.red3,
+            match.blue1,
+            match.blue2,
+            match.blue3,
+        ]
+    }
+
+    public static isMissing(teamNum:number, matchNum:number, forms:ScoutForm[]):boolean {
+
+       return forms.filter(e => e.match_number === matchNum && e.team === teamNum).length === 0
+            && forms.filter(e => e.match_number > matchNum + 1).length > 0
     }
 
     public static fromJson(data:any):ScoutForm {
@@ -121,4 +163,13 @@ class Field {
     }
 }
 
-export {ScoutForm}
+class MissingMatch {
+    constructor(
+        public matchNum:number,
+        public teamNum:number,
+        public scouter:string
+    ) {
+    }
+}
+
+export {ScoutForm, MissingMatch}

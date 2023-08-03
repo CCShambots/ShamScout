@@ -1,0 +1,6 @@
+.main-page-content {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 1vw;
+}

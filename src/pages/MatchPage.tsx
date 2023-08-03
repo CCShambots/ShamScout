@@ -6,6 +6,7 @@ import {useLocalStorage} from "usehooks-ts";
 import "./MatchPage.css"
 import {Link} from "react-router-dom";
 import {ScoutForm} from "../components/ScoutForm";
+import Match from "../components/scheduling/matchDisplay/Match";
 
 function MatchPage() {
     
@@ -24,7 +25,7 @@ function MatchPage() {
             let blueAllianceNumbers = blueAllianceKeys.map((e:any) => parseInt(e.substring(3)));
 
             return new Match(parseInt(e.key.substring(e.key.lastIndexOf("_qm")+3)), redAllianceNumbers, blueAllianceNumbers)
-        }).sort((e1:Match, e2:Match) => e1.match-e2.match))
+        }).sort((e1:Match, e2:Match) => e1.match_number-e2.match_number))
     })
 
     useEffect(() => {
@@ -57,14 +58,14 @@ function MatchPage() {
 
                     <Table.Body>
                         {matches.map(e =>
-                        <Table.Row className={"match-display"}>
-                            <Table.Cell>Quals {e.match}</Table.Cell>
-                            <TeamDisplay match={e.match} teamNum={e.red1} redAlliance={true} submittedForms={submittedForms}/>
-                            <TeamDisplay match={e.match} teamNum={e.red2} redAlliance={true} submittedForms={submittedForms}/>
-                            <TeamDisplay match={e.match} teamNum={e.red3} redAlliance={true} submittedForms={submittedForms}/>
-                            <TeamDisplay match={e.match} teamNum={e.blue1} redAlliance={false} submittedForms={submittedForms}/>
-                            <TeamDisplay match={e.match} teamNum={e.blue2} redAlliance={false} submittedForms={submittedForms}/>
-                            <TeamDisplay match={e.match} teamNum={e.blue3} redAlliance={false} submittedForms={submittedForms}/>
+                        <Table.Row className={"match-display"} key={e.match_number}>
+                            <Table.Cell>Quals {e.match_number}</Table.Cell>
+                            <TeamDisplay match={e.match_number} teamNum={e.red1} redAlliance={true} submittedForms={submittedForms}/>
+                            <TeamDisplay match={e.match_number} teamNum={e.red2} redAlliance={true} submittedForms={submittedForms}/>
+                            <TeamDisplay match={e.match_number} teamNum={e.red3} redAlliance={true} submittedForms={submittedForms}/>
+                            <TeamDisplay match={e.match_number} teamNum={e.blue1} redAlliance={false} submittedForms={submittedForms}/>
+                            <TeamDisplay match={e.match_number} teamNum={e.blue2} redAlliance={false} submittedForms={submittedForms}/>
+                            <TeamDisplay match={e.match_number} teamNum={e.blue3} redAlliance={false} submittedForms={submittedForms}/>
                         </Table.Row>
                         )}
                     </Table.Body>
@@ -88,7 +89,7 @@ function TeamDisplay(props: {teamNum:number, match:number, redAlliance:boolean, 
     let thisTeamForms = props.submittedForms
         .filter(e => e.team === props.teamNum && e.match_number === props.match)
 
-    let isMissing = thisTeamForms.length === 0 && props.submittedForms.filter(e => e.match_number > props.match + 1).length > 0
+    let isMissing = ScoutForm.isMissing(props.teamNum, props.match, props.submittedForms);
 
     return(
         <Table.Cell className={(props.redAlliance ? "red-team " : "blue-team ") + (isMissing ? "error-team" : "")}>
@@ -102,29 +103,6 @@ function TeamDisplay(props: {teamNum:number, match:number, redAlliance:boolean, 
             </Link>
         </Table.Cell>
     )
-}
-
-class Match {
-    public red1:number
-    public red2:number
-    public red3:number
-    public blue1:number
-    public blue2:number
-    public blue3:number
-
-    constructor(
-        public match:number,
-        redAlliance:number[],
-        blueAlliance:number[]
-    ) {
-        this.red1 = redAlliance[0]
-        this.red2 = redAlliance[1]
-        this.red3 = redAlliance[2]
-
-        this.blue1 = blueAlliance[0]
-        this.blue2 = blueAlliance[1]
-        this.blue3 = blueAlliance[2]
-    }
 }
 
 export default MatchPage

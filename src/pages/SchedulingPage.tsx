@@ -19,8 +19,13 @@ function SchedulingPage() {
     useEffect(() => {
         PullTBA(`event/${currentEvent}/matches/keys`, (tbaData) => {
 
+            let numQuals = tbaData.filter((ele:any) => ele.indexOf(currentEvent+"_qm") !== -1).length;
+
+            schedule.setNumMatches(numQuals)
+            setSchedule(schedule)
+
             Pull(`schedules/${currentEvent}`, (data) => {
-                setSchedule(Schedule.fromJson(data, tbaData.filter((ele:any) => ele.indexOf(currentEvent+"_qm") !== -1).length));
+                setSchedule(Schedule.fromJson(data, numQuals));
             }).then(() => {})
         })
     }, [currentEvent])

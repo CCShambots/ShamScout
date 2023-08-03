@@ -1,7 +1,7 @@
 .checklist-item {
     display: flex;
     flex-direction: row;
-    margin: 1vh 1vw;
+    margin: 2vh 1vw;
 
     position: relative;
 
@@ -16,6 +16,8 @@
 .checklist-text {
     margin-top: auto;
     margin-bottom: auto;
+
+    line-height: 2vh;
 }
 
 .child-checklist {

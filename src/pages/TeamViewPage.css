@@ -10,6 +10,10 @@
     border: 2px solid black;
 }
 
+.result-text {
+    text-align: center;
+}
+
 .top-row {
     display: flex;
     justify-content: space-between;
@@ -18,8 +22,10 @@
 }
 
 .banners {
-    display: flex;
+    /*display: flex;*/
     justify-content: space-between;
+
+    max-width: 25vw;
 }
 
 .top-text {
@@ -29,4 +35,6 @@
 
 .table-manager {
     display: flex;
+
+    align-items: start;
 }
