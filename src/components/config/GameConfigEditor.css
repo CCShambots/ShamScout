@@ -20,6 +20,8 @@
 
     background-color: white;
     border-radius: 5vh;
+
+    position: relative;
 }
 
 .config-qr-code-header-text {

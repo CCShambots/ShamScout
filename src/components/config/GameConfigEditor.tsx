@@ -14,7 +14,7 @@ import {
 import "./GameConfigEditor.css"
 import {DropDownOptionsAltText} from "../scheduling/matchDisplay/ScheduleData";
 import QRCode from "react-qr-code";
-import {splitString} from "../../util/QRUtil";
+import {QRDisplay, splitString} from "../../util/QRUtil";
 
 export default function GameConfigEditor(
     props: {
@@ -81,32 +81,10 @@ export default function GameConfigEditor(
                         </Button>
                     </div>
 
-                    <QRDisplay config={props.template}/>
+                    <QRDisplay splitCode={splitString(props.template.generateJSON())}/>
 
                 </div>
             </Dimmer>
-        </div>
-    )
-
-}
-
-function QRDisplay(props: {
-    config:GameConfig
-}) {
-
-    let splitCodeOptions = splitString(props.config.generateJSON());
-    let [currentSplitIndex, setCurrentSplitIndex] = useState(0)
-
-    return(
-        <div>
-            <QRCode value={splitCodeOptions[currentSplitIndex]} className={"qr-code-big"}/>
-            <p>{splitCodeOptions[currentSplitIndex]}</p>
-
-            <h2>Part {currentSplitIndex + 1} of {splitCodeOptions.length}</h2>
-            
-            <Button icon={"arrow left"} onClick={() => setCurrentSplitIndex(currentSplitIndex-1)} disabled={currentSplitIndex === 0}/>
-            <Button icon={"arrow right"} onClick={() => setCurrentSplitIndex(currentSplitIndex+1)} disabled={currentSplitIndex === splitCodeOptions.length-1}/>
-
         </div>
     )
 

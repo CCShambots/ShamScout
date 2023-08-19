@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
 import Header from "../components/header/Header";
-import {Button, Popup, Table} from "semantic-ui-react";
+import {Button, Dimmer, Icon, Popup, Table} from "semantic-ui-react";
 import {Pull, PullTBA} from "../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import "./MatchPage.css"
 import {Link} from "react-router-dom";
 import {ScoutForm} from "../components/ScoutForm";
 import Match from "../components/scheduling/matchDisplay/Match";
+import QRCode from "react-qr-code";
+import {QRDisplay, splitString} from "../util/QRUtil";
 
 function MatchPage() {
     
@@ -14,6 +16,8 @@ function MatchPage() {
     
     let [matches, setMatches] = useLocalStorage<Match[]>(`matches-${currentEvent}`, [])
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
+
+    let [qrDimmerActive, setQRDimmerActive] = useState(false)
     
     const syncMatches = () => PullTBA(`event/${currentEvent}/matches/simple`, (data) => {
         setMatches(data.filter((e:any) => e.key.indexOf(currentEvent+"_qm") !== -1).map((e:any):Match => {
@@ -72,13 +76,35 @@ function MatchPage() {
                 </Table>
             </div>
 
-            <Popup content={"Sync matches from TBA"} size={"huge"} inverted trigger={
-                <Button
-                    className={"sync-matches"}
-                    size={"massive"} icon={"sync"} color={"blue"}
-                    onClick={syncMatches}
-                />
-            }/>
+            <div className={"primary-action-buttons"}>
+                <Popup content={"Show schedule QR Code"} size={"large"} inverted trigger={
+                   <Button
+                       size={"massive"} icon={"qrcode"} color={"red"}
+                       onClick={() => setQRDimmerActive(true)}
+                   />
+                }/>
+
+                <Popup content={"Sync matches from TBA"} size={"large"} inverted trigger={
+                    <Button
+                        size={"massive"} icon={"sync"} color={"blue"}
+                        onClick={syncMatches}
+                    />
+                }/>
+
+            </div>
+
+            <Dimmer page active={qrDimmerActive} onClickOutside={() => setQRDimmerActive(false)}>
+                <div className={"config-qr-code-window"}>
+
+                    <div className={"qr-code-header"}>
+                        <h1 className={"config-qr-code-header-text"}>Match Schedule QR Code</h1>
+                        <Button className={"qr-code-close-button"} icon={"close"} onClick={() => setQRDimmerActive(false)}>
+                        </Button>
+                    </div>
+
+                    <QRDisplay splitCode={splitString(Match.toCode(matches), 500)}/>
+                </div>
+            </Dimmer>
 
         </div>
     )

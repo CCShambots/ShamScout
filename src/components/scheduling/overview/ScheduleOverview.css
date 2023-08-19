@@ -33,6 +33,7 @@
 }
 
 .qr-code-window {
+    position: relative;
     width: 35vw;
     max-height: 65vh;
 
@@ -59,6 +60,10 @@
     position: absolute;
     right: 2vw;
     height: 3vh;
+}
+
+.wrap-text {
+    overflow-wrap: anywhere;
 }
 
 .bottom-qr-code-content {

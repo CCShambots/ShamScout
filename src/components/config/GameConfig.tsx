@@ -89,7 +89,7 @@ class ConfigItem {
         //Return a different value if we need a min or max value
         if(this.type === ItemType.Rating) {
             return `{
-                "data_type":"{"${ItemType[this.type]}": {"min": ${this.min}, "max": ${this.max}}},
+                "data_type":{"${ItemType[this.type]}": {"min": ${this.min}, "max": ${this.max}}},
                 "name":"${this.label}"
             }`
         }
