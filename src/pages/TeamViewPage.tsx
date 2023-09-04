@@ -22,6 +22,8 @@ function TeamViewPage() {
 
     let [currentEvent] = useLocalStorage("current-event", "")
 
+    let [activeTemplate] = useLocalStorage("active-template", "")
+
     let [teams] = useLocalStorage<team[]>(`teams-${currentEvent}`, []);
 
     const [searchParams] = useSearchParams();
@@ -41,7 +43,8 @@ function TeamViewPage() {
 
     useEffect(() => {
 
-        Pull(`template/test/get`, (data) => {
+
+        Pull(`template/${activeTemplate}/get`, (data) => {
 
             let forms:ScoutForm[] = data.map((e:any) =>
                 ScoutForm.fromJson(e)
@@ -181,9 +184,11 @@ function TeamViewPage() {
                         <Table.Cell>{e.match_number}</Table.Cell>
                         <Table.Cell>{e.event}</Table.Cell>
                         {
-                            e.fields.map(e =>
-                                <Table.Cell key={e.getValue().toString()}>{e.getValue()}</Table.Cell>
-                            )
+                            thisTeamForms[0]?.fields.map(field => {
+                                return e.fields.filter(ele => ele.label === field.label).map((ele) =>
+                                    <Table.Cell key={ele.getValue().toString()}>{ele.getValue().toString()}</Table.Cell>
+                                )
+                            })
                         }
                     </Table.Row>
                 )}
@@ -267,7 +272,7 @@ class TeamEventInfo {
 }
 
 function EventTable(props: {events:TeamEventInfo[]}) {
-    return <Table>
+    return <Table className={"team-table-text-centering"}>
         <Table.Header>
             <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>

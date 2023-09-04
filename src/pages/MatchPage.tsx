@@ -13,6 +13,7 @@ import {QRDisplay, splitString} from "../util/QRUtil";
 function MatchPage() {
     
     let [currentEvent] = useLocalStorage("current-event", "")
+    let [currentTemplate] = useLocalStorage("active-template", "")
     
     let [matches, setMatches] = useLocalStorage<Match[]>(`matches-${currentEvent}`, [])
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
@@ -34,7 +35,9 @@ function MatchPage() {
 
     useEffect(() => {
 
-        Pull(`template/test/get?event=${currentEvent}`, (data) => {
+        Pull(`template/${currentTemplate}/get?event=${currentEvent}`, (data) => {
+
+            console.log(data)
             setSubmittedForms(data.map((e:any) =>
                 ScoutForm.fromJson(e)
             ))

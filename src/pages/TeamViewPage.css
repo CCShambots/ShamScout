@@ -38,3 +38,7 @@
 
     align-items: start;
 }
+
+.team-table-text-centering tr>td{
+    text-align: center;
+}
