@@ -150,21 +150,6 @@ function TeamViewPage() {
         <div className={"table-manager"}>
             <Button size={"huge"} color={"blue"} onClick={() => downloadCSVRef.current.link.click()}><Icon name={"table"}/>Download CSV</Button>
             <CSVLink ref={downloadCSVRef} data={thisTeamForms} headers={thisTeamForms[0]?.generateHeader()} filename={`${teamNum}-data.csv`}/>
-
-            {/*<Button size={"huge"}><Icon name={"filter"}/></Button>*/}
-
-            <Dropdown
-                button
-                className='icon'
-                floating
-                labeled
-                icon='filter'
-                // options={}
-                search
-                multiple
-                selection
-                text='Filter'
-            />
         </div>
 
         <Table>

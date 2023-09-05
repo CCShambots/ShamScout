@@ -3,6 +3,7 @@ import "./MatchSchedulingDisplay.css"
 import GridEntry from "./GridEntry";
 import {Schedule} from "./ScheduleData";
 import {Rectangle, RowCol} from "./MultiSelect";
+import {Button, Input, Popup} from "semantic-ui-react";
 
 type MatchSchedulingDisplayOptions = {
     schedule:Schedule,
@@ -16,6 +17,8 @@ function MatchSchedulingDisplay({schedule, setSchedule}: MatchSchedulingDisplayO
     let [multiSelect, setMultiSelect] = useState(false)
     let [multiSelectName, setMultiSelectName] = useState("")
 
+    let [newMatchNum, setNewMatchNum] = useState(-1)
+
     const generateGridEntry = (match:number, station:number) => {
         return <GridEntry match={match} station={station} schedule={schedule} setSchedule={setSchedule}
                    multiSelectRect={multiSelectRect} setMultiSelectRect={setMultiSelectRect}
@@ -26,7 +29,40 @@ function MatchSchedulingDisplay({schedule, setSchedule}: MatchSchedulingDisplayO
 
     return(
         <div className={"scheduling-container"}>
-            <h1 className={"scheduling-header"}>Matches</h1>
+            <div className={"scheduling-header"}>
+                <h1>Matches</h1>
+
+                <Popup
+                    trigger={
+                        <Button className={"match-number-button"} icon={"setting"} onClick={() => {
+                        }}/>
+                    }
+                    hoverable
+                >
+                    <Input
+                        value={newMatchNum !== -1 ? newMatchNum : ""}
+                        placeholder={"Set number of matches"}
+                        onChange={(e) => {
+                            if(parseInt(e.target.value)) {
+                                setNewMatchNum(parseInt(e.target.value))
+                            } else if(e.target.value === "") {
+                                setNewMatchNum(-1)
+                            }
+                        }}
+                    />
+                    <Button color={"green"} disabled={newMatchNum === -1} onClick={() => {
+
+                        schedule.setNumMatches(newMatchNum)
+
+                        setSchedule(Object.create(schedule))
+                        
+                        setNewMatchNum(-1)
+                    }}>
+                        Change
+                    </Button>
+
+                </Popup>
+            </div>
             <table className={"table"}
                 onMouseUp={() => {
                     setMultiSelect(false)

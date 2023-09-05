@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {createRef, useEffect, useState} from "react";
 import Header from "../components/header/Header";
 import Checklist from "../components/main/Checklist";
 import MissingMatchesDisplay from "../components/main/MissingMatchesDisplay";
@@ -8,6 +8,8 @@ import {useLocalStorage} from "usehooks-ts";
 import Match from "../components/scheduling/matchDisplay/Match";
 import "./MainPage.css"
 import {Schedule} from "../components/scheduling/matchDisplay/ScheduleData";
+import {Button, Icon} from "semantic-ui-react";
+import {CSVLink} from "react-csv";
 
 function MainPage() {
 
@@ -43,11 +45,23 @@ function MainPage() {
         }).then(() => {})
     }, [currentEvent])
 
+    let downloadCSVRef:any = createRef()
+
     return (
         <div>
             <Header/>
             <div className={"main-page-content"}>
                 <Checklist/>
+
+                <div className={"table-manager"}>
+                    <Button
+                        size={"huge"}
+                        color={"blue"}
+                        onClick={() => downloadCSVRef.current.link.click()}>
+                        <Icon name={"table"}/>Download CSV for {currentEvent}
+                    </Button>
+                    <CSVLink ref={downloadCSVRef} data={submittedForms} headers={submittedForms[0]?.generateHeader()} filename={`${currentEvent}-data.csv`}/>
+                </div>
 
                 <MissingMatchesDisplay submittedForms={submittedForms} matches={matches} schedule={schedule}/>
             </div>
