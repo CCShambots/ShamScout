@@ -1,3 +1,4 @@
+import {GameConfig} from "../components/config/GameConfig";
 
 let apiHost = "http://localhost:8080/";
 
@@ -23,6 +24,60 @@ export async function Post(endpoint:string, body:string):Promise<boolean> {
     )
 
     return response.ok;
+}
+
+export async function RemoveTemplate(templateName:string) {
+    const response = await fetch(apiHost + `template/delete/${templateName}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+    })
+
+    return response.ok;
+}
+
+export async function AddTemplate(config:GameConfig) {
+
+    const response = await fetch(apiHost + "template/add", {
+            method: 'POST',
+            body: config.generateJson(),
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            }
+        }
+    )
+
+    return response.ok;
+}
+
+export async function ModifyTemplate(config:GameConfig) {
+
+    const response = await fetch(apiHost + "template/modify", {
+            method: 'POST',
+            body: config.generateJson(),
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            }
+        }
+    )
+
+    return response.ok;
+}
+
+export async function IsApiAlive() {
+
+    try {
+        const response = await fetch(apiHost + "status")
+
+        return response.ok;
+
+    } catch {
+        return false
+    }
 }
 
 export function PullTBA(endpoint:string, callback:(e:any) => void) {

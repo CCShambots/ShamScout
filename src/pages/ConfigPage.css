@@ -30,9 +30,6 @@
 }
 
 .game-config-cell {
-    display: flex;
-    justify-content: space-between;
-
     user-select: none;
 }
 
@@ -65,4 +62,14 @@
 
     max-height: 85vh;
     overflow: scroll;
+}
+
+.inline-qr-code {
+    display: flex;
+}
+
+.full-length-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }

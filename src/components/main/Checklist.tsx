@@ -1,26 +1,45 @@
 import React, {useState} from "react";
 import {useLocalStorage} from "usehooks-ts";
-import {Checkbox} from "semantic-ui-react";
+import {Button, Checkbox, Icon} from "semantic-ui-react";
 import "./Checklist.css"
 
 function Checklist() {
 
-    let [currentEvent] = useLocalStorage("current-event", "")
-    let [checkListState, setCheckListState] = useLocalStorage<ChecklistItem[]>(`checklist-${currentEvent}`,
-        [
-            new ChecklistItem("Setup Event (in Config)", [
-                new ChecklistItem("Enter Event Key (From TBA)"),
-                new ChecklistItem("Set TBA API Key"),
-                new ChecklistItem("Ensure Team List is Correct"),
-                new ChecklistItem("Select Game Config"),
-                new ChecklistItem("Make sure Config Fields are Correct"),
-                new ChecklistItem("TODO"),
+    const defaultChecklist:ChecklistItem[] = [
+        new ChecklistItem("Event Setup (in Config) - Before Event", [
+            new ChecklistItem("Enter event key (From TBA)"),
+            new ChecklistItem("Set TBA API key"),
+            new ChecklistItem("Ensure team list is correct"),
+            new ChecklistItem("Select game config"),
+            new ChecklistItem("Make sure config fields are correct"),
+        ]),
+        new ChecklistItem("Setup Scouters - At Event", [
+            new ChecklistItem("(In Config) Have scouters scan current event key"),
+            new ChecklistItem("(In Config) Have scouters scan game config"),
+            new ChecklistItem("Get list of matches any scouters need to miss"),
+            new ChecklistItem("Create scouting schedule after match schedule releases"),
+            new ChecklistItem("Post schedule to server"),
+            new ChecklistItem("Make sure scouters have their schedules", [
+                new ChecklistItem("(If needed) Have scouters scan their schedules"),
             ])
-        ]
-    )
+        ]),
+    ]
+
+    let [currentEvent] = useLocalStorage("current-event", "")
+    let [checkListState, setCheckListState] =
+        useLocalStorage<ChecklistItem[]>(`checklist-${currentEvent}`, [...defaultChecklist])
 
     return(
         <div>
+            <Button
+                onClick={() => {
+                    setCheckListState([...defaultChecklist])
+                    window.location.reload()
+                }}
+                size={"big"}
+                color={"red"}>
+                    <Icon name={"eraser"}/>Clear List
+            </Button>
             {
                 ChecklistItem.generateComponent(checkListState, () => setCheckListState([...checkListState]))
             }

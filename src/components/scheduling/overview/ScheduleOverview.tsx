@@ -65,7 +65,7 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
 
                 <Button onClick={handleClick}><Icon name={"random"}/>Generate Schedule</Button>
 
-                <Button onClick={() => setQRCodeDimmerActive(true)}><Icon name={"qrcode"}/>Generate QR Codes</Button>
+                <Button color={"blue"} onClick={() => setQRCodeDimmerActive(true)}><Icon name={"qrcode"}/>Generate QR Codes</Button>
 
                 <Button.Group>
                     <Button color={"green"} onClick={() => {

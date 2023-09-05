@@ -82,14 +82,14 @@ function MatchPage() {
             <div className={"primary-action-buttons"}>
                 <Popup content={"Show schedule QR Code"} size={"large"} inverted trigger={
                    <Button
-                       size={"massive"} icon={"qrcode"} color={"red"}
+                       size={"massive"} icon={"qrcode"} color={"blue"}
                        onClick={() => setQRDimmerActive(true)}
                    />
                 }/>
 
                 <Popup content={"Sync matches from TBA"} size={"large"} inverted trigger={
                     <Button
-                        size={"massive"} icon={"sync"} color={"blue"}
+                        size={"massive"} icon={"sync"} color={"green"}
                         onClick={syncMatches}
                     />
                 }/>

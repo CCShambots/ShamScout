@@ -13,7 +13,6 @@ import {
 } from "semantic-ui-react";
 import "./GameConfigEditor.css"
 import {DropDownOptionsAltText} from "../scheduling/matchDisplay/ScheduleData";
-import QRCode from "react-qr-code";
 import {QRDisplay, splitString} from "../../util/QRUtil";
 
 export default function GameConfigEditor(
@@ -44,15 +43,12 @@ export default function GameConfigEditor(
                             {props.template.name}
                         </Table.HeaderCell>
                         <Table.HeaderCell>
-                            <Button animated={"vertical"} onClick={() => setQRDimmer(true)}>
-                                <Button.Content visible><Icon name={"qrcode"}/></Button.Content>
-                                <Button.Content hidden>QR Code</Button.Content>
-                            </Button>
+                            <Button color={"blue"} icon={"qrcode"} onClick={() => setQRDimmer(true)}/>
                         </Table.HeaderCell>
                         <Table.HeaderCell>
                             <Button animated={"vertical"} onClick={() => {
 
-                                props.template.items.push(new ConfigItem("title"))
+                                props.template.items.push(new ConfigItem("Title"))
 
                                 props.setTemplate(Object.create(props.template))
                             }}>
@@ -65,7 +61,9 @@ export default function GameConfigEditor(
                 <Table.Body>
                         {
                             props.template.items.map(e => {
-                                return <FormItem key={props.template.items.indexOf(e)} item={e} options={options} config={props.template} setConfig={props.setTemplate}/>
+                                return <FormItem key={props.template.items.indexOf(e)} item={e} options={options} config={props.template} setConfig={
+                                    props.setTemplate
+                                }/>
                             })
                         }
                 </Table.Body>
@@ -75,13 +73,10 @@ export default function GameConfigEditor(
                 <div className={"config-qr-code-window"}>
                     <div className={"qr-code-header"}>
                         <h1 className={"config-qr-code-header-text"}>Config QR Code</h1>
-                        <Button className={"qr-code-close-button"} animated={"vertical"} onClick={() => setQRDimmer(false)}>
-                            <Button.Content hidden>Close</Button.Content>
-                            <Button.Content visible><Icon name={"x"}/></Button.Content>
-                        </Button>
+                        <Button className={"qr-code-close-button"} icon={"x"} color={"red"} onClick={() => setQRDimmer(false)}/>
                     </div>
 
-                    <QRDisplay splitCode={splitString(props.template.generateJSON())}/>
+                    <QRDisplay splitCode={splitString(props.template.generateQRCodeJson())}/>
 
                 </div>
             </Dimmer>
@@ -115,8 +110,6 @@ function FormItem(props: {
                 // clearable
                 onChange={(event, {value}) => {
                     let str = value as string
-                    str = str.replace(" ", "_")
-                    str = str.toLowerCase();
                     props.item.setType(str)
                     props.setConfig(Object.create(props.config))
                 }}
@@ -130,6 +123,7 @@ function FormItem(props: {
                     props.item.label = data.value
                     props.setConfig(Object.create(props.config))
                 }}
+                error={!props.item.isLegalName(props.config)}
             />
         </Table.Cell>
         <Table.Cell>

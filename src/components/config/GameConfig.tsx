@@ -1,18 +1,35 @@
+import {Icon, Popup} from "semantic-ui-react";
+
 enum ItemType {
     Title,
     CheckBox,
     Rating,
     Number,
-    short_text,
-    long_text
+    ShortText,
+    LongText
+}
+
+enum Status {
+    Uploaded,
+    Edited
 }
 
 class GameConfig {
+    public status:Status;
+
     constructor(
         public name:string,
         public year:number,
         public items:ConfigItem[]
     ) {
+        this.status = Status.Uploaded;
+    }
+
+    //Evaluate if the config is legal based on whether it has all unique names
+    isLegal() {
+        let set =  new Set<String>(this.items.map(e => e.label).filter(e => e !== ""))
+
+        return set.size === this.items.length
     }
 
     public static fromJson(json:any):GameConfig {
@@ -21,33 +38,58 @@ class GameConfig {
         return new GameConfig(
             json.name,
             json.year,
-            json.fields.map((e:any) => {
-                let rawDataType = e["data_type"];
+            json.fields.map((e: any) => {
+                    let rawDataType = e["data_type"];
 
-                let useRawDataType = typeof rawDataType === "string"
+                    let useRawDataType = typeof rawDataType === "string"
 
-                let dataType = useRawDataType ? rawDataType : Object.keys(rawDataType)[0]
-                let min = useRawDataType ? -1 : rawDataType[Object.keys(rawDataType)[0]].min
-                let max = useRawDataType ? -1 : rawDataType[Object.keys(rawDataType)[0]].max
+                    let dataType = useRawDataType ? rawDataType : Object.keys(rawDataType)[0]
+                    let min = useRawDataType ? -1 : rawDataType[Object.keys(rawDataType)[0]].min
+                    let max = useRawDataType ? -1 : rawDataType[Object.keys(rawDataType)[0]].max
 
-                return new ConfigItem(dataType, e.name, min, max)
-            }
-
+                    return new ConfigItem(dataType, e.name, min, max)
+                }
             )
-        )
+        );
     }
 
-    public generateJSON():string {
-        return `cfg:{"name":"${this.name}","year": ${this.year},"fields": [
-            ${this.items.reduce((acc, val) => 
-                    acc + val.generateJSON() + (this.items.indexOf(val) !== this.items.length-1 ? "," : ""), "")}
+    public generateQRCodeJson():string {
+        return `cfg:${this.generateJson()}`
+    }
+
+    public generateJson():string {
+        return `{"name":"${this.name}","year": ${this.year},"fields": [
+            ${this.items.reduce((acc, val) =>
+            acc + val.generateJSON() + (this.items.indexOf(val) !== this.items.length-1 ? "," : ""), "")}
                 ]}`
     }
 
     removeItem(item:ConfigItem):GameConfig {
         this.items = this.items.filter(e => e !== item);
-
         return Object.create(this)
+    }
+
+    setEdited() {
+        this.status = Status.Edited
+    }
+
+    setUploaded() {
+        this.status = Status.Uploaded
+    }
+
+    getStatusIcon() {
+        switch(this.status) {
+            case Status.Uploaded:
+                return <Popup
+                trigger={<Icon name={"checkmark"} color={"green"}/>}
+                content={"This template is saved!"}
+            />
+            case Status.Edited:
+                return <Popup
+                   trigger={<Icon name={"pencil"}/>}
+                   content={"This template has unsaved changes!"}
+                />
+        }
     }
 
     swap(item:ConfigItem, up:boolean):GameConfig {
@@ -84,6 +126,10 @@ class ConfigItem {
         this.setType(type)
     }
 
+    isLegalName(config:GameConfig) {
+        return config.items.filter(e => e.label === this.label).length <= 1 && this.label !== ""
+    }
+
     generateJSON():string {
 
         //Return a different value if we need a min or max value
@@ -95,22 +141,21 @@ class ConfigItem {
         }
 
         return `{
-            "data_type":"${ItemType[this.type].replace(" ", "_")}",
+            "data_type":"${ItemType[this.type]}",
             "name":"${this.label}"
         }`
     }
 
     setType(type:string) {
         this.type = ItemType[type as keyof typeof ItemType]
-
     }
 
     isInput():boolean {
         return this.type === ItemType.CheckBox ||
                 this.type === ItemType.Rating ||
                 this.type === ItemType.Number ||
-                this.type === ItemType.short_text ||
-                this.type === ItemType.long_text
+                this.type === ItemType.ShortText ||
+                this.type === ItemType.LongText
     }
 }
 

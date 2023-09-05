@@ -12,8 +12,8 @@ import {Schedule} from "../components/scheduling/matchDisplay/ScheduleData";
 function MainPage() {
 
     let [currentEvent] = useLocalStorage("current-event", "")
+    let [currentTemplate] = useLocalStorage("active-template", "")
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
-
 
     let [matches, setMatches] = useLocalStorage<Match[]>(`matches-${currentEvent}`, [])
 
@@ -36,7 +36,7 @@ function MainPage() {
 
     useEffect(() => {
 
-        Pull(`template/test/get?event=${currentEvent}`, (data) => {
+        Pull(`template/${currentTemplate}/get?event=${currentEvent}`, (data) => {
             setSubmittedForms(data.map((e:any) =>
                 ScoutForm.fromJson(e)
             ))

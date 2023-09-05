@@ -16,6 +16,7 @@ type team = {
 function TeamsPage() {
 
     let [currentEvent] = useLocalStorage("current-event", "");
+    let [currentTemplate] = useLocalStorage("active-template", "")
 
     let [listView, setListView] = useLocalStorage("teams-list-view", false)
     let [teams] = useLocalStorage<team[]>(`teams-${currentEvent}`, []);
@@ -24,7 +25,7 @@ function TeamsPage() {
 
     useEffect(() => {
 
-        Pull(`template/test/get`, (data) => {
+        Pull(`template/${currentTemplate}/get`, (data) => {
             setSubmittedForms(data.map((e:any) =>
                 ScoutForm.fromJson(e)
             ))

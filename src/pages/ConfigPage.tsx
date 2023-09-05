@@ -3,11 +3,12 @@ import Header from "../components/header/Header";
 import "./ConfigPage.css"
 import GameConfigsDisplay from "../components/config/GameConfigsDisplay";
 import {GameConfig} from "../components/config/GameConfig";
-import {Pull} from "../util/APIUtil";
+import {AddTemplate, ModifyTemplate, Pull, RemoveTemplate} from "../util/APIUtil";
 import GameConfigEditor from "../components/config/GameConfigEditor";
-import {Input} from "semantic-ui-react";
+import {Button, Dimmer, Icon, Input} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
+import QRCode from "react-qr-code";
 
 function ConfigPage() {
 
@@ -19,6 +20,7 @@ function ConfigPage() {
     let [event, setEvent] = useLocalStorage("current-event", "");
     let [TBAKey, setTBAKey] = useLocalStorage("tba-key", "");
 
+    let [eventCodeDimmerActive, setEventCodeDimmerActive] = useState(false)
 
     let setActiveTemplate = (newItem:GameConfig) => {
         updateActiveTemplate(newItem)
@@ -26,6 +28,8 @@ function ConfigPage() {
     }
 
     let handleNewActiveTemplate = (newItem:GameConfig) => {
+
+        newItem.setEdited()
 
         templates[templates.indexOf(activeTemplate)] = newItem
 
@@ -65,9 +69,39 @@ function ConfigPage() {
 
             <div className={"config-content"}>
                 <div className={"left-column"}>
-                    <Input placeholder={'Set Event'} value={event} onChange={(e) => setEvent(e.target.value)}/>
-                    <Input placeholder={'Set TBA API Key'} value={TBAKey} onChange={(e) => setTBAKey(e.target.value)}/>
-                    <GameConfigsDisplay templates={templates} activeTemplate={activeTemplate} setActiveTemplate={setActiveTemplate}/>
+                    <div className={"inline-qr-code"}>
+                        <Button icon={"qrcode"} color={"blue"} onClick={() => setEventCodeDimmerActive(true)}/>
+                        <div className={"full-length-form"}>
+                            <Input placeholder={'Set Event'} value={event} onChange={(e) => setEvent(e.target.value)}/>
+                            <Input placeholder={'Set TBA API Key'} value={TBAKey} onChange={(e) => setTBAKey(e.target.value)}/>
+                        </div>
+                    </div>
+                    <GameConfigsDisplay
+                        templates={templates}
+                        addNewTemplate={(temp) => {
+                            templates.push(temp)
+                            setTemplates([...templates])
+
+                            AddTemplate(temp)
+                        }}
+                        modifyTemplate={async (temp) => {
+
+
+                            let success = await ModifyTemplate(temp)
+
+                            if(success) {
+                                temp.setUploaded()
+                                setTemplates([...templates])
+                            }
+                        }}
+                        removeTemplate={(name:string) => {
+                            setTemplates(templates.filter((e) => name !== e.name))
+
+                            RemoveTemplate(name)
+                        }}
+                        activeTemplate={activeTemplate}
+                        setActiveTemplate={setActiveTemplate}
+                    />
                 </div>
                 <div className={"middle-column"}>
                     <TeamsInEventDisplay/>
@@ -76,6 +110,28 @@ function ConfigPage() {
                     <GameConfigEditor template={activeTemplate} setTemplate={handleNewActiveTemplate}/>
                 </div>
             </div>
+
+            <Dimmer
+                page
+                active={eventCodeDimmerActive}
+                onClickOutside={() => setEventCodeDimmerActive(false)}
+            >
+                <div className={"config-qr-code-window"}>
+                    <div className={"qr-code-header"}>
+                        <h1 className={"config-qr-code-header-text"}>Config QR Code</h1>
+                        <Button
+                            className={"qr-code-close-button"}
+                            icon={"x"}
+                            color={"red"}
+                            onClick={() => setEventCodeDimmerActive(false)}
+                        />
+                    </div>
+
+                    <QRCode value={`eve:${event}`}/>
+
+                </div>
+
+            </Dimmer>
         </div>
     )
 }
