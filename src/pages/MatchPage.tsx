@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from "react";
 import Header from "../components/header/Header";
-import {Button, Dimmer, Icon, Popup, Table} from "semantic-ui-react";
+import {Button, Dimmer, Popup, Table} from "semantic-ui-react";
 import {Pull, PullTBA} from "../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import "./MatchPage.css"
 import {Link} from "react-router-dom";
 import {ScoutForm} from "../components/ScoutForm";
 import Match from "../components/scheduling/matchDisplay/Match";
-import QRCode from "react-qr-code";
 import {QRDisplay, splitString} from "../util/QRUtil";
 
 function MatchPage() {

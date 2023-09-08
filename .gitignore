@@ -25,3 +25,5 @@ yarn-error.log*
 /release-builds
 .idea/
 out/
+
+github_token.txt

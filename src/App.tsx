@@ -18,7 +18,7 @@ function App() {
 
     useEffect(() => {
         let interval = setInterval(() =>{
-            checkAPI()
+            checkAPI().then(() => {})
         }, 5000)
 
         return () => clearInterval(interval)

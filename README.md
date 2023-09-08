@@ -1,6 +1,10 @@
 ## Publishing new Releases
-- Update the version number (see [Update Number Instructions](https://semver.org))
+- Update the version number with the year as the major version. Bump the minor version for new features and bump the patch number for bug fixes.
+  - Ex. 2023.1.1 --> 2024.0.0 at the start of a new season
+  - Ex. 2023.1.1 --> 2023.2.0 when adding new features
+  - Ex. 2023.1.1 --> 2023.1.2 when patching bugs
 - Run `npm run build`
+- Create and set your Github token as a path variable ("GITHUB_TOKEN")
 - Run `npm run publish`
 
 ## Available Scripts

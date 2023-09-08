@@ -17,7 +17,7 @@ function MainPage() {
     let [currentTemplate] = useLocalStorage("active-template", "")
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
 
-    let [matches, setMatches] = useLocalStorage<Match[]>(`matches-${currentEvent}`, [])
+    let [matches] = useLocalStorage<Match[]>(`matches-${currentEvent}`, [])
 
     let [schedule, setSchedule] = useState(new Schedule(["Quals 1"], ["test"], []));
 

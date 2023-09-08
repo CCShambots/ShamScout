@@ -1,12 +1,16 @@
 module.exports = {
   packagerConfig: {
     asar: true,
+    icon: "./images/icon"
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+        // The ICO file to use as the icon for the generated Setup.exe
+        setupIcon: './images/icon.ico'
+      },
     },
     {
       name: '@electron-forge/maker-zip',
@@ -14,7 +18,11 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      config: {
+        options: {
+          icon: './images/icon.png'
+        }
+      },
     },
     {
       name: '@electron-forge/maker-rpm',
@@ -35,7 +43,8 @@ module.exports = {
           owner: 'CCShambots',
           name: 'ShamScout'
         },
-        prerelease: true
+        prerelease: true,
+        authToken: process.env.GITHUB_TOKEN,
       }
     }
   ]

@@ -6,6 +6,7 @@ import "./Checklist.css"
 function Checklist() {
 
     const defaultChecklist:ChecklistItem[] = [
+        new ChecklistItem("Ensure you're on the most recent version (check Github)"),
         new ChecklistItem("Event Setup (in Config) - Before Event", [
             new ChecklistItem("Enter event key (From TBA)"),
             new ChecklistItem("Set TBA API key"),
@@ -23,6 +24,9 @@ function Checklist() {
                 new ChecklistItem("(If needed) Have scouters scan their schedules"),
             ])
         ]),
+        new ChecklistItem("Supervise scouting"),
+        new ChecklistItem("Wait for team to be ranked top 8 (hopefully)"),
+        new ChecklistItem("Download data and analyze"),
     ]
 
     let [currentEvent] = useLocalStorage("current-event", "")

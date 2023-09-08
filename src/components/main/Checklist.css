@@ -41,7 +41,7 @@
 }
 
 .checklist-info-active {
-    color: gray;
+    color: rgb(128, 128, 128);
 }
 
 .checklist-cross-off {
@@ -59,7 +59,7 @@
 .checklist-cross-off-active {
     width: 100%;
 
-    background-color: gray;
+    background-color: rgb(128, 128, 128);
 }
 
 

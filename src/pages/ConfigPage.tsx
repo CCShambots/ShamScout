@@ -5,7 +5,7 @@ import GameConfigsDisplay from "../components/config/GameConfigsDisplay";
 import {GameConfig} from "../components/config/GameConfig";
 import {AddTemplate, ModifyTemplate, Pull, RemoveTemplate} from "../util/APIUtil";
 import GameConfigEditor from "../components/config/GameConfigEditor";
-import {Button, Dimmer, Icon, Input} from "semantic-ui-react";
+import {Button, Dimmer, Input} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
 import QRCode from "react-qr-code";
@@ -82,7 +82,7 @@ function ConfigPage() {
                             templates.push(temp)
                             setTemplates([...templates])
 
-                            AddTemplate(temp)
+                            AddTemplate(temp).then(() => {})
                         }}
                         modifyTemplate={async (temp) => {
 
@@ -97,7 +97,7 @@ function ConfigPage() {
                         removeTemplate={(name:string) => {
                             setTemplates(templates.filter((e) => name !== e.name))
 
-                            RemoveTemplate(name)
+                            RemoveTemplate(name).then(() => {})
                         }}
                         activeTemplate={activeTemplate}
                         setActiveTemplate={setActiveTemplate}
