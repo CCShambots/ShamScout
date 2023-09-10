@@ -8,7 +8,9 @@ function TeamPreviewDisplay(props: {teamName:string, teamNum:number}) {
     return (
         <Link to={`/team?number=${props.teamNum}`}>
             <div className={"team-display-container"}>
-                <img className={"team-display-image"} src={Picture} alt={props.teamNum.toString()}/>
+                <div className={"team-display-image-container"}>
+                    <img className={"team-display-image"} src={Picture} alt={props.teamNum.toString()}/>
+                </div>
                 <div className={"team-display-info"}>
                     <h3 className={"team-display-text"}>{props.teamNum}</h3>
                     <h3 className={"team-display-text"}>{props.teamName}</h3>

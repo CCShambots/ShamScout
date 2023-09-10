@@ -21,5 +21,35 @@
 
 .main-teams-display-list {
     padding: 1vh;
+}
 
+.inline-input {
+    display: flex;
+    justify-content: center;
+
+    margin-bottom: 1vh;
+}
+
+.input-text-container {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+.input-text {
+
+    margin-right: 0.5vw;
+}
+
+.inline-arrows {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 1vh;
+}
+
+.inline-arrows h3 {
+    margin-top: auto;
+    margin-bottom: auto;
 }

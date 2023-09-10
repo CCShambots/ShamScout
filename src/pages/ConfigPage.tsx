@@ -5,7 +5,7 @@ import GameConfigsDisplay from "../components/config/GameConfigsDisplay";
 import {GameConfig} from "../components/config/GameConfig";
 import {AddTemplate, ModifyTemplate, Pull, RemoveTemplate} from "../util/APIUtil";
 import GameConfigEditor from "../components/config/GameConfigEditor";
-import {Button, Dimmer, Input} from "semantic-ui-react";
+import {Button, Dimmer, Icon, Input} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
 import QRCode from "react-qr-code";
@@ -21,6 +21,8 @@ function ConfigPage() {
     let [TBAKey, setTBAKey] = useLocalStorage("tba-key", "");
 
     let [eventCodeDimmerActive, setEventCodeDimmerActive] = useState(false)
+
+    let [clearDataDimmerActive, setClearDataDimmerActive] = useState(false)
 
     let setActiveTemplate = (newItem:GameConfig) => {
         updateActiveTemplate(newItem)
@@ -102,6 +104,10 @@ function ConfigPage() {
                         activeTemplate={activeTemplate}
                         setActiveTemplate={setActiveTemplate}
                     />
+
+                    <Button color={"red"} onClick={() => setClearDataDimmerActive(true)}>
+                        Clear Mobile Data
+                    </Button>
                 </div>
                 <div className={"middle-column"}>
                     <TeamsInEventDisplay/>
@@ -127,8 +133,30 @@ function ConfigPage() {
                         />
                     </div>
 
-                    <QRCode value={`eve:${event}`}/>
+                    <QRCode value={`eve:${event},${TBAKey}`}/>
+                    <p>eve:{event},{TBAKey}</p>
 
+                </div>
+
+            </Dimmer>
+
+            <Dimmer
+                page
+                active={clearDataDimmerActive}
+                onClickOutside={() => setClearDataDimmerActive(false)}
+            >
+                <div className={"config-qr-code-window"}>
+                    <div className={"qr-code-header"}>
+                        <h1 className={"config-qr-code-header-text"}>Clear Mobile Data QR Code</h1>
+                        <Button
+                            className={"qr-code-close-button"}
+                            icon={"x"}
+                            color={"red"}
+                            onClick={() => setClearDataDimmerActive(false)}
+                        />
+                    </div>
+
+                    <QRCode value={`cle:`}/>
                 </div>
 
             </Dimmer>

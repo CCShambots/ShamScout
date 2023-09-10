@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useLocalStorage} from "usehooks-ts";
-import {Button, Checkbox, Icon} from "semantic-ui-react";
+import {Button, Checkbox, Icon, Progress} from "semantic-ui-react";
 import "./Checklist.css"
 
 function Checklist() {
@@ -34,16 +34,19 @@ function Checklist() {
         useLocalStorage<ChecklistItem[]>(`checklist-${currentEvent}`, [...defaultChecklist])
 
     return(
-        <div>
-            <Button
-                onClick={() => {
-                    setCheckListState([...defaultChecklist])
-                    window.location.reload()
-                }}
-                size={"big"}
-                color={"red"}>
-                    <Icon name={"eraser"}/>Clear List
-            </Button>
+        <div className={"checklist-container"}>
+            <div className={"checklist-header"}>
+                <h1>Checklist</h1>
+                <Button
+                    onClick={() => {
+                        setCheckListState([...defaultChecklist])
+                        window.location.reload()
+                    }}
+                    className={"checklist-clear-button"}
+                    color={"red"}>
+                        <Icon name={"eraser"}/>Clear List
+                </Button>
+            </div>
             {
                 ChecklistItem.generateComponent(checkListState, () => setCheckListState([...checkListState]))
             }
@@ -65,13 +68,24 @@ function ChecklistItemComponent(props: {item:ChecklistItem, updateState:() => vo
     return (
         <div>
             <div className={"checklist-item"}>
-                <Checkbox className={"checklist-checkbox"} checked={checked}
-                          onChange={(e, data) => updateChecked(data.checked!)}/>
+                <div className="checkbox-wrapper-65">
+                    <label htmlFor="cbk1-65">
+                        <input
+                            type="checkbox"
+                            checked={checked}
+                            readOnly
+                        />
+                        <span className="cbx" onClick={() => updateChecked(!checked)}>
+                            <svg width="12px" height="11px" viewBox="0 0 12 11">
+                                <polyline points="1 6.29411765 4.5 10 11 1"></polyline>
+                            </svg>
+                        </span>
+                    </label>
+                </div>
                 <div className={"checklist-info " + (checked ? "checklist-info-active" : "")}>
-                    <h2 className={"checklist-text"}>{props.item.name}</h2>
+                    <p className={"checklist-text"}>{props.item.name}</p>
                     <div className={"checklist-cross-off " + (checked ? "checklist-cross-off-active" : "") }/>
                 </div>
-                {/*<h4>{checked ? props.item.getUnfinishedChildren() + " Unfinished!" : ""}</h4>*/}
             </div>
 
             <div className={"child-checklist " + (checked ? "child-checklist-hidden" : "")}>
