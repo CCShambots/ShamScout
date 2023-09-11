@@ -57,6 +57,9 @@ class ScoutForm {
     }
 
     public static fromJson(data:any):ScoutForm {
+
+        console.log(data)
+
         return new ScoutForm(
             data.scouter,
             data.team,
@@ -131,8 +134,8 @@ class Field {
         public CheckBox:boolean,
         public Rating:number,
         public Number:number,
-        public short_text:string,
-        public long_text:string
+        public ShortText:string,
+        public LongText:string
     ) {
         this.value = this.getValue()
     }
@@ -143,13 +146,15 @@ class Field {
             case "CheckBox": return this.CheckBox
             case "Rating": return this.Rating
             case "Number": return this.Number
-            case "short_text": return this.short_text
-            case "long_text": return this.long_text
+            case "ShortText": return this.ShortText
+            case "LongText": return this.LongText
             default: return "Failed to Load"
         }
     }
 
     public static fromJson(key:string, data:any):Field {
+
+
         return new Field(
             key,
             Object.keys(data)[0],
@@ -157,8 +162,8 @@ class Field {
             data.CheckBox ?? false,
             data.Rating ?? 0,
             data.Number ?? 0,
-            data["short_text"] ?? "",
-            data["long_text"] ?? "",
+            data["ShortText"] ?? "",
+            data["LongText"] ?? "",
         )
     }
 }
