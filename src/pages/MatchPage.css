@@ -30,7 +30,7 @@
 }
 
 .primary-action-buttons {
-    position: absolute;
+    position: fixed;
 
     right: 1vw;
     bottom: 1vw;

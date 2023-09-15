@@ -1,6 +1,6 @@
 import {GameConfig} from "../components/config/GameConfig";
 
-let apiHost = "http://localhost:8080/";
+export let apiHost = "http://localhost:8080/";
 
 export async function Pull(endpoint:string, callback:(e:any) => void):Promise<void> {
     try {
@@ -85,6 +85,25 @@ export async function IsApiAlive() {
     } catch {
         return false
     }
+}
+
+export async function doesTeamHaveImage(teamNum:number) {
+    try {
+        let response = await fetch(apiHost + "bytes/get")
+
+        let outputString:string[] = await response.json()
+
+        let key = `${teamNum}-img`
+
+    return outputString.includes(key);
+
+    }catch {
+        return false
+    }
+}
+
+export function getImagePath(teamNum:number) {
+    return `${apiHost}bytes/get/key/${teamNum}-img`
 }
 
 export function PullTBA(endpoint:string, callback:(e:any) => void) {

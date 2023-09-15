@@ -5,7 +5,7 @@ import {useLocalStorage} from "usehooks-ts";
 import Picture from "../resources/2056.jpg";
 import "./TeamViewPage.css"
 import {ScoutForm} from "../components/ScoutForm";
-import {Pull, PullTBA} from "../util/APIUtil";
+import {apiHost, doesTeamHaveImage, getImagePath, Pull, PullTBA} from "../util/APIUtil";
 import {Button, Dropdown, Icon, Table} from "semantic-ui-react";
 import packageJson from '../../package.json';
 import Banner from "../components/teams/Banner";
@@ -38,6 +38,12 @@ function TeamViewPage() {
     let year=  packageJson.version.substring(0, 4);
 
     let [events, setEvents] = useState<TeamEventInfo[]>([])
+
+    let [imageInAPI, setImageInAPI] = useState(false)
+
+    useEffect(() => {
+        doesTeamHaveImage(teamNum).then((result) => {setImageInAPI(result)});
+    }, [teamNum]);
 
     let downloadCSVRef:any = createRef()
 
@@ -144,7 +150,10 @@ function TeamViewPage() {
                     })
                 }
             </div>
+            {imageInAPI ?
+            <img className={"team-view-pic"} src={getImagePath(teamNum)} alt={teamNum.toString()}/> :
             <img className={"team-view-pic"} src={Picture} alt={teamNum.toString()}/>
+            }
         </div>
 
         <div className={"table-manager"}>

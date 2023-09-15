@@ -5,7 +5,7 @@ import GameConfigsDisplay from "../components/config/GameConfigsDisplay";
 import {GameConfig} from "../components/config/GameConfig";
 import {AddTemplate, ModifyTemplate, Pull, RemoveTemplate} from "../util/APIUtil";
 import GameConfigEditor from "../components/config/GameConfigEditor";
-import {Button, Dimmer, Icon, Input} from "semantic-ui-react";
+import {Button, Dimmer, Input} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
 import QRCode from "react-qr-code";
@@ -19,8 +19,10 @@ function ConfigPage() {
 
     let [event, setEvent] = useLocalStorage("current-event", "");
     let [TBAKey, setTBAKey] = useLocalStorage("tba-key", "");
+    let [remoteAPIAdress, setRemoteAPIAdress] = useLocalStorage("api-address", "");
 
     let [eventCodeDimmerActive, setEventCodeDimmerActive] = useState(false)
+    let [apiAddressDimmerActive, setApiAddressDimmerActive] = useState(false)
 
     let [clearDataDimmerActive, setClearDataDimmerActive] = useState(false)
 
@@ -76,6 +78,12 @@ function ConfigPage() {
                         <div className={"full-length-form"}>
                             <Input placeholder={'Set Event'} value={event} onChange={(e) => setEvent(e.target.value)}/>
                             <Input placeholder={'Set TBA API Key'} value={TBAKey} onChange={(e) => setTBAKey(e.target.value)}/>
+                        </div>
+                    </div>
+                    <div className={"inline-qr-code"}>
+                        <Button icon={"qrcode"} color={"blue"} onClick={() => setApiAddressDimmerActive(true)}/>
+                        <div className={"full-length-form"}>
+                            <Input placeholder={'Set API Key'} value={remoteAPIAdress} onChange={(e) => setRemoteAPIAdress(e.target.value)}/>
                         </div>
                     </div>
                     <GameConfigsDisplay
@@ -142,6 +150,29 @@ function ConfigPage() {
 
             <Dimmer
                 page
+                active={apiAddressDimmerActive}
+                onClickOutside={() => setApiAddressDimmerActive(false)}
+            >
+                <div className={"config-qr-code-window"}>
+                    <div className={"qr-code-header"}>
+                        <h1 className={"config-qr-code-header-text"}>Config QR Code</h1>
+                        <Button
+                            className={"qr-code-close-button"}
+                            icon={"x"}
+                            color={"red"}
+                            onClick={() => setApiAddressDimmerActive(false)}
+                        />
+                    </div>
+
+                    <QRCode value={`api:${getCorrectRemoteAddress(remoteAPIAdress)}`}/>
+                    <p>api:{getCorrectRemoteAddress(remoteAPIAdress)}</p>
+
+                </div>
+
+            </Dimmer>
+
+            <Dimmer
+                page
                 active={clearDataDimmerActive}
                 onClickOutside={() => setClearDataDimmerActive(false)}
             >
@@ -162,6 +193,11 @@ function ConfigPage() {
             </Dimmer>
         </div>
     )
+}
+
+function getCorrectRemoteAddress(remoteAdress:string)  {
+    if(remoteAdress[remoteAdress.length-1] !== "/") return remoteAdress + "/"
+    return remoteAdress;
 }
 
 export default ConfigPage
