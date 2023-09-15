@@ -41,12 +41,12 @@ function ConfigPage() {
     }
 
     useEffect(() => {
-        Pull("templates", async (e) => {
+        Pull("templates/get", async (e) => {
 
             let newTemplates:GameConfig[] = []
 
             await Promise.all(e.map(async (element:any) =>
-                await Pull(`templates/${element}`,
+                await Pull(`templates/get/name/${element}`,
                     (info) => {
                         newTemplates.push(GameConfig.fromJson(info))
                     }

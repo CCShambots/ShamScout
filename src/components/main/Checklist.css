@@ -1,6 +1,8 @@
 .checklist-container {
     background-color: lightgray;
     border-radius: 3vh;
+
+    align-self: flex-start;
 }
 
 .checklist-header {

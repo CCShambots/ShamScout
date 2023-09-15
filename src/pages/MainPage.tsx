@@ -30,7 +30,7 @@ function MainPage() {
             schedule.setNumMatches(numQuals)
             setSchedule(schedule)
 
-            Pull(`schedules/${currentEvent}`, (data) => {
+            Pull(`schedules/get/event/${currentEvent}`, (data) => {
                 setSchedule(Schedule.fromJson(data, numQuals));
             }).then(() => {})
         })
@@ -38,7 +38,7 @@ function MainPage() {
 
     useEffect(() => {
 
-        Pull(`template/${currentTemplate}/get?event=${currentEvent}`, (data) => {
+        Pull(`forms/get/template/${currentTemplate}?event=${currentEvent}`, (data) => {
             setSubmittedForms(data.map((e:any) =>
                 ScoutForm.fromJson(e)
             ))

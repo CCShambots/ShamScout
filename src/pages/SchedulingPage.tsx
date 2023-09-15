@@ -24,7 +24,7 @@ function SchedulingPage() {
             schedule.setNumMatches(numQuals)
             setSchedule(schedule)
 
-            Pull(`schedules/${currentEvent}`, (data) => {
+            Pull(`schedules/get/event/${currentEvent}`, (data) => {
                 setSchedule(Schedule.fromJson(data, numQuals));
             }).then(() => {})
         })

@@ -34,11 +34,11 @@ function MatchPage() {
 
     useEffect(() => {
 
-        Pull(`template/${currentTemplate}/get?event=${currentEvent}`, (data) => {
+        Pull(`forms/get/template/${currentTemplate}?event=${currentEvent}`, (data) => {
 
             console.log(data)
             setSubmittedForms(data.map((e:any) =>
-                ScoutForm.fromJson(e)
+                ScoutForm.fromJson(e[0])
             ))
         }).then(() => {})
     }, [matches, currentEvent])

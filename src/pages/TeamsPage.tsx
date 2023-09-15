@@ -7,8 +7,6 @@ import TeamPreviewDisplay from "../components/teams/TeamPreviewDisplay";
 import {Pull} from "../util/APIUtil";
 import {ScoutForm} from "../components/ScoutForm";
 import TeamListDisplay from "../components/teams/TeamListDisplay";
-import {QRDisplay, splitString} from "../util/QRUtil";
-import Match from "../components/scheduling/matchDisplay/Match";
 import QRCode from "react-qr-code";
 
 type team = {
@@ -36,7 +34,7 @@ function TeamsPage() {
 
     useEffect(() => {
 
-        Pull(`template/${currentTemplate}/get`, (data) => {
+        Pull(`templates/get/name/${currentTemplate}`, (data) => {
             setSubmittedForms(data.map((e:any) =>
                 ScoutForm.fromJson(e)
             ))

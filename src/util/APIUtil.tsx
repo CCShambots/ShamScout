@@ -23,6 +23,13 @@ export async function Post(endpoint:string, body:string):Promise<boolean> {
         }
     )
 
+    console.log(response)
+    if(!response.ok) {
+        console.log("failure: WOMP WOMP")
+        console.log(response.status)
+        console.log(response.body)
+    }
+
     return response.ok;
 }
 
@@ -40,7 +47,7 @@ export async function RemoveTemplate(templateName:string) {
 
 export async function AddTemplate(config:GameConfig) {
 
-    const response = await fetch(apiHost + "template/add", {
+    const response = await fetch(apiHost + "templates/submit", {
             method: 'POST',
             body: config.generateJson(),
             headers: {
@@ -55,8 +62,8 @@ export async function AddTemplate(config:GameConfig) {
 
 export async function ModifyTemplate(config:GameConfig) {
 
-    const response = await fetch(apiHost + "template/modify", {
-            method: 'POST',
+    const response = await fetch(apiHost + "templates/edit", {
+            method: 'PUT',
             body: config.generateJson(),
             headers: {
                 'Content-Type': 'application/json',

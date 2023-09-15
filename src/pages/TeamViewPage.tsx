@@ -44,10 +44,10 @@ function TeamViewPage() {
     useEffect(() => {
 
 
-        Pull(`template/${activeTemplate}/get`, (data) => {
+        Pull(`forms/get/template/${activeTemplate}`, (data) => {
 
             let forms:ScoutForm[] = data.map((e:any) =>
-                ScoutForm.fromJson(e)
+                ScoutForm.fromJson(e[0])
             )
 
             forms.sort((e1, e2) => e1.match_number - e2.match_number)

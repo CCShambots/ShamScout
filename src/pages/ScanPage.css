@@ -5,3 +5,8 @@
     width:fit-content;
     height:fit-content;
 }
+
+.header-explode {
+    background-color: #343a40;
+    height: 100vh;
+}

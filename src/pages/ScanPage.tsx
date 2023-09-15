@@ -24,7 +24,7 @@ function ScanPage() {
         if(data) {
             setResult(data.text);
 
-            Post(`template/${currentTemplate}/submit`, data.text).then(r => {
+            Post(`forms/submit/template/${currentTemplate}`, `${data.text}`).then(r => {
                 setSaveDimmerActive(true);
                 setSaveSuccess(r);
             })
@@ -35,7 +35,7 @@ function ScanPage() {
     }
 
     return (
-        <div>
+        <div className={"header-explode"}>
             <Header/>
 
             <div className={"qr-reader-holder"}>
