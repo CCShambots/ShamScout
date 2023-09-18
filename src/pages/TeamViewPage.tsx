@@ -5,11 +5,12 @@ import {useLocalStorage} from "usehooks-ts";
 import Picture from "../resources/2056.jpg";
 import "./TeamViewPage.css"
 import {ScoutForm} from "../components/ScoutForm";
-import {apiHost, doesTeamHaveImage, getImagePath, Pull, PullTBA} from "../util/APIUtil";
-import {Button, Dropdown, Icon, Table} from "semantic-ui-react";
+import {doesTeamHaveImage, getImagePath, Pull, PullTBA} from "../util/APIUtil";
+import {Button, Icon, Table} from "semantic-ui-react";
 import packageJson from '../../package.json';
 import Banner from "../components/teams/Banner";
 import { CSVLink } from "react-csv";
+import {GameConfig} from "../components/config/GameConfig";
 
 type team = {
     number:number,
@@ -47,7 +48,16 @@ function TeamViewPage() {
 
     let downloadCSVRef:any = createRef()
 
+    //Load in all the data
     useEffect(() => {
+
+        let orderOfItems:string[] = [];
+
+        Pull(`templates/get/name/${activeTemplate}`, (data) => {
+            let config:GameConfig = GameConfig.fromJson(data)
+
+            orderOfItems = config.items.map((e) => e.label);
+        })
 
 
         Pull(`forms/get/template/${activeTemplate}`, (data) => {
@@ -57,6 +67,10 @@ function TeamViewPage() {
             )
 
             forms.sort((e1, e2) => e1.match_number - e2.match_number)
+
+            forms.forEach((e) => {
+                e.fields.sort((e1, e2) => orderOfItems.indexOf(e1.label) - orderOfItems.indexOf(e2.label))
+            })
 
             setSubmittedForms(forms)
 

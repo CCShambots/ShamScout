@@ -8,13 +8,15 @@ import {useLocalStorage} from "usehooks-ts";
 import Match from "../components/scheduling/matchDisplay/Match";
 import "./MainPage.css"
 import {Schedule} from "../components/scheduling/matchDisplay/ScheduleData";
-import {Button, Icon} from "semantic-ui-react";
+import {Button, Icon, Statistic} from "semantic-ui-react";
 import {CSVLink} from "react-csv";
+import {GameConfig} from "../components/config/GameConfig";
+import {Simulate} from "react-dom/test-utils";
 
 function MainPage() {
 
     let [currentEvent] = useLocalStorage("current-event", "")
-    let [currentTemplate] = useLocalStorage("active-template", "")
+    let [activeTemplate] = useLocalStorage("active-template", "")
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
 
     let [matches] = useLocalStorage<Match[]>(`matches-${currentEvent}`, [])
@@ -36,12 +38,28 @@ function MainPage() {
         })
     }, [currentEvent])
 
+    //Load submitted forms
     useEffect(() => {
 
-        Pull(`forms/get/template/${currentTemplate}?event=${currentEvent}`, (data) => {
-            setSubmittedForms(data.map((e:any) =>
-                ScoutForm.fromJson(e)
-            ))
+        let orderOfItems:string[] = [];
+
+        Pull(`templates/get/name/${activeTemplate}`, (data) => {
+            let config:GameConfig = GameConfig.fromJson(data)
+
+            orderOfItems = config.items.map((e) => e.label);
+        })
+
+        Pull(`forms/get/template/${activeTemplate}?event=${currentEvent}`, (data) => {
+
+            let forms:ScoutForm[] = data.map((e:any) =>
+                ScoutForm.fromJson(e[0])
+            )
+
+            forms.forEach((e) => {
+                e.fields.sort((e1, e2) => orderOfItems.indexOf(e1.label) - orderOfItems.indexOf(e2.label))
+            })
+
+            setSubmittedForms(forms);
         }).then(() => {})
     }, [currentEvent])
 
@@ -53,14 +71,19 @@ function MainPage() {
             <div className={"main-page-content"}>
                 <Checklist/>
 
-                <div className={"table-manager"}>
-                    <Button
-                        size={"huge"}
-                        color={"blue"}
-                        onClick={() => downloadCSVRef.current.link.click()}>
-                        <Icon name={"table"}/>Download CSV for {currentEvent}
-                    </Button>
-                    <CSVLink ref={downloadCSVRef} data={submittedForms} headers={submittedForms[0]?.generateHeader()} filename={`${currentEvent}-data.csv`}/>
+                <div className={"center-column"}>
+                    <div className={"table-manager"}>
+                        <Button
+                            size={"huge"}
+                            color={"blue"}
+                            onClick={() => downloadCSVRef.current.link.click()}>
+                            <Icon name={"table"}/>Download CSV for {currentEvent}
+                        </Button>
+                        <CSVLink ref={downloadCSVRef} data={submittedForms} headers={submittedForms[0]?.generateHeader()} filename={`${currentEvent}-data.csv`}/>
+                    </div>
+
+                    <Statistic value={submittedForms.length} label={"Forms Submitted"}/>
+
                 </div>
 
                 <MissingMatchesDisplay submittedForms={submittedForms} matches={matches} schedule={schedule}/>

@@ -1,6 +1,7 @@
 import {GameConfig} from "../components/config/GameConfig";
 
-export let apiHost = "http://localhost:8080/";
+// export let apiHost = "http://localhost:8080/";
+export let apiHost = "http://167.71.240.213:8080/";
 
 export async function Pull(endpoint:string, callback:(e:any) => void):Promise<void> {
     try {
@@ -34,7 +35,7 @@ export async function Post(endpoint:string, body:string):Promise<boolean> {
 }
 
 export async function RemoveTemplate(templateName:string) {
-    const response = await fetch(apiHost + `template/delete/${templateName}`, {
+    const response = await fetch(apiHost + `templates/remove/name/${templateName}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
