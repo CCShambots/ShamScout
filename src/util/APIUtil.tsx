@@ -34,6 +34,27 @@ export async function Post(endpoint:string, body:string):Promise<boolean> {
     return response.ok;
 }
 
+export async function Put(endpoint:string, body:string):Promise<boolean> {
+    const response = await fetch(apiHost + endpoint, {
+            method: 'PUT',
+            body: body,
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            }
+        }
+    )
+
+    console.log(response)
+    if(!response.ok) {
+        console.log("failure: WOMP WOMP")
+        console.log(response.status)
+        console.log(response.body)
+    }
+
+    return response.ok;
+}
+
 export async function RemoveTemplate(templateName:string) {
     const response = await fetch(apiHost + `templates/remove/name/${templateName}`, {
         method: 'DELETE',

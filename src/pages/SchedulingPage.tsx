@@ -15,6 +15,8 @@ function SchedulingPage() {
 
     let [schedule, setSchedule] = useState(new Schedule(["Quals 1"], ["test"], []));
 
+    let [savedToDatabase, setSavedToDatabase] = useState(false)
+
     //Load whatever schedule is currently saved to the API
     useEffect(() => {
         PullTBA(`event/${currentEvent}/matches/keys`, (tbaData) => {
@@ -25,7 +27,9 @@ function SchedulingPage() {
             setSchedule(schedule)
 
             Pull(`schedules/get/event/${currentEvent}`, (data) => {
-                setSchedule(Schedule.fromJson(data, numQuals));
+                let loadedSchedule = Schedule.fromJson(data, numQuals)
+                if(loadedSchedule.shifts.length > 0) setSavedToDatabase(true)
+                setSchedule(loadedSchedule);
             }).then(() => {})
         })
     }, [currentEvent])
@@ -37,7 +41,7 @@ function SchedulingPage() {
             <div className={"scheduling-page-container"}>
                 <MatchSchedulingDisplay schedule={schedule} setSchedule={setSchedule}/>
                 <ScouterDisplay schedule={schedule} setSchedule={setSchedule}/>
-                <ScheduleOverview schedule={schedule} setSchedule={setSchedule}/>
+                <ScheduleOverview schedule={schedule} setSchedule={setSchedule} savedToDatabase={savedToDatabase}/>
             </div>
 
         </div>

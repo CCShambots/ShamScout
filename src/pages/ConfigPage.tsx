@@ -132,7 +132,7 @@ function ConfigPage() {
             >
                 <div className={"config-qr-code-window"}>
                     <div className={"qr-code-header"}>
-                        <h1 className={"config-qr-code-header-text"}>Config QR Code</h1>
+                        <h1 className={"config-qr-code-header-text"}>Even Setup QR Code</h1>
                         <Button
                             className={"qr-code-close-button"}
                             icon={"x"}
@@ -141,8 +141,8 @@ function ConfigPage() {
                         />
                     </div>
 
-                    <QRCode value={`eve:${event},${TBAKey}`}/>
-                    <p>eve:{event},{TBAKey}</p>
+                    <QRCode value={`eve:${event},${TBAKey},${activeTemplate.name}`}/>
+                    <p>eve:{event},{TBAKey},{activeTemplate.name}</p>
 
                 </div>
 

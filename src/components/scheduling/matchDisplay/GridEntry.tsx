@@ -177,11 +177,14 @@ function GridEntry({match, station, schedule, setSchedule,
                         options={scoutOptions}
                         onChange={(e, data) => setSwitchNameSelection(data.value as string)}
                     />
-                    <Checkbox
-                        onChange={(e, data) => setWholeShift(data.checked?data.checked : false)}
-                        checked={wholeShift}
-                    />
-                    <p>Whole shift?</p>
+
+                    <div className={"inline"}>
+                        <Checkbox
+                            onChange={(e, data) => setWholeShift(data.checked?data.checked : false)}
+                            checked={wholeShift}
+                        />
+                        <p>Whole shift?</p>
+                    </div>
 
                     <Button
                         disabled={schedule.scouters.map(e => e.name).indexOf(switchNameSelection) === -1}

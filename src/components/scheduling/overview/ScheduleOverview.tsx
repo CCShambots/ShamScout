@@ -1,18 +1,19 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./ScheduleOverview.css"
 import {DropDownOptions, Schedule, Scouter} from "../matchDisplay/ScheduleData";
 import {Button, Dimmer, Dropdown, Icon, Progress, Statistic} from "semantic-ui-react";
 
 import QRCode from "react-qr-code"
-import {Post} from "../../../util/APIUtil";
+import {Post, Put} from "../../../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 
 type scheduleOverviewOptions = {
     schedule:Schedule,
-    setSchedule:(e:Schedule) => void
+    setSchedule:(e:Schedule) => void,
+    savedToDatabase:boolean
 }
 
-function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
+function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverviewOptions) {
 
     let [currentEvent] = useLocalStorage("current-event", "")
 
@@ -33,6 +34,7 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
     let scoutOptions = schedule.scouters.map(e =>
         new DropDownOptions(e.name)
     )
+
 
     return(
         <div className={"overview-container"}>
@@ -69,8 +71,18 @@ function ScheduleOverview({schedule, setSchedule}:scheduleOverviewOptions) {
 
                 <Button.Group>
                     <Button color={"green"} onClick={() => {
+
+                        let scheduleJson = schedule.generateJson(currentEvent)
+
+                        console.log(savedToDatabase)
+
+                        savedToDatabase ?
                         //Post this schedule to the API
-                        Post(`schedules/submit`, schedule.generateJson(currentEvent)).then(r => {
+                        Put(`schedules/get/edit`, scheduleJson).then(r => {
+                            setSaveScheduleDimmerActive(true);
+                            setSaveSuccess(r);
+                        }) :
+                        Post(`schedules/submit`, scheduleJson).then(r => {
                             setSaveScheduleDimmerActive(true);
                             setSaveSuccess(r);
                         })
