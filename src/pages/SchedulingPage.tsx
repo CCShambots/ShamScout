@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Header from "../components/header/Header";
+import AppHeader from "../components/header/AppHeader";
 import MatchSchedulingDisplay from "../components/scheduling/matchDisplay/MatchSchedulingDisplay";
 import {Schedule} from "../components/scheduling/matchDisplay/ScheduleData";
 import ScouterDisplay from "../components/scheduling/scouterDisplay/ScouterDisplay";
@@ -37,7 +37,7 @@ function SchedulingPage() {
 
     return(
         <div>
-            <Header/>
+            <AppHeader/>
             <div className={"scheduling-page-container"}>
                 <MatchSchedulingDisplay schedule={schedule} setSchedule={setSchedule}/>
                 <ScouterDisplay schedule={schedule} setSchedule={setSchedule}/>

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Header from "../components/header/Header";
+import AppHeader from "../components/header/AppHeader";
 import {Button, Dimmer, Popup, Table} from "semantic-ui-react";
 import {Pull, PullTBA} from "../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
@@ -45,7 +45,7 @@ function MatchPage() {
 
     return(
         <div className={"page"}>
-            <Header/>
+            <AppHeader/>
 
             <div className={"match-table"}>
 

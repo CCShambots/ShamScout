@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Header from "../components/header/Header";
+import AppHeader from "../components/header/AppHeader";
 import {Button, Dimmer, Icon, Input, Popup, Table} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import "./TeamsPage.css"
@@ -61,7 +61,7 @@ function TeamsPage() {
 
     return(
         <div>
-            <Header/>
+            <AppHeader/>
 
             <div className={"page"}>
                 <div className={"top-row-info"}>

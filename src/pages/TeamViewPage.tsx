@@ -1,16 +1,16 @@
 import React, {createRef, useEffect, useState} from "react";
-import Header from "../components/header/Header";
 import {useSearchParams} from "react-router-dom";
 import {useLocalStorage} from "usehooks-ts";
 import Picture from "../resources/team_placeholder.png";
 import "./TeamViewPage.css"
 import {ScoutForm} from "../components/ScoutForm";
-import {doesTeamHaveImage, getImagePath, Pull, PullTBA} from "../util/APIUtil";
-import {Button, Icon, Table} from "semantic-ui-react";
+import {doesTeamHaveImage, getImagePath, Pull, PullTBA, RemoveImage} from "../util/APIUtil";
+import {Button, Dimmer, Header, Icon, Table} from "semantic-ui-react";
 import packageJson from '../../package.json';
 import Banner from "../components/teams/Banner";
 import { CSVLink } from "react-csv";
 import {GameConfig} from "../components/config/GameConfig";
+import AppHeader from "../components/header/AppHeader";
 
 type team = {
     number:number,
@@ -41,6 +41,8 @@ function TeamViewPage() {
     let [events, setEvents] = useState<TeamEventInfo[]>([])
 
     let [imageInAPI, setImageInAPI] = useState(false)
+
+    let [removeImageDimmer, setRemoveImageDimmer] = useState(false)
 
     useEffect(() => {
         doesTeamHaveImage(teamNum).then((result) => {setImageInAPI(result)});
@@ -144,7 +146,7 @@ function TeamViewPage() {
 
 
     return <div>
-        <Header/>
+        <AppHeader/>
         <div className={"top-row"}>
             <div className={"top-text"}>
                 <h1>{teamNum}</h1>
@@ -164,10 +166,16 @@ function TeamViewPage() {
                     })
                 }
             </div>
-            {imageInAPI ?
-            <img className={"team-view-pic"} src={getImagePath(teamNum)} alt={teamNum.toString()}/> :
-            <img className={"team-view-pic"} src={Picture} alt={teamNum.toString()}/>
-            }
+            <div className={"team-image-container"}>
+                {
+                    imageInAPI ?
+                    <img className={"team-view-pic"} src={getImagePath(teamNum)} alt={teamNum.toString()}/> :
+                    <img className={"team-view-pic"} src={Picture} alt={teamNum.toString()}/>
+                }
+                <Button color={"red"} disabled={!imageInAPI} onClick={() => {
+                    setRemoveImageDimmer(true)
+                }}><Icon name={"erase"}/> Clear Image</Button>
+            </div>
         </div>
 
         <div className={"table-manager"}>
@@ -202,6 +210,17 @@ function TeamViewPage() {
                 )}
             </Table.Body>
         </Table>
+
+        <Dimmer page active={removeImageDimmer} onClickOutside={() => setRemoveImageDimmer(false)}>
+            <Header inverted>
+                Are you sure you want to delete {teamNum}'s image?
+            </Header>
+
+            <Button size={"huge"} color={"red"} onClick={() => {
+                setRemoveImageDimmer(false)
+                RemoveImage(teamNum).then(() => {})
+            }}>Yes, I'm sure</Button>
+        </Dimmer>
     </div>
 }
 

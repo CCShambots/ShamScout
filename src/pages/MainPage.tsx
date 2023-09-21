@@ -1,5 +1,5 @@
 import React, {createRef, useEffect, useState} from "react";
-import Header from "../components/header/Header";
+import AppHeader from "../components/header/AppHeader";
 import Checklist from "../components/main/Checklist";
 import MissingMatchesDisplay from "../components/main/MissingMatchesDisplay";
 import {Pull, PullTBA} from "../util/APIUtil";
@@ -67,7 +67,7 @@ function MainPage() {
 
     return (
         <div>
-            <Header/>
+            <AppHeader/>
             <div className={"main-page-content"}>
                 <Checklist/>
 

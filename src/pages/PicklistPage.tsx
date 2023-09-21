@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Header from "../components/header/Header";
+import AppHeader from "../components/header/AppHeader";
 import {ReactSortable} from "react-sortablejs";
 import "./PicklistPage.css"
 import {useLocalStorage} from "usehooks-ts";
@@ -78,7 +78,7 @@ function PicklistPage() {
 
     return (
         <div>
-            <Header/>
+            <AppHeader/>
 
             <div className={"picklist-flex"}>
                 <div className={"picklist-column"}>

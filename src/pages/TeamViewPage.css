@@ -8,6 +8,8 @@
     position: relative;
 
     border: 2px solid black;
+
+    margin-bottom: 1vh;
 }
 
 .result-text {
@@ -41,4 +43,9 @@
 
 .team-table-text-centering tr>td{
     text-align: center;
+}
+
+.team-image-container {
+    display: flex;
+    flex-direction: column;
 }

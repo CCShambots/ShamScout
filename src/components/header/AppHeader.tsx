@@ -7,7 +7,7 @@ import packageJson from "../../../package.json";
 type HeaderProps = {
 }
 
-function Header({}: HeaderProps) {
+function AppHeader({}: HeaderProps) {
 
     let [currentEvent] = useLocalStorage("current-event", "")
 
@@ -31,4 +31,4 @@ function Header({}: HeaderProps) {
     )
 }
 
-export default Header;
+export default AppHeader;

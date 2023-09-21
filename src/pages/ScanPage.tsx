@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import Header from "../components/header/Header";
+import AppHeader from "../components/header/AppHeader";
 import QrReader from 'react-qr-scanner';
 import {Post} from "../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
@@ -36,7 +36,7 @@ function ScanPage() {
 
     return (
         <div className={"header-explode"}>
-            <Header/>
+            <AppHeader/>
 
             <div className={"qr-reader-holder"}>
                 <QrReader

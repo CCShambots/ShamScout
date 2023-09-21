@@ -55,18 +55,6 @@ export async function Put(endpoint:string, body:string):Promise<boolean> {
     return response.ok;
 }
 
-export async function RemoveTemplate(templateName:string) {
-    const response = await fetch(apiHost + `templates/remove/name/${templateName}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        },
-    })
-
-    return response.ok;
-}
-
 export async function AddTemplate(config:GameConfig) {
 
     const response = await fetch(apiHost + "templates/submit", {
@@ -81,6 +69,31 @@ export async function AddTemplate(config:GameConfig) {
 
     return response.ok;
 }
+
+export async function RemoveTemplate(templateName:string) {
+    const response = await fetch(apiHost + `templates/remove/name/${templateName}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+    })
+
+    return response.ok;
+}
+
+export async function RemoveImage(teamNum:number) {
+    const response = await fetch(apiHost + `bytes/remove/key/${teamNum}-img`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+    })
+
+    return response.ok;
+}
+
 
 export async function ModifyTemplate(config:GameConfig) {
 

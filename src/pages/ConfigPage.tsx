@@ -193,33 +193,33 @@ function ConfigPage() {
             >
                 {
                     clearDataAllowed ?
-                <div className={"config-qr-code-window"}>
+                    <div className={"config-qr-code-window"}>
 
-                        <div className={"qr-code-header"}>
-                            <h1 className={"config-qr-code-header-text"}>Clear Mobile Data QR Code</h1>
-                            <Button
-                                className={"qr-code-close-button"}
-                                icon={"x"}
-                                color={"red"}
-                                onClick={() => setClearDataDimmerActive(false)}
-                            />
-                        </div>
-                        <QRCode value={`cle:`}/>
+                            <div className={"qr-code-header"}>
+                                <h1 className={"config-qr-code-header-text"}>Clear Mobile Data QR Code</h1>
+                                <Button
+                                    className={"qr-code-close-button"}
+                                    icon={"x"}
+                                    color={"red"}
+                                    onClick={() => setClearDataDimmerActive(false)}
+                                />
+                            </div>
+                            <QRCode value={`cle:`}/>
 
-                </div>
+                    </div>
                         :
-                <div>
-                    <Header inverted>
-                        Warning! You could delete unsaved scouting reports!
-                        <br/>
-                        Type '{deleteString}' into the input to continue...
-                    </Header>
+                    <div>
+                        <Header inverted>
+                            Warning! You could delete unsaved scouting reports!
+                            <br/>
+                            Type '{deleteString}' into the input to continue...
+                        </Header>
 
-                    <Input
-                        placeholder={"Confirmation"}
-                        value={deleteConfirmationValue}
-                        onChange={(e) => setDeleteConfirmationValue(e.target.value)}/>
-                </div>
+                        <Input
+                            placeholder={"Confirmation"}
+                            value={deleteConfirmationValue}
+                            onChange={(e) => setDeleteConfirmationValue(e.target.value)}/>
+                    </div>
                 }
 
 
