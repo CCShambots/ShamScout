@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import AppHeader from "../components/header/AppHeader";
-import {Button, Dimmer, Icon, Input, Popup, Table} from "semantic-ui-react";
+import {Button, Dimmer, Header, Icon, Input, Popup, Table} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import "./TeamsPage.css"
 import TeamPreviewDisplay from "../components/teams/TeamPreviewDisplay";

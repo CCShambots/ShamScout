@@ -11,16 +11,35 @@ function TeamPreviewDisplay(props: {teamName:string, teamNum:number}) {
 
     useEffect(() => {
         doesTeamHaveImage(props.teamNum).then((result) => {setImageInAPI(result)});
+
     }, [props.teamNum]);
+
+    const src = getImagePath(props.teamNum)
+
+    const [imgSrc, setImgSrc] = useState(Picture || src);
+
+    useEffect(() => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => {
+            setImgSrc(src);
+        };
+    }, [src]);
+
+    const customClass =
+        imgSrc === Picture && imageInAPI ? "loading" : "loaded";
 
     return (
         <Link to={`/team?number=${props.teamNum}`}>
             <div className={"team-display-container"}>
                 <div className={"team-display-image-container"}>
                     {
-                        imageInAPI ?
-                        <img className={"team-display-image"} src={getImagePath(props.teamNum)} alt={props.teamNum.toString()}/> :
-                        <img className={"team-display-image"} src={Picture} alt={props.teamNum.toString()}/>
+                        // imageInAPI ?
+                        <img className={`team-display-image ${customClass}`}
+                             src={imgSrc} alt={props.teamNum.toString()}/>
+                        // :
+                        // <img className={"team-display-image"}
+                        //      src={Picture} alt={props.teamNum.toString()}/>
 
                     }
                 </div>

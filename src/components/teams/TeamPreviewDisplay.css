@@ -1,5 +1,9 @@
 :root {
     --team-display-border: 3vh;
+
+    --normal-preview-size: 15vw;
+    --bigger-preview-size: 0.75vw;
+    --preview-margin: 1vh;
 }
 
 .team-display-image-container {
@@ -25,13 +29,34 @@
 }
 
 .team-display-container {
+
     position: relative;
 
-    height: 15vw;
-    width: 15vw;
+    height: var(--normal-preview-size);
+    width: var(--normal-preview-size);
 
-    margin: 1vh;
+    margin: var(--preview-margin);
 
+    user-select: none;
+
+    transition: 0.25s;
+
+
+}
+
+.loading {
+    filter: blur(10px);
+}
+.loaded {
+    filter: blur(0px);
+    transition: filter 0.5s linear;
+}
+
+.team-display-container:hover {
+    height: calc(var(--normal-preview-size) + var(--bigger-preview-size));
+    width: calc(var(--normal-preview-size) + var(--bigger-preview-size));
+
+    margin: calc(var(--preview-margin)- var(--bigger-preview-size));
 }
 
 
