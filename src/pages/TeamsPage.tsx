@@ -34,9 +34,9 @@ function TeamsPage() {
 
     useEffect(() => {
 
-        Pull(`templates/get/name/${currentTemplate}`, (data) => {
+        Pull(`forms/get/template/${currentTemplate}`, (data) => {
             setSubmittedForms(data.map((e:any) =>
-                ScoutForm.fromJson(e)
+                ScoutForm.fromJson(e[0])
             ))
         }).then(() => {})
     }, [currentEvent])
