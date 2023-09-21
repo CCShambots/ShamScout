@@ -8,6 +8,7 @@ import {Button, Dimmer, Header, Input} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
 import QRCode from "react-qr-code";
+import AppHeader from "../components/header/AppHeader";
 
 function ConfigPage() {
 
@@ -84,7 +85,7 @@ function ConfigPage() {
 
     return(
         <div>
-            <Header/>
+            <AppHeader/>
 
             <div className={"config-content"}>
                 <div className={"left-column"}>

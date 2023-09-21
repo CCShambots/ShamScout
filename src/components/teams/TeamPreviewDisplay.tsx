@@ -19,12 +19,14 @@ function TeamPreviewDisplay(props: {teamName:string, teamNum:number}) {
     const [imgSrc, setImgSrc] = useState(Picture || src);
 
     useEffect(() => {
-        const img = new Image();
-        img.src = src;
-        img.onload = () => {
-            setImgSrc(src);
-        };
-    }, [src]);
+        if(imageInAPI) {
+            const img = new Image();
+            img.src = src;
+            img.onload = () => {
+                setImgSrc(src);
+            };
+        }
+    }, [src, imageInAPI]);
 
     const customClass =
         imgSrc === Picture && imageInAPI ? "loading" : "loaded";
