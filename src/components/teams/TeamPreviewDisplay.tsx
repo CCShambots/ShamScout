@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Picture from "../../resources/2056.jpg"
+import Picture from "../../resources/team_placeholder.png"
 
 import "./TeamPreviewDisplay.css"
 import {Link} from "react-router-dom";

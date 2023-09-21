@@ -17,6 +17,15 @@
 
 }
 
+.header-side-text {
+    flex-direction: column;
+}
+
+.header-side-text h2 {
+    margin: 0;
+    text-align: right;
+}
+
 .header-text {
     color: white;
     padding-right: 2vw;

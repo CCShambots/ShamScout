@@ -100,7 +100,7 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverv
                         setWarningDimmerActive(false)
                         setSchedule(schedule.generateSchedule())
                     }}
-                        primary
+                        primaryu
                     >I understand, generate a new schedule</Button>
                     <Button.Or/>
                     <Button secondary onClick={() => setWarningDimmerActive(false)}>Cancel</Button>

@@ -126,13 +126,10 @@ function PicklistPage() {
             <Button className={"privacy-button"} size={"massive"}
                     icon={"hide"} color={"red"} onClick={() => setPrivacyDimmer(true)}/>
 
-            <Dimmer page
-                    active={privacyDimmer}
-                     // className={(privacyDimmer ? "privacy" : "")}
-            >
-                    <Button className={"close-privacy-button"} color={"red"} size={"massive"}
-                            onClick={() => setPrivacyDimmer(false)}>Return to Picklist</Button>
-            </Dimmer>
+            <div
+                className={(privacyDimmer) ? "privacy-active" : "privacy-inactive"}
+                onClick={() => setPrivacyDimmer(false)}
+            />
         </div>
     )
 }

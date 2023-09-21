@@ -46,7 +46,7 @@ function ScanPage() {
                     onScan={handleScan}
                 />
             </div>
-            <p>{result}</p>
+            <p className={"scan-qr-text"}>{result}</p>
 
             <Dimmer active={saveDimmerActive} onClickOutside={() => setSaveDimmerActive(false)} page>
                 <div className={"vertical-center"}>

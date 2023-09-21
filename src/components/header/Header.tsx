@@ -2,6 +2,7 @@ import React from "react";
 import "./Header.css"
 import {Link} from "react-router-dom";
 import {useLocalStorage} from "usehooks-ts";
+import packageJson from "../../../package.json";
 
 type HeaderProps = {
 }
@@ -22,8 +23,9 @@ function Header({}: HeaderProps) {
                     <Link className={"link"} to={"/config"}>Config</Link>
                 </div>
 
-                <div className={"header-item"}>
-                    <h1 className={"header-text"}>{currentEvent}</h1>
+                <div className={"header-item header-side-text"}>
+                    <h2 className={"header-text"}>{currentEvent}</h2>
+                    <h2 className={"header-text"}>v{packageJson.version}</h2>
                 </div>
         </div>
     )

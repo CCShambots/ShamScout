@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
-import Header from "../components/header/Header";
 import "./ConfigPage.css"
 import GameConfigsDisplay from "../components/config/GameConfigsDisplay";
 import {GameConfig} from "../components/config/GameConfig";
 import {AddTemplate, ModifyTemplate, Pull, RemoveTemplate} from "../util/APIUtil";
 import GameConfigEditor from "../components/config/GameConfigEditor";
-import {Button, Dimmer, Input} from "semantic-ui-react";
+import {Button, Dimmer, Header, Input} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
 import QRCode from "react-qr-code";
@@ -25,6 +24,22 @@ function ConfigPage() {
     let [apiAddressDimmerActive, setApiAddressDimmerActive] = useState(false)
 
     let [clearDataDimmerActive, setClearDataDimmerActive] = useState(false)
+
+    let [clearDataAllowed, setClearDataAllowed] = useState(false)
+
+    const [deleteConfirmationValue, setDeleteConfirmationValue] = useState("")
+    const deleteString = "I'm sure I know what I'm doing"
+
+    useEffect(() => {
+        if(!clearDataDimmerActive) {
+            setDeleteConfirmationValue("")
+            setClearDataAllowed(false)
+        }
+    }, [clearDataDimmerActive])
+
+    useEffect(() => {
+        if(deleteConfirmationValue === deleteString) setClearDataAllowed(true)
+    }, [deleteConfirmationValue]);
 
     let setActiveTemplate = (newItem:GameConfig) => {
         updateActiveTemplate(newItem)
@@ -176,19 +191,37 @@ function ConfigPage() {
                 active={clearDataDimmerActive}
                 onClickOutside={() => setClearDataDimmerActive(false)}
             >
+                {
+                    clearDataAllowed ?
                 <div className={"config-qr-code-window"}>
-                    <div className={"qr-code-header"}>
-                        <h1 className={"config-qr-code-header-text"}>Clear Mobile Data QR Code</h1>
-                        <Button
-                            className={"qr-code-close-button"}
-                            icon={"x"}
-                            color={"red"}
-                            onClick={() => setClearDataDimmerActive(false)}
-                        />
-                    </div>
 
-                    <QRCode value={`cle:`}/>
+                        <div className={"qr-code-header"}>
+                            <h1 className={"config-qr-code-header-text"}>Clear Mobile Data QR Code</h1>
+                            <Button
+                                className={"qr-code-close-button"}
+                                icon={"x"}
+                                color={"red"}
+                                onClick={() => setClearDataDimmerActive(false)}
+                            />
+                        </div>
+                        <QRCode value={`cle:`}/>
+
                 </div>
+                        :
+                <div>
+                    <Header inverted>
+                        Warning! You could delete unsaved scouting reports!
+                        <br/>
+                        Type '{deleteString}' into the input to continue...
+                    </Header>
+
+                    <Input
+                        placeholder={"Confirmation"}
+                        value={deleteConfirmationValue}
+                        onChange={(e) => setDeleteConfirmationValue(e.target.value)}/>
+                </div>
+                }
+
 
             </Dimmer>
         </div>

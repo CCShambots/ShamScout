@@ -2,7 +2,7 @@ import React, {createRef, useEffect, useState} from "react";
 import Header from "../components/header/Header";
 import {useSearchParams} from "react-router-dom";
 import {useLocalStorage} from "usehooks-ts";
-import Picture from "../resources/2056.jpg";
+import Picture from "../resources/team_placeholder.png";
 import "./TeamViewPage.css"
 import {ScoutForm} from "../components/ScoutForm";
 import {doesTeamHaveImage, getImagePath, Pull, PullTBA} from "../util/APIUtil";
