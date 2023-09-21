@@ -46,6 +46,8 @@
 
 .loading {
     filter: blur(10px);
+    /*clip-path: inset(0);*/
+    clip-path: border-box;
 }
 .loaded {
     filter: blur(0px);
