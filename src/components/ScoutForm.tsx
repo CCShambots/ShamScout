@@ -57,9 +57,6 @@ class ScoutForm {
     }
 
     public static fromJson(data:any):ScoutForm {
-
-        console.log(data)
-
         return new ScoutForm(
             data.scouter,
             data.team,
@@ -67,6 +64,10 @@ class ScoutForm {
             data.event_key,
             Object.keys(data.fields).map(e => Field.fromJson(e, data.fields[e]))
         )
+    }
+
+    public toString() {
+        return `${this.scouter}${this.team}${this.match_number}${this.event}`
     }
 
     public generateHeader():HeaderType[] {
@@ -78,7 +79,6 @@ class ScoutForm {
             {label: "Scouter", key: "scouter"},
             ...this.fields.map(e =>
                 {
-                    console.log(this.fields[this.fields.indexOf(e)].value)
                     return {label: e.label, key: `fields[${this.fields.indexOf(e)}].value`}
                 }
             )

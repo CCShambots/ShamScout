@@ -5,7 +5,7 @@ import Picture from "../resources/team_placeholder.png";
 import "./TeamViewPage.css"
 import {ScoutForm} from "../components/ScoutForm";
 import {doesTeamHaveImage, getImagePath, Pull, PullTBA, RemoveImage} from "../util/APIUtil";
-import {Button, Dimmer, Header, Icon, Table} from "semantic-ui-react";
+import {Button, Dimmer, Header, Icon, Popup, Table} from "semantic-ui-react";
 import packageJson from '../../package.json';
 import Banner from "../components/teams/Banner";
 import { CSVLink } from "react-csv";
@@ -32,6 +32,7 @@ function TeamViewPage() {
     let [teamName, setTeamName] = useState("")
 
     let [, setSubmittedForms] = useState<ScoutForm[]>([])
+    let [idMap, setIdMap] = useState<Map<string, string>>(new Map())
 
     let [thisTeamForms, setThisTeamForms] = useState<ScoutForm[]>([])
     let [thisEventForms, setThisEventForms] = useState<ScoutForm[]>([])
@@ -64,9 +65,17 @@ function TeamViewPage() {
 
         Pull(`forms/get/template/${activeTemplate}`, (data) => {
 
+            console.log(data)
+
             let forms:ScoutForm[] = data.map((e:any) =>
                 ScoutForm.fromJson(e[0])
             )
+
+            for(let i = 0; i < forms.length; i++) {
+                idMap.set(forms[i].toString(), data[i][1])
+            }
+
+            setIdMap(idMap)
 
             forms.sort((e1, e2) => e1.match_number - e2.match_number)
 
@@ -188,6 +197,7 @@ function TeamViewPage() {
                 <Table.Row>
                     <Table.HeaderCell>Match</Table.HeaderCell>
                     <Table.HeaderCell>Event</Table.HeaderCell>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
                     {thisTeamForms[0]?.fields.map(e =>
                         <Table.HeaderCell key={e.label}>{e.label}</Table.HeaderCell>
                     )}
@@ -195,10 +205,22 @@ function TeamViewPage() {
             </Table.Header>
 
             <Table.Body>
-                {thisTeamForms.map(e =>
-                    <Table.Row key={thisTeamForms.indexOf(e)}>
+                {thisTeamForms.map(e => {
+
+                    return <Table.Row key={thisTeamForms.indexOf(e)}>
                         <Table.Cell>{e.match_number}</Table.Cell>
                         <Table.Cell>{e.event}</Table.Cell>
+                        <Table.Cell>
+                            <Popup
+                                content={"Copy ID to clipboard"}
+                                trigger={
+                                    <Icon name={"copy outline"} color={"blue"} onClick={() => {
+                                        navigator.clipboard.writeText(idMap.get(e.toString()) ?? "NOT FOUND")
+                                    }}/>
+                                }
+                            />
+
+                        </Table.Cell>
                         {
                             thisTeamForms[0]?.fields.map(field => {
                                 return e.fields.filter(ele => ele.label === field.label).map((ele) =>
@@ -207,6 +229,7 @@ function TeamViewPage() {
                             })
                         }
                     </Table.Row>
+                }
                 )}
             </Table.Body>
         </Table>
