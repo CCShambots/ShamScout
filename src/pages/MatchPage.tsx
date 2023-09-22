@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import AppHeader from "../components/header/AppHeader";
-import {Button, Dimmer, Header, Icon, Input, Popup, Table} from "semantic-ui-react";
+import {Button, Dimmer, Input, Popup, Table} from "semantic-ui-react";
 import {Pull, PullTBA} from "../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import "./MatchPage.css"

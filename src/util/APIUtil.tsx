@@ -1,4 +1,5 @@
 import {GameConfig} from "../components/config/GameConfig";
+import {callbackify} from "util";
 
 export let apiHost = "http://localhost:8080/";
 // export let apiHost = "http://167.71.240.213:8080/";
@@ -171,4 +172,28 @@ export function PullTBA(endpoint:string, callback:(e:any) => void) {
             .catch(() => {})
 
     } catch (e) {}
+}
+
+export type NewReleaseDetails = {
+    isNew:boolean,
+    value:string,
+    body:string
+}
+
+export function IsNewRelease(currentVersion:string) {
+    try {
+        return fetch("https://api.github.com/repos/CCShambots/ShamScout/releases/latest")
+            .then(response => {return response.json()})
+            .then((json):NewReleaseDetails => {
+                return {
+                    isNew: (json.name as string).indexOf(currentVersion) === -1,
+                    value: json.name,
+                    body: json.body
+                }
+            })
+    } catch {
+        return new Promise<NewReleaseDetails>((resolve, reject) => {
+            resolve({isNew: false, value: currentVersion, body: ""})
+        })
+    }
 }

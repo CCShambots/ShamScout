@@ -148,7 +148,12 @@ function ScouterEntry({e, removeSelf, numScheduled, targetNumScheduled, setSched
                         }}
                        onOpen={() => setUnavailableMatches(e.getUnavailableString())}
                     content={
-                        <div>
+                        <div onKeyDown={(event) => {
+                            if(event.key === "Enter") {
+                                e.parseUnavailableMatches(unavailableMatches)
+                                setSchedule(Object.create(schedule))
+                            }
+                        }}>
                             <p>Unavailable Matches</p>
                             <Input placeholder={"Matches..."} value={unavailableMatches}
                                    onChange={(e, data) => {setUnavailableMatches(data?.value)}}/>

@@ -11,6 +11,7 @@ import TeamViewPage from "./pages/TeamViewPage";
 import PicklistPage from "./pages/PicklistPage";
 import {IsApiAlive} from "./util/APIUtil";
 import {Dimmer, Header, Icon} from "semantic-ui-react";
+import {NewVersionChecker} from "./components/NewVersionChecker";
 
 function App() {
 
@@ -23,8 +24,6 @@ function App() {
 
         return () => clearInterval(interval)
     });
-
-
 
     const checkAPI = async () => {
 
@@ -57,6 +56,8 @@ function App() {
               </div>
               <Header inverted>Couldn't Connect to the API! Start Your Local API Instance.</Header>
           </Dimmer>
+
+          <NewVersionChecker/>
       </div>
   );
 }
