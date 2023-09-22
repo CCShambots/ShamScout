@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {PullTBA} from "../../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
-import {Button, Dimmer, Icon, Input, Segment, Table} from "semantic-ui-react";
+import {Button, Dimmer, Icon, Input, Table} from "semantic-ui-react";
 import TeamLink from "../team-link/TeamLink";
 
 

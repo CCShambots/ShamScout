@@ -4,7 +4,7 @@ import {ReactSortable} from "react-sortablejs";
 import "./PicklistPage.css"
 import {useLocalStorage} from "usehooks-ts";
 import TeamLink from "../components/team-link/TeamLink";
-import {Button, Checkbox, Dimmer} from "semantic-ui-react";
+import {Button, Checkbox} from "semantic-ui-react";
 
 type Team = {
     name:string,

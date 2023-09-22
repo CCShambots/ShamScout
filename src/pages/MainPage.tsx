@@ -11,7 +11,6 @@ import {Schedule} from "../components/scheduling/matchDisplay/ScheduleData";
 import {Button, Icon, Statistic} from "semantic-ui-react";
 import {CSVLink} from "react-csv";
 import {GameConfig} from "../components/config/GameConfig";
-import {Simulate} from "react-dom/test-utils";
 
 function MainPage() {
 

@@ -1,5 +1,4 @@
 import {GameConfig} from "../components/config/GameConfig";
-import {callbackify} from "util";
 
 export let apiHost = "http://localhost:8080/";
 // export let apiHost = "http://167.71.240.213:8080/";

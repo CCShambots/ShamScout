@@ -4,10 +4,7 @@ import {Link} from "react-router-dom";
 import {useLocalStorage} from "usehooks-ts";
 import packageJson from "../../../package.json";
 
-type HeaderProps = {
-}
-
-function AppHeader({}: HeaderProps) {
+function AppHeader() {
 
     let [currentEvent] = useLocalStorage("current-event", "")
 
