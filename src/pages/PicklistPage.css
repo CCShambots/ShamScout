@@ -27,6 +27,12 @@
 
     display: flex;
     justify-content: space-between;
+
+    transition: 0.5s;
+}
+
+.picklist-item-display:hover {
+    background-color: #8a8787;
 }
 
 .picklist-text {
@@ -74,10 +80,18 @@
 }
 
 .accept {
+    background-color: #70d970;
+}
+
+.accept:hover {
     background-color: lime;
 }
 
 .decline {
+    background-color: #ef7676;
+}
+
+.decline:hover {
     background-color: red;
 }
 
