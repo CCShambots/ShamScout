@@ -54,9 +54,9 @@
     "eject": "react-scripts eject",
     "cbuild": "craco build",
     "estart": "electron .",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish"
+    "package": "react-scripts build && electron-forge package",
+    "make": "react-scripts build && electron-forge make",
+    "publish": "react-scripts build && electron-forge publish"
   },
   "eslintConfig": {
     "extends": [
