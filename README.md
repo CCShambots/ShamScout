@@ -6,6 +6,7 @@
 - Run `npm run build`
 - Create and set your Github token as a path variable ("GITHUB_TOKEN")
 - Run `npm run publish`
+- Upload the most recent version of ShamScout Editor 
 
 ## Available Scripts
 
