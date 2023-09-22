@@ -10,15 +10,13 @@ function Checklist() {
         new ChecklistItem("Event Setup (in Config) - Before Event", [
             new ChecklistItem("Enter event key (From TBA)"),
             new ChecklistItem("Set TBA API key"),
-            new ChecklistItem("Set Remote API location"),
+            new ChecklistItem("Set Remote API host"),
             new ChecklistItem("Ensure team list is correct"),
             new ChecklistItem("Select game config"),
             new ChecklistItem("Make sure config fields are correct"),
         ]),
         new ChecklistItem("Setup Scouters - At Event", [
-            new ChecklistItem("(In Config) Have scouters scan current event key"),
-            new ChecklistItem("(In Config) Have scouters scan remote API location"),
-            new ChecklistItem("(In Config) Have scouters scan game config"),
+            new ChecklistItem("(In Config) Have scouters scan current event key, etc."),
             new ChecklistItem("Get list of matches any scouters need to miss"),
             new ChecklistItem("Create scouting schedule after match schedule releases"),
             new ChecklistItem("Post schedule to server"),

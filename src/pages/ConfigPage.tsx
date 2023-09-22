@@ -99,7 +99,7 @@ function ConfigPage() {
                     <div className={"inline-qr-code"}>
                         <Button icon={"qrcode"} color={"blue"} onClick={() => setApiAddressDimmerActive(true)}/>
                         <div className={"full-length-form"}>
-                            <Input placeholder={'Set API Key'} value={remoteAPIAdress} onChange={(e) => setRemoteAPIAdress(e.target.value)}/>
+                            <Input placeholder={'Set API Host'} value={remoteAPIAdress} onChange={(e) => setRemoteAPIAdress(e.target.value)}/>
                         </div>
                     </div>
                     <GameConfigsDisplay

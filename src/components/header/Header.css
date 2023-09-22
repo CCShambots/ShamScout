@@ -24,6 +24,8 @@
 .header-side-text h2 {
     margin: 0;
     text-align: right;
+
+    font-size: 2vh;
 }
 
 .header-text {

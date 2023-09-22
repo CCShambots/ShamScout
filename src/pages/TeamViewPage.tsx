@@ -4,7 +4,7 @@ import {useLocalStorage} from "usehooks-ts";
 import Picture from "../resources/team_placeholder.png";
 import "./TeamViewPage.css"
 import {ScoutForm} from "../components/ScoutForm";
-import {doesTeamHaveImage, getImagePath, Pull, PullTBA, RemoveImage} from "../util/APIUtil";
+import {doesTeamHaveImage, getImagePath, Pull, PullTBA, RemoveForm, RemoveImage} from "../util/APIUtil";
 import {Button, Dimmer, Header, Icon, Popup, Table} from "semantic-ui-react";
 import packageJson from '../../package.json';
 import Banner from "../components/teams/Banner";
@@ -44,6 +44,9 @@ function TeamViewPage() {
     let [imageInAPI, setImageInAPI] = useState(false)
 
     let [removeImageDimmer, setRemoveImageDimmer] = useState(false)
+
+    let [removeFormDimmer, setRemoveFormDimmer] = useState(false)
+    let [removeFormID, setRemoveFormID] = useState("")
 
     useEffect(() => {
         doesTeamHaveImage(teamNum).then((result) => {setImageInAPI(result)});
@@ -198,6 +201,7 @@ function TeamViewPage() {
                     <Table.HeaderCell>Match</Table.HeaderCell>
                     <Table.HeaderCell>Event</Table.HeaderCell>
                     <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Del.</Table.HeaderCell>
                     {thisTeamForms[0]?.fields.map(e =>
                         <Table.HeaderCell key={e.label}>{e.label}</Table.HeaderCell>
                     )}
@@ -220,6 +224,17 @@ function TeamViewPage() {
                                 }
                             />
 
+                        </Table.Cell>
+                        <Table.Cell>
+                            <Popup
+                                content={"Remove this form (dangerous)"}
+                                trigger={
+                                    <Icon color={"red"} name={"trash alternate"} onClick={() => {
+                                      setRemoveFormID(idMap.get(e.toString()) ?? "NOT FOUND")
+                                      setRemoveFormDimmer(true)
+                                    }}/>
+                                }
+                            />
                         </Table.Cell>
                         {
                             thisTeamForms[0]?.fields.map(field => {
@@ -244,6 +259,19 @@ function TeamViewPage() {
                 RemoveImage(teamNum).then(() => {})
             }}>Yes, I'm sure</Button>
         </Dimmer>
+
+        <Dimmer page active={removeFormDimmer} onClickOutside={() => setRemoveFormDimmer(false)}>
+            <Header inverted>
+                Are you sure you want to delete his form?
+            </Header>
+
+            <Button size={"huge"} color={"red"} onClick={() => {
+                setRemoveFormDimmer(false)
+                RemoveForm(activeTemplate, removeFormID).then(() => {})
+                window.location.reload()
+            }}>Yes, I'm sure</Button>
+        </Dimmer>
+
     </div>
 }
 

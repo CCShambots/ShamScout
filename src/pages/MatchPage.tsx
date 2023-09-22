@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import AppHeader from "../components/header/AppHeader";
-import {Button, Dimmer, Popup, Table} from "semantic-ui-react";
+import {Button, Dimmer, Header, Icon, Input, Popup, Table} from "semantic-ui-react";
 import {Pull, PullTBA} from "../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import "./MatchPage.css"
@@ -18,6 +18,8 @@ function MatchPage() {
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
 
     let [qrDimmerActive, setQRDimmerActive] = useState(false)
+
+    let [manualMatchesActive, setManualMatchesActive] = useState(false)
     
     const syncMatches = () => PullTBA(`event/${currentEvent}/matches/simple`, (data) => {
         setMatches(data.filter((e:any) => e.key.indexOf(currentEvent+"_qm") !== -1).map((e:any):Match => {
@@ -30,6 +32,8 @@ function MatchPage() {
 
             return new Match(parseInt(e.key.substring(e.key.lastIndexOf("_qm")+3)), redAllianceNumbers, blueAllianceNumbers)
         }).sort((e1:Match, e2:Match) => e1.match_number-e2.match_number))
+
+        window.location.reload()
     })
 
     useEffect(() => {
@@ -42,6 +46,11 @@ function MatchPage() {
             ))
         }).then(() => {})
     }, [matches, currentEvent])
+
+    function createNewMatch() {
+        matches.push(new Match(matches.length+1, [0,0,0], [0,0,0]))
+        setMatches(matches)
+    }
 
     return(
         <div className={"page"}>
@@ -95,6 +104,17 @@ function MatchPage() {
 
             </div>
 
+            <div className={"manual-config-button"}>
+                <Popup content={"Manually set matches"} size={"large"} inverted trigger={
+                    <Button
+                        size={"huge"} icon={"setting"} color={"red"}
+                        onClick={() => {setManualMatchesActive(true)}}
+                    />
+                }
+
+                />
+            </div>
+
             <Dimmer page active={qrDimmerActive} onClickOutside={() => setQRDimmerActive(false)}>
                 <div className={"config-qr-code-window"}>
 
@@ -105,6 +125,134 @@ function MatchPage() {
                     </div>
 
                     <QRDisplay splitCode={splitString(Match.toCode(matches), 500)}/>
+                </div>
+            </Dimmer>
+
+            <Dimmer page active={manualMatchesActive} onClickOutside={() => setManualMatchesActive(false)}>
+                <div className={"manual-match-window"}>
+                    <h1>Manually enter a list of matches</h1>
+
+                    <div className={"match-table-manager"}>
+                        <div/>
+                        <Table>
+                            <Table.Header>
+                                <Table.HeaderCell>Match</Table.HeaderCell>
+                                <Table.HeaderCell>Red 1</Table.HeaderCell>
+                                <Table.HeaderCell>Red 2</Table.HeaderCell>
+                                <Table.HeaderCell>Red 3</Table.HeaderCell>
+                                <Table.HeaderCell>Blue 1</Table.HeaderCell>
+                                <Table.HeaderCell>Blue 2</Table.HeaderCell>
+                                <Table.HeaderCell>Blue 3</Table.HeaderCell>
+                            </Table.Header>
+                            {
+                                matches.map((e) =>
+                                    <Table.Row>
+                                        <Table.Cell>{e.match_number}</Table.Cell>
+                                        <Table.Cell>
+                                            <Input
+                                                value={e.red1}
+                                                onChange={(event) => {
+                                                    let num = parseInt(event.target.value);
+
+                                                    if(num) {
+                                                        e.red1 = num
+                                                    } else if(event.target.value === "") {
+                                                        e.red1 = 0
+                                                    }
+                                                    setMatches([...matches])
+                                                }}
+                                            />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <Input
+                                                value={e.red2}
+                                                onChange={(event) => {
+                                                    let num = parseInt(event.target.value);
+
+                                                    if(num) {
+                                                        e.red2 = num
+                                                    } else if(event.target.value === "") {
+                                                        e.red2 = 0
+                                                    }
+                                                    setMatches([...matches])
+                                                }}
+                                            />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <Input
+                                                value={e.red3}
+                                                onChange={(event) => {
+                                                    let num = parseInt(event.target.value);
+
+                                                    if(num) {
+                                                        e.red3 = num
+                                                    } else if(event.target.value === "") {
+                                                        e.red3 = 0
+                                                    }
+                                                    setMatches([...matches])
+                                                }}
+                                            />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <Input
+                                                value={e.blue1}
+                                                onChange={(event) => {
+                                                    let num = parseInt(event.target.value);
+
+                                                    if(num) {
+                                                        e.blue1 = num
+                                                    } else if(event.target.value === "") {
+                                                        e.blue1 = 0
+                                                    }
+                                                    setMatches([...matches])
+                                                }}
+                                            />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <Input
+                                                value={e.blue2}
+                                                onChange={(event) => {
+                                                    let num = parseInt(event.target.value);
+
+                                                    if(num) {
+                                                        e.blue2 = num
+                                                    } else if(event.target.value === "") {
+                                                        e.blue2 = 0
+                                                    }
+                                                    setMatches([...matches])
+                                                }}
+                                            />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <Input
+                                                value={e.blue3}
+                                                onChange={(event) => {
+                                                    let num = parseInt(event.target.value);
+
+                                                    if(num) {
+                                                        e.blue3 = num
+                                                    } else if(event.target.value === "") {
+                                                        e.blue3 = 0
+                                                    }
+                                                    setMatches([...matches])
+                                                }}
+                                            />
+                                        </Table.Cell>
+                                    </Table.Row>
+                                )
+                            }
+                        </Table>
+                        <div/>
+                    </div>
+
+                    <Button color={"green"} onFocus={() => {
+                        createNewMatch()
+                    }} onClick={() => {
+                        createNewMatch()
+                    }}>Create New Match</Button>
+                    <Button color={"red"} onClick={() => {
+                        setMatches([...matches.slice(0, matches.length-1)])
+                    }}>Remove Last Match</Button>
                 </div>
             </Dimmer>
 

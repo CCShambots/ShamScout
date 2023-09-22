@@ -35,3 +35,36 @@
     right: 1vw;
     bottom: 1vw;
 }
+
+.manual-config-button {
+    position: fixed;
+
+    right: 1vh;
+
+    top: 9vh;
+}
+
+.manual-match-window {
+
+    width: 50vw;
+    max-height: 75vh;
+
+    overflow-y: scroll;
+
+    border-radius: 5vh;
+
+    background-color: white;
+
+    color: black;
+
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+}
+
+.match-table-manager {
+    display: flex;
+}
+
+.match-table-manager div{
+    width: 5vw;
+}

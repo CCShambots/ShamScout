@@ -1,7 +1,7 @@
 import {GameConfig} from "../components/config/GameConfig";
 
-// export let apiHost = "http://localhost:8080/";
-export let apiHost = "http://167.71.240.213:8080/";
+export let apiHost = "http://localhost:8080/";
+// export let apiHost = "http://167.71.240.213:8080/";
 
 export async function Pull(endpoint:string, callback:(e:any) => void):Promise<void> {
     try {
@@ -84,6 +84,18 @@ export async function RemoveTemplate(templateName:string) {
 
 export async function RemoveImage(teamNum:number) {
     const response = await fetch(apiHost + `bytes/remove/key/${teamNum}-img`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+    })
+
+    return response.ok;
+}
+
+export async function RemoveForm(template:string, id:string) {
+    const response = await fetch(apiHost + `forms/remove/template/${template}/id/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

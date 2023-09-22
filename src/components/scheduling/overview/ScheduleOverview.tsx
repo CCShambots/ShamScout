@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import "./ScheduleOverview.css"
 import {DropDownOptions, Schedule, Scouter} from "../matchDisplay/ScheduleData";
 import {Button, Dimmer, Dropdown, Icon, Progress, Statistic} from "semantic-ui-react";
@@ -65,7 +65,7 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverv
                 </Statistic.Group>
                 <p/>
 
-                <Button onClick={handleClick}><Icon name={"random"}/>Generate Schedule</Button>
+                <Button onClick={handleClick} color={"purple"}><Icon name={"random"}/>Generate Schedule</Button>
 
                 <Button color={"blue"} onClick={() => setQRCodeDimmerActive(true)}><Icon name={"qrcode"}/>Generate QR Codes</Button>
 
@@ -73,8 +73,6 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverv
                     <Button color={"green"} onClick={() => {
 
                         let scheduleJson = schedule.generateJson(currentEvent)
-
-                        console.log(savedToDatabase)
 
                         savedToDatabase ?
                         //Post this schedule to the API

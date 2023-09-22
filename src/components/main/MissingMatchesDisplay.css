@@ -1,0 +1,5 @@
+.missing-matches-container {
+    max-height: 83vh;
+
+    overflow: scroll;
+}
