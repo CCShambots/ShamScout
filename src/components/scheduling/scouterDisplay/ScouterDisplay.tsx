@@ -50,6 +50,7 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
                     <Button.Content visible><Icon name={"add"}/></Button.Content>
                     <Button.Content hidden>Create</Button.Content>
                 </Button>
+
                 <Dimmer page active={dimmerActive} onClickOutside={() => setDimmerActive(false)}>
                     <div className={"create-scout-dimmer"}>
                         <h1>Create new Scouter</h1>

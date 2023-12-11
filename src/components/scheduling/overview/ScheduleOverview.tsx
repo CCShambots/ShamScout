@@ -111,10 +111,8 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverv
                 <div className={"qr-code-window"}>
                     <div className={"qr-code-header"}>
                         <h1 className={"qr-code-header-text"}>Schedule QR Code</h1>
-                        <Button className={"qr-code-close-button"} animated={"vertical"} onClick={() => setQRCodeDimmerActive(false)}>
-                            <Button.Content hidden>Close</Button.Content>
-                            <Button.Content visible><Icon name={"x"}/></Button.Content>
-                        </Button>
+
+                        <Button onClick={() => setQRCodeDimmerActive(false)} icon={"x"}/>
                     </div>
 
                     <QRCodeDisplay scouter={schedule.scouters[currentQRCodeIndex]} schedule={schedule}/>

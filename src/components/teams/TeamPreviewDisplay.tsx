@@ -5,14 +5,19 @@ import "./TeamPreviewDisplay.css"
 import {Link} from "react-router-dom";
 import {doesTeamHaveImage, getImagePath} from "../../util/APIUtil";
 
-function TeamPreviewDisplay(props: {teamName:string, teamNum:number}) {
+function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumber:(val:number) => void}) {
 
     let [imageInAPI, setImageInAPI] = useState(false)
 
     useEffect(() => {
         doesTeamHaveImage(props.teamNum).then((result) => {setImageInAPI(result)});
-
     }, [props.teamNum]);
+
+    useEffect(() => {
+        if(imageInAPI) {
+            props.setTeamNumber(props.teamNum)
+        }
+    }, [imageInAPI]);
 
     const src = getImagePath(props.teamNum)
 

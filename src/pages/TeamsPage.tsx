@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
 import AppHeader from "../components/header/AppHeader";
-import {Button, Dimmer, Icon, Input, Popup, Table} from "semantic-ui-react";
+import {Button, Dimmer, Icon, Popup, Table} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import "./TeamsPage.css"
 import TeamPreviewDisplay from "../components/teams/TeamPreviewDisplay";
-import {Pull} from "../util/APIUtil";
+import {doesTeamHaveImage, Pull} from "../util/APIUtil";
 import {ScoutForm} from "../components/ScoutForm";
 import TeamListDisplay from "../components/teams/TeamListDisplay";
-import QRCode from "react-qr-code";
+import PhotoAssignment from "../components/teams/PhotoAssignment";
 
-type team = {
+export type team = {
     number:number,
     name:string
 }
@@ -21,16 +21,12 @@ function TeamsPage() {
 
     let [listView, setListView] = useLocalStorage("teams-list-view", false)
     let [teams] = useLocalStorage<team[]>(`teams-${currentEvent}`, []);
+    let [teamsWithPhotos, setTeamsWithPhotos] = useState<number[]>([])
+    let [teamsWithOldPhotos, setTeamsWithOldPhotos] = useState<number[]>([])
 
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
 
     let [qrDimmerActive, setQRDimmerActive] = useState(false)
-
-    let [numPitScouters, setNumPitScouters] = useState(1)
-    let [currentPitScout, setCurrentPitScout] = useState(0)
-
-    let [pitScoutSchedules, setPitScoutSchedules] = useState<String[]>([])
-
 
     useEffect(() => {
 
@@ -42,22 +38,15 @@ function TeamsPage() {
     }, [currentEvent])
 
     useEffect(() => {
-        let pitScoutArray:String[]= Array(numPitScouters).fill("")
-        
-        let index = 0;
-        
-        teams.forEach(e => {
-            let num = e.number
-            pitScoutArray[index] += `${num},`
 
-            index = index < pitScoutArray.length-1 ? index+1 : 0
-        })
+        //TODO: Implement old photos when Aiden has photo timing
+        setTeamsWithOldPhotos(teams.map(e => e.number))
+    }, [teams]);
 
-        let shortenedArray =pitScoutArray.map(e => e.substring(0, e.length-1))
+    useEffect(() => {
+        console.log(teamsWithPhotos.length)
+    }, [teamsWithPhotos]);
 
-        setPitScoutSchedules(shortenedArray)
-        
-    }, [numPitScouters, teams]);
 
     return(
         <div>
@@ -97,7 +86,15 @@ function TeamsPage() {
                         </div>
                     : <div className={"main-teams-display-grid"}>
                         {
-                            teams.map(e => <TeamPreviewDisplay key={e.number} teamName={e.name} teamNum={e.number}/>)
+                            teams.map(e => <TeamPreviewDisplay
+                                key={e.number}
+                                teamName={e.name}
+                                teamNum={e.number}
+                                setTeamNumber={(val) => {
+                                    teamsWithPhotos.push(val)
+                                    setTeamsWithPhotos([...teamsWithPhotos])
+                                }}
+                            />)
                         }
                     </div>
                 }
@@ -113,48 +110,12 @@ function TeamsPage() {
             </div>
 
             <Dimmer page active={qrDimmerActive} onClickOutside={() => setQRDimmerActive(false)}>
-                <div className={"config-qr-code-window"}>
-
-                    <div className={"qr-code-header"}>
-                        <h1 className={"config-qr-code-header-text"}>Team Photo QR Code</h1>
-                        <Button className={"qr-code-close-button"} icon={"close"} onClick={() => setQRDimmerActive(false)}>
-                        </Button>
-                    </div>
-
-                    <div className={"inline-input"}>
-                        <div className={"input-text-container"}>
-                            <h3 className={"input-text"}>Number of Pit Scouters</h3>
-                        </div>
-                        <Input
-                            value={numPitScouters}
-                            onChange={(event) => {
-                                let result = parseInt(event.target.value)
-                                if(result && result < teams.length) {
-                                    setNumPitScouters(parseInt(event.target.value))
-                                } else if (event.target.value === "") {
-                                    setNumPitScouters(0);
-                                }
-                            }
-                        }/>
-                    </div>
-
-                    <br/>
-                    <QRCode value={`pho:${pitScoutSchedules[currentPitScout]}`}/>
-
-                    <div className={"inline-arrows"}>
-                        <Button icon={"arrow left"} onClick={() => {
-                            if(currentPitScout > 0) {
-                                setCurrentPitScout(currentPitScout-1)
-                            }
-                        }}/>
-                        <h3>{currentPitScout+1} of {numPitScouters}</h3>
-                        <Button icon={"arrow right"} onClick={() => {
-                            if(currentPitScout < numPitScouters-1) {
-                                setCurrentPitScout(currentPitScout+1)
-                            }
-                        }}/>
-                    </div>
-                </div>
+                <PhotoAssignment
+                    allTeams={teams.map(e => e.number)}
+                    teamsWithoutPhotos={teams.map(e => e.number).filter(e => !teamsWithPhotos.includes(e))}
+                    teamsWithOldPhotos={teamsWithOldPhotos}
+                    setQRDimmerActive={(val) => {setQRDimmerActive(val)}}
+                />
             </Dimmer>
         </div>
     )

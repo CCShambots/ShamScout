@@ -21,8 +21,12 @@ function AppHeader() {
                 </div>
 
                 <div className={"header-item header-side-text"}>
-                    <h2 className={"header-text"}>{currentEvent}</h2>
-                    <h2 className={"header-text"}>v{packageJson.version}</h2>
+                    <h2 className={"header-text"}>
+                            {currentEvent}
+                    </h2>
+                    <h2 className={"header-text"}>
+                            v{packageJson.version}
+                    </h2>
                 </div>
         </div>
     )
