@@ -12,6 +12,7 @@ import PicklistPage from "./pages/PicklistPage";
 import {IsApiAlive} from "./util/APIUtil";
 import {Dimmer, Header, Icon} from "semantic-ui-react";
 import {NewVersionChecker} from "./components/NewVersionChecker";
+import VSPage from "./pages/VSPage";
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
                 <Route path='/teams' element={ <TeamsPage /> } />
                 <Route path='/team' element={<TeamViewPage/>}/>
                 <Route path='/picklist' element={<PicklistPage/>}/>
+                <Route path='/vs' element={<VSPage/>}/>
                 <Route path='/scheduler' element={ <SchedulingPage /> } />
                 <Route path='/config' element={ <ConfigPage /> } />
 

@@ -12,7 +12,7 @@ import { CSVLink } from "react-csv";
 import {GameConfig} from "../components/config/GameConfig";
 import AppHeader from "../components/header/AppHeader";
 
-type team = {
+export type Team = {
     number:number,
     name:string
 }
@@ -25,7 +25,7 @@ function TeamViewPage() {
 
     let [activeTemplate] = useLocalStorage("active-template", "")
 
-    let [teams] = useLocalStorage<team[]>(`teams-${currentEvent}`, []);
+    let [teams] = useLocalStorage<Team[]>(`teams-${currentEvent}`, []);
 
     const [searchParams] = useSearchParams();
     let teamNum= parseInt(searchParams.get("number") || "0")
@@ -67,8 +67,6 @@ function TeamViewPage() {
 
 
         Pull(`forms/get/template/${activeTemplate}`, (data) => {
-
-            console.log(data)
 
             let forms:ScoutForm[] = data.map((e:any) =>
                 ScoutForm.fromJson(e[0])

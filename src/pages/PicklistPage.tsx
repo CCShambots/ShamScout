@@ -5,6 +5,7 @@ import "./PicklistPage.css"
 import {useLocalStorage} from "usehooks-ts";
 import TeamLink from "../components/team-link/TeamLink";
 import {Button, Checkbox} from "semantic-ui-react";
+import {Link} from "react-router-dom";
 
 type Team = {
     name:string,
@@ -79,6 +80,8 @@ function PicklistPage() {
     return (
         <div>
             <AppHeader/>
+
+            <Link to={"/vs"}>VS</Link>
 
             <div className={"picklist-flex"}>
                 <div className={"picklist-column"}>

@@ -19,7 +19,7 @@ function ConfigPage() {
 
     let [event, setEvent] = useLocalStorage("current-event", "");
     let [TBAKey, setTBAKey] = useLocalStorage("tba-key", "");
-    let [remoteAPIAdress, setRemoteAPIAdress] = useLocalStorage("api-address", "");
+    let [remoteAPIAddress, setRemoteAPIAddress] = useLocalStorage("api-address", "");
 
     let [eventCodeDimmerActive, setEventCodeDimmerActive] = useState(false)
     let [apiAddressDimmerActive, setApiAddressDimmerActive] = useState(false)
@@ -99,7 +99,7 @@ function ConfigPage() {
                     <div className={"inline-qr-code"}>
                         <Button icon={"qrcode"} color={"blue"} onClick={() => setApiAddressDimmerActive(true)}/>
                         <div className={"full-length-form"}>
-                            <Input placeholder={'Set API Host'} value={remoteAPIAdress} onChange={(e) => setRemoteAPIAdress(e.target.value)}/>
+                            <Input placeholder={'Set API Host'} value={remoteAPIAddress} onChange={(e) => setRemoteAPIAddress(e.target.value)}/>
                         </div>
                     </div>
                     <GameConfigsDisplay
@@ -180,8 +180,8 @@ function ConfigPage() {
                         />
                     </div>
 
-                    <QRCode value={`api:${getCorrectRemoteAddress(remoteAPIAdress)}`}/>
-                    <p>api:{getCorrectRemoteAddress(remoteAPIAdress)}</p>
+                    <QRCode value={`api:${getCorrectRemoteAddress(remoteAPIAddress)}`}/>
+                    <p>api:{getCorrectRemoteAddress(remoteAPIAddress)}</p>
 
                 </div>
 

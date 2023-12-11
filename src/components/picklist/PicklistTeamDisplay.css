@@ -1,0 +1,78 @@
+.team-vs-display {
+
+    position: absolute;
+
+    z-index: 150;
+
+    top: 2.5%;
+    left: 50%;
+
+    transform: translate(-50%, 0);
+
+    padding: 3vh;
+    border-radius: 2vh;
+
+    height: 55vh;
+
+    width: 30vw;
+
+    transition: 0.25s;
+
+    --grow-amount: 1vh;
+}
+
+.transitioning {
+    transition: .3s;
+
+    top: -10%;
+
+    transform: translate(-50%, -100%);
+}
+
+.team-vs-display:hover {
+    transition: 0.25s;
+
+    padding: calc(2vh + var(--grow-amount) * 2);
+
+    height: 57vh;
+    width: 32vw;
+
+}
+
+.vs-team-header {
+    overflow-x: hidden;
+
+    height: 5vh;
+}
+
+.team-vs-display h1 {
+    text-align: center;
+}
+
+.boolean-container {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    height: 90%;
+}
+
+.team-boolean-value {
+    display: flex;
+
+    justify-content: space-between;
+}
+
+.team-boolean-value h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.higher {
+    color: green;
+}
+
+.equal {
+    color: #ffffaa;
+}

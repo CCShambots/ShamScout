@@ -43,7 +43,7 @@ module.exports = {
           owner: 'CCShambots',
           name: 'ShamScout'
         },
-        prerelease: true,
+        prerelease: false,
         authToken: process.env.GITHUB_TOKEN,
       }
     }
