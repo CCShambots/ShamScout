@@ -16,6 +16,10 @@
     text-align: center;
 }
 
+.allow-scrolling {
+    /*overflow-y: scroll;*/
+}
+
 .top-row {
     display: flex;
     justify-content: space-between;
@@ -39,6 +43,7 @@
     display: flex;
 
     align-items: start;
+
 }
 
 .team-table-text-centering tr>td{
@@ -48,4 +53,8 @@
 .team-image-container {
     display: flex;
     flex-direction: column;
+}
+
+.non-selectable {
+    user-select: none;
 }

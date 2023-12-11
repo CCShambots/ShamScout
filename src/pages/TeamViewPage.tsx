@@ -19,8 +19,6 @@ export type Team = {
 
 function TeamViewPage() {
 
-    //TODO: Properly update state
-
     let [currentEvent] = useLocalStorage("current-event", "")
 
     let [activeTemplate] = useLocalStorage("active-template", "")
@@ -116,7 +114,7 @@ function TeamViewPage() {
             })
 
         })
-    }, [currentEvent])
+    }, [currentEvent, teamNum])
 
     useEffect(() => {
         if(teams.filter(e => e.number === teamNum).length === 0) {
@@ -157,6 +155,7 @@ function TeamViewPage() {
 
     return <div>
         <AppHeader/>
+
         <div className={"top-row"}>
             <div className={"top-text"}>
                 <h1>{teamNum}</h1>
@@ -210,7 +209,14 @@ function TeamViewPage() {
                 {thisTeamForms.map(e => {
 
                     return <Table.Row key={thisTeamForms.indexOf(e)}>
-                        <Table.Cell>{e.match_number}</Table.Cell>
+                        <Table.Cell>
+                            <Popup
+                                content={`Scouted by: ${e.scouter}`}
+                                trigger={
+                                    <p className={"non-selectable"}>{e.match_number}</p>
+                                }
+                            />
+                        </Table.Cell>
                         <Table.Cell>{e.event}</Table.Cell>
                         <Table.Cell>
                             <Popup
