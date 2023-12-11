@@ -41,13 +41,8 @@ function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumb
             <div className={"team-display-container"}>
                 <div className={"team-display-image-container"}>
                     {
-                        // imageInAPI ?
                         <img className={`team-display-image ${customClass}`}
                              src={imgSrc} alt={props.teamNum.toString()}/>
-                        // :
-                        // <img className={"team-display-image"}
-                        //      src={Picture} alt={props.teamNum.toString()}/>
-
                     }
                 </div>
                 <div className={"team-display-info"}>
