@@ -2,12 +2,25 @@
 
 }
 
-.item-type-dropdown {
-    /*width: 5vw;*/
-}
-
 .item-type-title {
     background-color: lightblue;
+}
+
+.item-type-normal {
+    background-color: lightgray;
+}
+
+.template-item {
+    display: flex;
+    padding: 1vh 1vw;
+    margin: 0.5vh 0;
+    border-radius: 0.75vh;
+}
+
+.draggable-list {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
 }
 
 .config-qr-code-window {
