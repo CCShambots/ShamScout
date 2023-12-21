@@ -112,12 +112,18 @@ function ConfigPage() {
                         }}
                         modifyTemplate={async (temp) => {
 
-
-                            let success = await ModifyTemplate(temp)
-
-                            if(success) {
-                                temp.setUploaded()
-                                setTemplates([...templates])
+                            try {
+                                let success = await ModifyTemplate(temp)
+                                
+                                if(success) {
+                                    temp.setUploaded()
+                                    setTemplates([...templates])
+                                } else {
+                                    temp.setErrored()
+                                    setTemplates([...templates])
+                                }
+                            } catch (e) {
+                                temp.setErrored()
                             }
                         }}
                         removeTemplate={(name:string) => {

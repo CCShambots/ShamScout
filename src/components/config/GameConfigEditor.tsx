@@ -44,6 +44,17 @@ export default function GameConfigEditor(
                 <Icon name={"qrcode"}/> QR Code
             </Button>
 
+            <Button color={"green"} icon={"add circle"}
+                onClick={() => {
+
+                    props.template.items.push(new ConfigItem("Title", props.template.items.length.toString()))
+
+                   props.setTemplate(Object.create(props.template))
+                }}>
+
+                {/*<Icon name={"add"}/> Create*/}
+            </Button>
+
             <ReactSortable
                 list={props.template.items.map(e => {return {id: props.template.items.indexOf(e), name: e.label}})}
                 setList={(e) => {
@@ -115,8 +126,10 @@ function FormItem(props: {
             placeholder={"label"}
             value={props.item.label}
             onChange={(event, data) => {
-                props.item.label = data.value
-                props.setConfig(Object.create(props.config))
+                if(props.item.isNewNameLegal(props.config, data.value)) {
+                    props.item.label = data.value
+                    props.setConfig(Object.create(props.config))
+                }
             }}
             error={!props.item.isLegalName(props.config)}
         />

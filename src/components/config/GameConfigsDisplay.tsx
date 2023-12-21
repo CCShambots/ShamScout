@@ -54,7 +54,7 @@ export default function GameConfigsDisplay(props: {
             <Table>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell colSpan={3}>Game Configs</Table.HeaderCell>
+                        <Table.HeaderCell colSpan={3}>Form Templates</Table.HeaderCell>
                         <Table.HeaderCell>
                             <Button icon={"plus circle"} color={"green"} onClick={() => setAddDimmerActive(true)}/>
                         </Table.HeaderCell>

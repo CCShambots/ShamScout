@@ -11,7 +11,8 @@ enum ItemType {
 
 enum Status {
     Uploaded,
-    Edited
+    Edited,
+    Failed
 }
 
 class GameConfig {
@@ -73,6 +74,10 @@ class GameConfig {
         this.status = Status.Edited
     }
 
+    setErrored() {
+        this.status = Status.Failed
+    }
+
     setUploaded() {
         this.status = Status.Uploaded
     }
@@ -88,6 +93,11 @@ class GameConfig {
                 return <Popup
                    trigger={<Icon name={"pencil"}/>}
                    content={"This template has unsaved changes!"}
+                />
+            case Status.Failed:
+                return <Popup
+                    trigger={<Icon name={"x"} color={"red"}/>}
+                    content={"This template failed to upload!"}
                 />
         }
     }
@@ -128,6 +138,10 @@ class ConfigItem {
 
     isLegalName(config:GameConfig) {
         return config.items.filter(e => e.label === this.label).length <= 1 && this.label !== ""
+    }
+
+    isNewNameLegal(config:GameConfig, label:string) {
+        return config.items.filter(e => e.label === label).length <= 1
     }
 
     generateJSON():string {
