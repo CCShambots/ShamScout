@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import AppHeader from "../components/header/AppHeader";
-import {Button, Dimmer, Icon, Popup, Table} from "semantic-ui-react";
+import {Button, Dimmer, Icon, Input, Popup, Table} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import "./TeamsPage.css"
 import TeamPreviewDisplay from "../components/teams/TeamPreviewDisplay";
@@ -8,6 +8,7 @@ import {doesTeamHaveImage, Pull} from "../util/APIUtil";
 import {ScoutForm} from "../components/ScoutForm";
 import TeamListDisplay from "../components/teams/TeamListDisplay";
 import PhotoAssignment from "../components/teams/PhotoAssignment";
+import {Link} from "react-router-dom";
 
 export type team = {
     number:number,
@@ -27,6 +28,9 @@ function TeamsPage() {
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
 
     let [qrDimmerActive, setQRDimmerActive] = useState(false)
+
+    let [lookupTeam, setLookupTeam] = useState("")
+    let linkRef = useRef<HTMLAnchorElement>(null)
 
     useEffect(() => {
 
@@ -54,7 +58,32 @@ function TeamsPage() {
 
             <div className={"page"}>
                 <div className={"top-row-info"}>
-                    <h1 className={"teams-title"}>Teams</h1>
+                    <div>
+                        <Input
+                            icon={"users"}
+                            iconPosition={"left"}
+                            placeholder={"Team Lookup"}
+                            onChange={(e) => {
+                                if(parseInt(e.target.value)) {
+                                    setLookupTeam(e.target.value)
+                                }
+                            }}
+                            onKeyDown={(e:any) => {
+                                if(e.key === "Enter") {
+                                    if(linkRef.current) {
+                                        linkRef.current.click()
+                                    }
+                                }
+                            }}
+                        />
+                        <Button icon={"arrow right"} color={"blue"}
+                               disabled={isNaN(parseInt(lookupTeam))} onClick={() => {
+                            if(linkRef.current) {
+                                linkRef.current.click()
+                            }
+                        }}></Button>
+                        <Link to={`/team?number=${lookupTeam}`} ref={linkRef}/>
+                    </div>
                     <Button.Group size={"huge"}>
                         <Button animated={"vertical"} onClick={() => setListView(true)} active={listView}>
                             <Button.Content hidden>List</Button.Content>
