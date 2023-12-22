@@ -5,7 +5,7 @@ import Picture from "../resources/team_placeholder.png";
 import "./TeamViewPage.css"
 import {ScoutForm} from "../components/ScoutForm";
 import {doesTeamHaveImage, getImagePath, Pull, PullTBA, RemoveForm, RemoveImage} from "../util/APIUtil";
-import {Button, Dimmer, Header, Icon, Popup, Table} from "semantic-ui-react";
+import {Button, Dimmer, Dropdown, Header, Icon, Popup, Table} from "semantic-ui-react";
 import packageJson from '../../package.json';
 import Banner from "../components/teams/Banner";
 import { CSVLink } from "react-csv";
@@ -45,6 +45,8 @@ function TeamViewPage() {
 
     let [removeFormDimmer, setRemoveFormDimmer] = useState(false)
     let [removeFormID, setRemoveFormID] = useState("")
+
+    let [eventsInFilter, setEventsInFilter] = useState<string[]>([])
 
     useEffect(() => {
         doesTeamHaveImage(teamNum).then((result) => {setImageInAPI(result)});
@@ -152,14 +154,12 @@ function TeamViewPage() {
 
     }, [thisTeamForms])
 
-
     return <div>
         <AppHeader/>
 
         <div className={"top-row"}>
             <div className={"top-text"}>
-                <h1>{teamNum}</h1>
-                <h1>{teamName}</h1>
+                <h1>{teamNum} - {teamName}</h1>
                 <h1>{TeamEventInfo.getSeasonRecordString(events)}</h1>
                 <h1>{thisTeamForms.length} Forms on Record</h1>
                 <h1>{thisEventForms.length} Forms for This Event</h1>
@@ -188,9 +188,38 @@ function TeamViewPage() {
         </div>
 
         <div className={"table-manager"}>
+
+            <Dropdown
+                placeholder={"Filter Event"}
+                // fluid
+                multiple
+                selection
+                options={
+                    Array.from(thisTeamForms.reduce( (acc, e) => {
+                        acc.add(e.event)
+
+                        return acc;
+                    }, new Set<string>())).map(e => {
+                        return {
+                            key: e,
+                            text: e,
+                            value: e
+                        }
+                    })
+                }
+                onChange={(event, data) => {
+                    if(data.value) {
+                        setEventsInFilter(data.value as string[])
+                    } else {
+                        setEventsInFilter([])
+                    }
+                }}
+
+            />
+
             <Button size={"huge"} color={"blue"} onClick={() => downloadCSVRef.current.link.click()}><Icon name={"table"}/>Download CSV</Button>
-            <CSVLink ref={downloadCSVRef} data={thisTeamForms} headers={thisTeamForms[0]?.generateHeader()} filename={`${teamNum}-data.csv`}/>
         </div>
+        <CSVLink ref={downloadCSVRef} data={thisTeamForms} headers={thisTeamForms[0]?.generateHeader()} filename={`${teamNum}-data.csv`}/>
 
         <Table>
             <Table.Header>
@@ -206,7 +235,9 @@ function TeamViewPage() {
             </Table.Header>
 
             <Table.Body>
-                {thisTeamForms.map(e => {
+                {thisTeamForms.filter(e => {
+                    return eventsInFilter.length === 0 || eventsInFilter.indexOf(e.event) !== -1
+                }).map(e => {
 
                     return <Table.Row key={thisTeamForms.indexOf(e)}>
                         <Table.Cell>

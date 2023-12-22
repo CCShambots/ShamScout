@@ -37,13 +37,19 @@
 .top-text {
     text-align: center;
     align-self: center;
+
+    max-width: 25vw;
 }
 
 .table-manager {
     display: flex;
 
-    align-items: start;
+    justify-content: space-between;
 
+    align-items: center;
+
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 
 .team-table-text-centering tr>td{

@@ -114,7 +114,7 @@ function ConfigPage() {
 
                             try {
                                 let success = await ModifyTemplate(temp)
-                                
+
                                 if(success) {
                                     temp.setUploaded()
                                     setTemplates([...templates])

@@ -65,7 +65,9 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverv
                 </Statistic.Group>
                 <p/>
 
-                <Button onClick={handleClick} color={"purple"}><Icon name={"random"}/>Generate Schedule</Button>
+                <Button onClick={handleClick} color={"purple"} disabled={schedule.scouters.length <= 6}>
+                    <Icon name={"random"}/>Generate Schedule
+                </Button>
 
                 <Button color={"blue"} onClick={() => setQRCodeDimmerActive(true)}><Icon name={"qrcode"}/>Generate QR Codes</Button>
 
