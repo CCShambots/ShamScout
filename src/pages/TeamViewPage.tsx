@@ -190,7 +190,7 @@ function TeamViewPage() {
         <div className={"table-manager"}>
 
             <Dropdown
-                placeholder={"Filter Event"}
+                placeholder={"Filter by Event"}
                 // fluid
                 multiple
                 selection
