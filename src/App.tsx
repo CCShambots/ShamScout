@@ -14,12 +14,13 @@ import {Button, Dimmer, Header, Icon} from "semantic-ui-react";
 import {NewVersionChecker} from "./components/NewVersionChecker";
 import VSPage from "./pages/VSPage";
 import {useLocalStorage} from "usehooks-ts";
+import SelectAPIType from "./components/config/SelectAPIType";
 
 function App() {
 
     const [apiAlive, setApiAlive] = useState(true)
 
-    const [useLocalAPI, setUseLocalAPI] = useLocalStorage("use-local-api", true)
+    const [useLocalAPI] = useLocalStorage("use-local-api", true)
 
     useEffect(() => {
         let interval = setInterval(() =>{
@@ -64,20 +65,7 @@ function App() {
                 <Icon color={"red"} name={"unlink"} size={"massive"}/>
               </div>
               <Header inverted>Couldn't Connect to the API! Start your {useLocalAPI ? "Local" : "Remote"} API Instance or Switch API Type.</Header>
-              <Button.Group>
-                  <Button color={"blue"} disabled={useLocalAPI} onClick={() => {
-                      setUseLocalAPI(true)
-                  }}>
-
-                      <Icon name={"laptop"}/> Local API Host (Recommended)
-                  </Button>
-                  <Button.Or/>
-                  <Button color={"purple"} disabled={!useLocalAPI} onClick={() => {
-                      setUseLocalAPI(false)
-                  }}>
-                      <Icon name={"cloud"}/> Remote API Host
-                  </Button>
-              </Button.Group>
+              <SelectAPIType/>
           </Dimmer>
 
           <NewVersionChecker/>

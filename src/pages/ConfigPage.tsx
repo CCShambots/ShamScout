@@ -9,6 +9,7 @@ import {useLocalStorage} from "usehooks-ts";
 import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
 import QRCode from "react-qr-code";
 import AppHeader from "../components/header/AppHeader";
+import SelectAPIType from "../components/config/SelectAPIType";
 
 function ConfigPage() {
 
@@ -141,20 +142,7 @@ function ConfigPage() {
                         Clear Mobile Data
                     </Button>
                     <h1>Set API Host</h1>
-                    <Button.Group>
-                        <Button color={"blue"} disabled={useLocalAPI} onClick={() => {
-                            setUseLocalAPI(true)
-                        }}>
-
-                            <Icon name={"laptop"}/> Local API Host (Recommended)
-                        </Button>
-                        <Button.Or/>
-                        <Button color={"purple"} disabled={!useLocalAPI} onClick={() => {
-                            setUseLocalAPI(false)
-                        }}>
-                            <Icon name={"cloud"}/> Remote API Host
-                        </Button>
-                    </Button.Group>
+                    <SelectAPIType/>
                 </div>
                 <div className={"middle-column"}>
                     <TeamsInEventDisplay/>

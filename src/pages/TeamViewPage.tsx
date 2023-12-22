@@ -385,30 +385,31 @@ class TeamEventInfo {
 }
 
 function EventTable(props: {events:TeamEventInfo[]}) {
-    return <Table className={"team-table-text-centering"}>
+    return <Table>
         <Table.Header>
             <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Rank</Table.HeaderCell>
-                <Table.HeaderCell>Quals</Table.HeaderCell>
-                <Table.HeaderCell>Alliance</Table.HeaderCell>
-                <Table.HeaderCell>Playoffs</Table.HeaderCell>
+                <Table.HeaderCell className={"center-cell-text"}>Rank</Table.HeaderCell>
+                <Table.HeaderCell className={"center-cell-text"}>Quals</Table.HeaderCell>
+                <Table.HeaderCell className={"center-cell-text"}>Alliance</Table.HeaderCell>
+                <Table.HeaderCell className={"center-cell-text"}>Playoffs</Table.HeaderCell>
             </Table.Row>
         </Table.Header>
 
         <Table.Body>
             {props.events.map(e => {
 
-                    let rank1Stars = e.rank === 1 ? "✨" : ""
-                    let qualStars = e.qualRecord.losses === 0 && e.qualRecord.wins > 0 ? "✨" : ""
-                    let playoffStars = e.playoffRecord.losses === 0 && e.playoffRecord.wins > 0 ? "✨" : ""
-
-                    return <Table.Row key={e.eventKey}>
+                    return <Table.Row
+                        key={e.eventKey}
+                        className=
+                            {e.rank === 1 || e.qualRecord.losses === 0 ||
+                            (e.playoffRecord.losses === 0 && e.playoffRecord.wins > 0) ? "good-job-row" : ""}
+                    >
                         <Table.Cell>{e.eventName}</Table.Cell>
-                        <Table.Cell>{rank1Stars}{e.rank !== -1 ? e.rank : "N/A"}{rank1Stars}</Table.Cell>
-                        <Table.Cell>{qualStars}{e.getQualsRecord()}{qualStars}</Table.Cell>
-                        <Table.Cell>{e.allianceNum !== -1 ? e.allianceNum : "None"}</Table.Cell>
-                        <Table.Cell>{playoffStars}{e.getPlayoffRecord()}{playoffStars}</Table.Cell>
+                        <Table.Cell className={"center-cell-text"}>{e.rank !== -1 ? e.rank : "N/A"}</Table.Cell>
+                        <Table.Cell className={"center-cell-text"}>{e.getQualsRecord()}</Table.Cell>
+                        <Table.Cell className={"center-cell-text"}>{e.allianceNum !== -1 ? e.allianceNum : "None"}</Table.Cell>
+                        <Table.Cell className={"center-cell-text"}>{e.getPlayoffRecord()}</Table.Cell>
                     </Table.Row>
                 }
             )}
