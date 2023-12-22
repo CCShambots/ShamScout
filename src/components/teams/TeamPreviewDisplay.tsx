@@ -4,6 +4,7 @@ import Picture from "../../resources/team_placeholder.png"
 import "./TeamPreviewDisplay.css"
 import {Link} from "react-router-dom";
 import {doesTeamHaveImage, getImagePath} from "../../util/APIUtil";
+import {useLocalStorage} from "usehooks-ts";
 
 function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumber:(val:number) => void}) {
 
@@ -19,7 +20,9 @@ function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumb
         }
     }, [imageInAPI]);
 
-    const src = getImagePath(props.teamNum)
+    let [currentEvent] = useLocalStorage("current-event", "")
+
+    const src = getImagePath(props.teamNum, currentEvent.substring(0, 4))
 
     const [imgSrc, setImgSrc] = useState(Picture || src);
 

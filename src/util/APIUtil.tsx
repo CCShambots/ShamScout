@@ -160,8 +160,8 @@ export async function doesTeamHaveImage(teamNum:number) {
     }
 }
 
-export function getImagePath(teamNum:number) {
-    return `${apiHost}bytes/get/key/${teamNum}-img-${year}`
+export function getImagePath(teamNum:number, yearToUse?:string) {
+    return `${apiHost}bytes/get/key/${teamNum}-img-${yearToUse ? yearToUse : year}`
 }
 
 export function PullTBA(endpoint:string, callback:(e:any) => void) {

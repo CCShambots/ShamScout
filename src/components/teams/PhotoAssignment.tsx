@@ -2,6 +2,7 @@ import {Button, Dropdown, Input} from "semantic-ui-react";
 import QRCode from "react-qr-code";
 import React, {useEffect, useState} from "react";
 import packageJson from "../../../package.json";
+import {useLocalStorage} from "usehooks-ts";
 
 type assignmentOptions = {
     allTeams:number[],
@@ -28,7 +29,19 @@ export default function PhotoAssignment({allTeams, teamsWithoutPhotos, teamsWith
     let [pitScoutSchedules, setPitScoutSchedules] = useState<String[]>([])
     let [currentPitScout, setCurrentPitScout] = useState(0)
 
-    let year=  parseInt(packageJson.version.substring(0, 4));
+    let versionYear=  packageJson.version.substring(0, 4);
+
+    let [currentEvent] = useLocalStorage("current-event", "")
+
+    let [yearToUse, setYearToUse] = useState(versionYear)
+
+    useEffect(() => {
+        if(parseInt(currentEvent.substring(0, 4))) {
+            setYearToUse(currentEvent.substring(0, 4))
+        } else {
+            setYearToUse(versionYear)
+        }
+    }, []);
 
     useEffect(() => {
         switch (currentTeamOption) {
@@ -101,7 +114,9 @@ export default function PhotoAssignment({allTeams, teamsWithoutPhotos, teamsWith
 
             <br/>
             <br/>
-            <QRCode value={`pho:${year};${pitScoutSchedules[currentPitScout]}`}/>
+            <QRCode value={`pho:${yearToUse};${pitScoutSchedules[currentPitScout]}`}/>
+
+            <h3>Using Year: {yearToUse}</h3>
 
             <div className={"inline-arrows"}>
                 <Button icon={"arrow left"} onClick={() => {

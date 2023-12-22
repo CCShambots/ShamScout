@@ -48,6 +48,8 @@ function TeamViewPage() {
 
     let [eventsInFilter, setEventsInFilter] = useState<string[]>([])
 
+    const eventYear = currentEvent.substring(0, 4)
+
     useEffect(() => {
         doesTeamHaveImage(teamNum).then((result) => {setImageInAPI(result)});
     }, [teamNum]);
@@ -178,7 +180,7 @@ function TeamViewPage() {
             <div className={"team-image-container"}>
                 {
                     imageInAPI ?
-                    <img className={"team-view-pic"} src={getImagePath(teamNum)} alt={teamNum.toString()}/> :
+                    <img className={"team-view-pic"} src={getImagePath(teamNum, eventYear)} alt={teamNum.toString()}/> :
                     <img className={"team-view-pic"} src={Picture} alt={teamNum.toString()}/>
                 }
                 <Button color={"red"} disabled={!imageInAPI} onClick={() => {

@@ -24,7 +24,7 @@
 }
 
 .config-qr-code-window {
-    width: 55vw;
+    max-width: 55vw;
     max-height: 100vh;
 
     padding: 2vh;
@@ -32,13 +32,14 @@
     color:black;
 
     background-color: white;
-    border-radius: 5vh;
+    border-radius: 2vh;
 
     position: relative;
 }
 
 .config-qr-code-header-text {
-    width: 75vw;
+    max-width: 75vw;
+    min-width: 30vw;
 }
 
 .qr-code-big {
