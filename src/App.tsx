@@ -9,14 +9,17 @@ import ConfigPage from "./pages/ConfigPage";
 import ScanPage from "./pages/ScanPage";
 import TeamViewPage from "./pages/TeamViewPage";
 import PicklistPage from "./pages/PicklistPage";
-import {IsApiAlive} from "./util/APIUtil";
-import {Dimmer, Header, Icon} from "semantic-ui-react";
+import {IsApiAlive, setApiHost} from "./util/APIUtil";
+import {Button, Dimmer, Header, Icon} from "semantic-ui-react";
 import {NewVersionChecker} from "./components/NewVersionChecker";
 import VSPage from "./pages/VSPage";
+import {useLocalStorage} from "usehooks-ts";
 
 function App() {
 
     const [apiAlive, setApiAlive] = useState(true)
+
+    const [useLocalAPI, setUseLocalAPI] = useLocalStorage("use-local-api", true)
 
     useEffect(() => {
         let interval = setInterval(() =>{
@@ -32,6 +35,10 @@ function App() {
 
         setApiAlive(result);
     }
+
+    useEffect(() => {
+        setApiHost(useLocalAPI)
+    }, [useLocalAPI]);
 
   return (
       <div>
@@ -56,7 +63,21 @@ function App() {
               <div className={"api-message-icon"}>
                 <Icon color={"red"} name={"unlink"} size={"massive"}/>
               </div>
-              <Header inverted>Couldn't Connect to the API! Start Your Local API Instance.</Header>
+              <Header inverted>Couldn't Connect to the API! Start your {useLocalAPI ? "Local" : "Remote"} API Instance or Switch API Type.</Header>
+              <Button.Group>
+                  <Button color={"blue"} disabled={useLocalAPI} onClick={() => {
+                      setUseLocalAPI(true)
+                  }}>
+
+                      <Icon name={"laptop"}/> Local API Host (Recommended)
+                  </Button>
+                  <Button.Or/>
+                  <Button color={"purple"} disabled={!useLocalAPI} onClick={() => {
+                      setUseLocalAPI(false)
+                  }}>
+                      <Icon name={"cloud"}/> Remote API Host
+                  </Button>
+              </Button.Group>
           </Dimmer>
 
           <NewVersionChecker/>

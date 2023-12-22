@@ -4,7 +4,7 @@ import GameConfigsDisplay from "../components/config/GameConfigsDisplay";
 import {GameConfig} from "../components/config/GameConfig";
 import {AddTemplate, ModifyTemplate, Pull, RemoveTemplate} from "../util/APIUtil";
 import GameConfigEditor from "../components/config/GameConfigEditor";
-import {Button, Dimmer, Header, Input} from "semantic-ui-react";
+import {Button, Dimmer, Header, Icon, Input} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
 import QRCode from "react-qr-code";
@@ -20,6 +20,8 @@ function ConfigPage() {
     let [event, setEvent] = useLocalStorage("current-event", "");
     let [TBAKey, setTBAKey] = useLocalStorage("tba-key", "");
     let [remoteAPIAddress, setRemoteAPIAddress] = useLocalStorage("api-address", "");
+
+    let [useLocalAPI, setUseLocalAPI] = useLocalStorage("use-local-api", true)
 
     let [eventCodeDimmerActive, setEventCodeDimmerActive] = useState(false)
     let [apiAddressDimmerActive, setApiAddressDimmerActive] = useState(false)
@@ -138,6 +140,21 @@ function ConfigPage() {
                     <Button color={"red"} onClick={() => setClearDataDimmerActive(true)}>
                         Clear Mobile Data
                     </Button>
+                    <h1>Set API Host</h1>
+                    <Button.Group>
+                        <Button color={"blue"} disabled={useLocalAPI} onClick={() => {
+                            setUseLocalAPI(true)
+                        }}>
+
+                            <Icon name={"laptop"}/> Local API Host (Recommended)
+                        </Button>
+                        <Button.Or/>
+                        <Button color={"purple"} disabled={!useLocalAPI} onClick={() => {
+                            setUseLocalAPI(false)
+                        }}>
+                            <Icon name={"cloud"}/> Remote API Host
+                        </Button>
+                    </Button.Group>
                 </div>
                 <div className={"middle-column"}>
                     <TeamsInEventDisplay/>

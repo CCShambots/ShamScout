@@ -45,6 +45,10 @@
     flex-direction: column;
 }
 
+.left-column > h1 {
+    align-self: center;
+}
+
 .middle-column {
     min-width: 23vw;
 
