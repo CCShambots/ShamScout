@@ -4,7 +4,7 @@ import {Button, Dimmer, Icon, Input, Popup, Table} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import "./TeamsPage.css"
 import TeamPreviewDisplay from "../components/teams/TeamPreviewDisplay";
-import {doesTeamHaveImage, Pull} from "../util/APIUtil";
+import {Pull} from "../util/APIUtil";
 import {ScoutForm} from "../components/ScoutForm";
 import TeamListDisplay from "../components/teams/TeamListDisplay";
 import PhotoAssignment from "../components/teams/PhotoAssignment";
@@ -127,6 +127,13 @@ function TeamsPage() {
                         }
                     </div>
                 }
+                <hr/>
+                <hr/>
+                <hr/>
+                <hr/>
+                <hr/>
+                <hr/>
+                <hr/>
             </div>
 
             <div className={"primary-action-buttons"}>

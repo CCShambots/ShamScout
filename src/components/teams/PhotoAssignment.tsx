@@ -1,6 +1,7 @@
 import {Button, Dropdown, Input} from "semantic-ui-react";
 import QRCode from "react-qr-code";
 import React, {useEffect, useState} from "react";
+import packageJson from "../../../package.json";
 
 type assignmentOptions = {
     allTeams:number[],
@@ -26,6 +27,8 @@ export default function PhotoAssignment({allTeams, teamsWithoutPhotos, teamsWith
 
     let [pitScoutSchedules, setPitScoutSchedules] = useState<String[]>([])
     let [currentPitScout, setCurrentPitScout] = useState(0)
+
+    let year=  parseInt(packageJson.version.substring(0, 4));
 
     useEffect(() => {
         switch (currentTeamOption) {
@@ -98,7 +101,7 @@ export default function PhotoAssignment({allTeams, teamsWithoutPhotos, teamsWith
 
             <br/>
             <br/>
-            <QRCode value={`pho:${pitScoutSchedules[currentPitScout]}`}/>
+            <QRCode value={`pho:${year};${pitScoutSchedules[currentPitScout]}`}/>
 
             <div className={"inline-arrows"}>
                 <Button icon={"arrow left"} onClick={() => {

@@ -1,7 +1,10 @@
 import {GameConfig} from "../components/config/GameConfig";
+import packageJson from "../../package.json";
 
 // export let apiHost = "http://localhost:8080/";
 export let apiHost = "http://167.71.240.213:8080/";
+
+let year=  parseInt(packageJson.version.substring(0, 4));
 
 export async function Pull(endpoint:string, callback:(e:any) => void):Promise<void> {
     try {
@@ -83,7 +86,7 @@ export async function RemoveTemplate(templateName:string) {
 }
 
 export async function RemoveImage(teamNum:number) {
-    const response = await fetch(apiHost + `bytes/remove/key/${teamNum}-img`, {
+    const response = await fetch(apiHost + `bytes/remove/key/${teamNum}-img-${year}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -140,7 +143,7 @@ export async function doesTeamHaveImage(teamNum:number) {
 
         let outputString:string[] = await response.json()
 
-        let key = `${teamNum}-img`
+        let key = `${teamNum}-img-${year}`
 
     return outputString.includes(key);
 
@@ -150,7 +153,7 @@ export async function doesTeamHaveImage(teamNum:number) {
 }
 
 export function getImagePath(teamNum:number) {
-    return `${apiHost}bytes/get/key/${teamNum}-img`
+    return `${apiHost}bytes/get/key/${teamNum}-img-${year}`
 }
 
 export function PullTBA(endpoint:string, callback:(e:any) => void) {
