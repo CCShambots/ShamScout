@@ -23,6 +23,16 @@ function App() {
     const [useLocalAPI] = useLocalStorage("use-local-api", true)
     const [apiHostAddress] = useLocalStorage("api-host-address", remoteAPIAddress)
 
+    setApiRemoteHost(apiHostAddress)
+    setApiHost(useLocalAPI)
+    
+    useEffect(() => {
+        setApiRemoteHost(apiHostAddress)
+        setApiHost(useLocalAPI)
+
+    }, [useLocalAPI, apiHostAddress]);
+
+
     useEffect(() => {
         let interval = setInterval(() =>{
             checkAPI().then(() => {})
@@ -39,10 +49,6 @@ function App() {
     }
 
 
-    useEffect(() => {
-        setApiRemoteHost(apiHostAddress)
-        setApiHost(useLocalAPI)
-    }, [useLocalAPI, apiHostAddress]);
 
   return (
       <div>

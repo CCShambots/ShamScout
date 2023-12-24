@@ -17,6 +17,7 @@ export function setApiRemoteHost(newAddress:string) {
 let year=  parseInt(packageJson.version.substring(0, 4));
 
 export async function Pull(endpoint:string, callback:(e:any) => void):Promise<void> {
+    console.log(apiHost)
     try {
         await fetch(apiHost + endpoint)
             .then(response => { return response.json()})
