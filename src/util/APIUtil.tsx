@@ -1,4 +1,4 @@
-import {GameConfig} from "../components/config/GameConfig";
+import {FormTemplate} from "../components/config/FormTemplate";
 import packageJson from "../../package.json";
 
 export let localAPIAddress = "http://localhost:8080/";
@@ -69,7 +69,7 @@ export async function Put(endpoint:string, body:string):Promise<boolean> {
     return response.ok;
 }
 
-export async function AddTemplate(config:GameConfig) {
+export async function AddTemplate(config:FormTemplate) {
 
     const response = await fetch(apiHost + "templates/submit", {
             method: 'POST',
@@ -121,7 +121,7 @@ export async function RemoveForm(template:string, id:string) {
 }
 
 
-export async function ModifyTemplate(config:GameConfig) {
+export async function ModifyTemplate(config:FormTemplate) {
 
     const response = await fetch(apiHost + "templates/edit", {
             method: 'PUT',

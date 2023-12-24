@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {ConfigItem, GameConfig, ItemType} from "./GameConfig";
+import {ConfigItem, FormTemplate, ItemType} from "./FormTemplate";
 import {
     Button,
     Checkbox,
@@ -10,16 +10,16 @@ import {
     Popup,
     SegmentInline,
 } from "semantic-ui-react";
-import "./GameConfigEditor.css"
+import "./FormTemplateEditor.css"
 import {DropDownOptionsAltText} from "../scheduling/matchDisplay/ScheduleData";
 import {QRDisplay, splitString} from "../../util/QRUtil";
 import {ReactSortable} from "react-sortablejs";
 import {useIsMounted} from "usehooks-ts";
 
-export default function GameConfigEditor(
+export default function FormTemplateEditor(
     props: {
-        template:GameConfig,
-        setTemplate:(e:GameConfig) => void
+        template:FormTemplate,
+        setTemplate:(e:FormTemplate) => void
     }
     ) {
 
@@ -92,8 +92,8 @@ export default function GameConfigEditor(
 function FormItem(props: {
     item: ConfigItem,
     options: DropDownOptionsAltText[],
-    config: GameConfig,
-    setConfig: (e:GameConfig) => void
+    config: FormTemplate,
+    setConfig: (e:FormTemplate) => void
 }) {
 
     let [useMin, setUseMin] = useState(props.item.min !== -1)

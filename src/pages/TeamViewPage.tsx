@@ -9,7 +9,7 @@ import {Button, Dimmer, Dropdown, Header, Icon, Popup, Table} from "semantic-ui-
 import packageJson from '../../package.json';
 import Banner from "../components/teams/Banner";
 import { CSVLink } from "react-csv";
-import {GameConfig} from "../components/config/GameConfig";
+import {FormTemplate} from "../components/config/FormTemplate";
 import AppHeader from "../components/header/AppHeader";
 
 export type Team = {
@@ -62,7 +62,7 @@ function TeamViewPage() {
         let orderOfItems:string[] = [];
 
         Pull(`templates/get/name/${activeTemplate}`, (data) => {
-            let config:GameConfig = GameConfig.fromJson(data)
+            let config:FormTemplate = FormTemplate.fromJson(data)
 
             orderOfItems = config.items.map((e) => e.label);
         })

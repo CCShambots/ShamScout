@@ -15,7 +15,7 @@ enum Status {
     Failed
 }
 
-class GameConfig {
+class FormTemplate {
     public status:Status;
 
     constructor(
@@ -33,10 +33,10 @@ class GameConfig {
         return set.size === this.items.length
     }
 
-    public static fromJson(json:any):GameConfig {
+    public static fromJson(json:any):FormTemplate {
 
 
-        return new GameConfig(
+        return new FormTemplate(
             json.name,
             json.year,
             json.fields.map((e: any) => {
@@ -65,7 +65,7 @@ class GameConfig {
                 ]}`
     }
 
-    removeItem(item:ConfigItem):GameConfig {
+    removeItem(item:ConfigItem):FormTemplate {
         this.items = this.items.filter(e => e !== item);
         return Object.create(this)
     }
@@ -102,7 +102,7 @@ class GameConfig {
         }
     }
 
-    swap(item:ConfigItem, up:boolean):GameConfig {
+    swap(item:ConfigItem, up:boolean):FormTemplate {
 
         let index = this.items.indexOf(item)
         let swapIndex = index + (up ? -1 : 1)
@@ -136,11 +136,11 @@ class ConfigItem {
         this.setType(type)
     }
 
-    isLegalName(config:GameConfig) {
+    isLegalName(config:FormTemplate) {
         return config.items.filter(e => e.label === this.label).length <= 1 && this.label !== ""
     }
 
-    isNewNameLegal(config:GameConfig, label:string) {
+    isNewNameLegal(config:FormTemplate, label:string) {
         return config.items.filter(e => e.label === label).length <= 1
     }
 
@@ -174,7 +174,7 @@ class ConfigItem {
 }
 
 export {
-    GameConfig,
+    FormTemplate,
     ConfigItem,
     ItemType
 };

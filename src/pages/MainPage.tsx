@@ -10,7 +10,7 @@ import "./MainPage.css"
 import {Schedule} from "../components/scheduling/matchDisplay/ScheduleData";
 import {Button, Icon, Statistic} from "semantic-ui-react";
 import {CSVLink} from "react-csv";
-import {GameConfig} from "../components/config/GameConfig";
+import {FormTemplate} from "../components/config/FormTemplate";
 
 function MainPage() {
 
@@ -43,7 +43,7 @@ function MainPage() {
         let orderOfItems:string[] = [];
 
         Pull(`templates/get/name/${activeTemplate}`, (data) => {
-            let config:GameConfig = GameConfig.fromJson(data)
+            let config:FormTemplate = FormTemplate.fromJson(data)
 
             orderOfItems = config.items.map((e) => e.label);
         })

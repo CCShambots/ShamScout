@@ -4,7 +4,7 @@ import {useLocalStorage} from "usehooks-ts";
 import React, {useEffect, useState} from "react";
 import {ScoutForm} from "../components/ScoutForm";
 import {Pull} from "../util/APIUtil";
-import {GameConfig} from "../components/config/GameConfig";
+import {FormTemplate} from "../components/config/FormTemplate";
 import {
     Bar,
     BarChart,
@@ -195,7 +195,7 @@ export default function VSPage() {
         let orderOfItems:string[] = [];
 
         Pull(`templates/get/name/${activeTemplate}`, (data) => {
-            let config:GameConfig = GameConfig.fromJson(data)
+            let config:FormTemplate = FormTemplate.fromJson(data)
 
             orderOfItems = config.items.map((e) => e.label);
         }).then(() => {})

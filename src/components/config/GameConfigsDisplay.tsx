@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {Button, Dimmer, Header, Icon, Input, Popup, Segment, Table} from "semantic-ui-react";
-import {GameConfig} from "./GameConfig";
+import {FormTemplate} from "./FormTemplate";
 import packageJson from "../../../package.json";
 
 export default function GameConfigsDisplay(props: {
-    templates:GameConfig[],
-    addNewTemplate:(template:GameConfig) => void,
-    modifyTemplate:(template:GameConfig) => void,
+    templates:FormTemplate[],
+    addNewTemplate:(template:FormTemplate) => void,
+    modifyTemplate:(template:FormTemplate) => void,
     removeTemplate:(name:string) => void,
-    activeTemplate:GameConfig,
-    setActiveTemplate:(e:GameConfig) => void
+    activeTemplate:FormTemplate,
+    setActiveTemplate:(e:FormTemplate) => void
 }) {
 
     const [addDimmerActive, setAddDimmerActive] = useState(false);
@@ -36,7 +36,7 @@ export default function GameConfigsDisplay(props: {
     const createConfig = () => {
         if(legalAddName) {
 
-            const config = new GameConfig(addName, year, [])
+            const config = new FormTemplate(addName, year, [])
             props.addNewTemplate(config)
             setAddName("")
             setAddDimmerActive(false)

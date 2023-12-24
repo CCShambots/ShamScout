@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import "./ConfigPage.css"
 import GameConfigsDisplay from "../components/config/GameConfigsDisplay";
-import {GameConfig} from "../components/config/GameConfig";
+import {FormTemplate} from "../components/config/FormTemplate";
 import {AddTemplate, ModifyTemplate, Pull, RemoveTemplate} from "../util/APIUtil";
-import GameConfigEditor from "../components/config/GameConfigEditor";
+import FormTemplateEditor from "../components/config/FormTemplateEditor";
 import {Button, Dimmer, Header, Input} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
@@ -15,8 +15,8 @@ function ConfigPage() {
 
     let [activeTemplateKey, setActiveTemplateKey] = useLocalStorage("active-template", "")
 
-    let [templates, setTemplates] = useState<GameConfig[]>([]);
-    let [activeTemplate, updateActiveTemplate] = useState<GameConfig>(new GameConfig("", 0, []));
+    let [templates, setTemplates] = useState<FormTemplate[]>([]);
+    let [activeTemplate, updateActiveTemplate] = useState<FormTemplate>(new FormTemplate("", 0, []));
 
     let [event, setEvent] = useLocalStorage("current-event", "");
     let [TBAKey, setTBAKey] = useLocalStorage("tba-key", "");
@@ -45,12 +45,12 @@ function ConfigPage() {
         if(deleteConfirmationValue === deleteString) setClearDataAllowed(true)
     }, [deleteConfirmationValue]);
 
-    let setActiveTemplate = (newItem:GameConfig) => {
+    let setActiveTemplate = (newItem:FormTemplate) => {
         updateActiveTemplate(newItem)
         setActiveTemplateKey(newItem.name)
     }
 
-    let handleNewActiveTemplate = (newItem:GameConfig) => {
+    let handleNewActiveTemplate = (newItem:FormTemplate) => {
 
         newItem.setEdited()
 
@@ -64,12 +64,12 @@ function ConfigPage() {
     useEffect(() => {
         Pull("templates/get", async (e) => {
 
-            let newTemplates:GameConfig[] = []
+            let newTemplates:FormTemplate[] = []
 
             await Promise.all(e.map(async (element:any) =>
                 await Pull(`templates/get/name/${element}`,
                     (info) => {
-                        newTemplates.push(GameConfig.fromJson(info))
+                        newTemplates.push(FormTemplate.fromJson(info))
                     }
                 )
             ))
@@ -148,7 +148,7 @@ function ConfigPage() {
                     <TeamsInEventDisplay/>
                 </div>
                 <div className={"right-column"}>
-                    <GameConfigEditor template={activeTemplate} setTemplate={handleNewActiveTemplate}/>
+                    <FormTemplateEditor template={activeTemplate} setTemplate={handleNewActiveTemplate}/>
                 </div>
             </div>
 
