@@ -9,7 +9,6 @@ import {
     Input,
     Popup,
     SegmentInline,
-    Table,
 } from "semantic-ui-react";
 import "./GameConfigEditor.css"
 import {DropDownOptionsAltText} from "../scheduling/matchDisplay/ScheduleData";
@@ -105,7 +104,7 @@ function FormItem(props: {
     >
         <Icon name={"list"} size={"large"} className={"draggable-list"}/>
 
-        <Button icon={"trash alternate"} color={"red"} onClick={() => {
+        <Button tabIndex={-1} icon={"trash alternate"} color={"red"} onClick={() => {
 
             props.setConfig(props.config.removeItem(props.item))
         }}></Button>
