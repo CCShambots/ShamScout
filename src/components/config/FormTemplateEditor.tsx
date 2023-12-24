@@ -39,20 +39,22 @@ export default function FormTemplateEditor(
 
     return (
         <div>
-            <Button color={"blue"} onClick={() => setQRDimmer(true)}>
-                <Icon name={"qrcode"}/> QR Code
-            </Button>
+            <Button.Group fluid>
+                <Button color={"blue"} onClick={() => setQRDimmer(true)}>
+                    <Icon name={"qrcode"}/> QR Code
+                </Button>
 
-            <Button color={"green"} icon={"add circle"}
-                onClick={() => {
+                <Button color={"green"}
+                    onClick={() => {
 
-                    props.template.items.push(new ConfigItem("Title", props.template.items.length.toString()))
+                        props.template.items.push(new ConfigItem("Title", props.template.items.length.toString()))
 
-                   props.setTemplate(Object.create(props.template))
-                }}>
+                       props.setTemplate(Object.create(props.template))
+                    }}>
 
-                {/*<Icon name={"add"}/> Create*/}
-            </Button>
+                    <Icon name={"add"}/> Create
+                </Button>
+            </Button.Group>
 
             <ReactSortable
                 list={props.template.items.map(e => {return {id: props.template.items.indexOf(e), name: e.label}})}

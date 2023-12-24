@@ -43,7 +43,7 @@ function ScouterDisplay({schedule, setSchedule}: displayOptions) {
         >
             <div className={"scouter-header"}>
                 <h1>Scouters ({schedule.scouters.length})</h1>
-                <Button animated={"vertical"} onClick={() => {
+                <Button color={"green"} animated={"vertical"} onClick={() => {
                     setDimmerActive(true)
                     setNewColor(schedule.getNextColor())
                 }}>

@@ -76,18 +76,20 @@ function TeamsInEventDisplay() {
                         <Table.HeaderCell>Number</Table.HeaderCell>
                         <Table.HeaderCell>Name</Table.HeaderCell>
                         <Table.HeaderCell>
-                            <Button animated={"vertical"} onClick={() => setAddTeamDimmerActive(true)}>
-                                <Button.Content hidden>Create</Button.Content>
-                                <Button.Content visible><Icon name={"add"}/> </Button.Content>
-                            </Button>
+                            <Button.Group fluid>
+                                <Button color={"green"} animated={"vertical"} onClick={() => setAddTeamDimmerActive(true)}>
+                                    <Button.Content hidden>Create</Button.Content>
+                                    <Button.Content visible><Icon name={"add"}/> </Button.Content>
+                                </Button>
 
-                            <Button animated={"vertical"} onClick={() => {
-                                setTeamOverride(false)
-                                syncTeamsInEvent()
-                            }}>
-                                <Button.Content hidden>Sync</Button.Content>
-                                <Button.Content visible><Icon name={"sync"}/> </Button.Content>
-                            </Button>
+                                <Button color={"blue"} animated={"vertical"} onClick={() => {
+                                    setTeamOverride(false)
+                                    syncTeamsInEvent()
+                                }}>
+                                    <Button.Content hidden>Sync</Button.Content>
+                                    <Button.Content visible><Icon name={"sync"}/> </Button.Content>
+                                </Button>
+                            </Button.Group>
                         </Table.HeaderCell>
                     </Table.Row>
 
