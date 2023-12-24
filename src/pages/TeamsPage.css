@@ -8,6 +8,13 @@
 
 }
 
+.page {
+    max-height: 100vh;
+
+    overflow-y: scroll;
+}
+
+
 .teams-title {
 
     font-size: 3vh;
