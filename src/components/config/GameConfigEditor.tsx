@@ -113,7 +113,7 @@ function FormItem(props: {
             options={props.options}
             value={ItemType[props.item.type]}
             selection
-            // clearable
+            // fluid
             onChange={(event, {value}) => {
                 let str = value as string
                 props.item.setType(str)

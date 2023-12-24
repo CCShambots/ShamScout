@@ -59,9 +59,6 @@
 .right-column {
     min-width: 30vw;
 
-    display: flex;
-    flex-direction: column;
-
     margin-left: 2vw;
 
     max-height: 85vh;
