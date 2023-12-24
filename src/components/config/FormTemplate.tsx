@@ -9,21 +9,21 @@ enum ItemType {
     LongText
 }
 
-enum Status {
+export enum TemplateStatus {
     Uploaded,
     Edited,
     Failed
 }
 
 class FormTemplate {
-    public status:Status;
+    public status:TemplateStatus;
 
     constructor(
         public name:string,
         public year:number,
         public items:ConfigItem[]
     ) {
-        this.status = Status.Uploaded;
+        this.status = TemplateStatus.Uploaded;
     }
 
     //Evaluate if the config is legal based on whether it has all unique names
@@ -71,30 +71,30 @@ class FormTemplate {
     }
 
     setEdited() {
-        this.status = Status.Edited
+        this.status = TemplateStatus.Edited
     }
 
     setErrored() {
-        this.status = Status.Failed
+        this.status = TemplateStatus.Failed
     }
 
     setUploaded() {
-        this.status = Status.Uploaded
+        this.status = TemplateStatus.Uploaded
     }
 
     getStatusIcon() {
         switch(this.status) {
-            case Status.Uploaded:
+            case TemplateStatus.Uploaded:
                 return <Popup
                 trigger={<Icon name={"checkmark"} color={"green"}/>}
                 content={"This template is saved!"}
             />
-            case Status.Edited:
+            case TemplateStatus.Edited:
                 return <Popup
                    trigger={<Icon name={"pencil"}/>}
                    content={"This template has unsaved changes!"}
                 />
-            case Status.Failed:
+            case TemplateStatus.Failed:
                 return <Popup
                     trigger={<Icon name={"x"} color={"red"}/>}
                     content={"This template failed to upload!"}

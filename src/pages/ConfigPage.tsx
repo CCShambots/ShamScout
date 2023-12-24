@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./ConfigPage.css"
 import GameConfigsDisplay from "../components/config/GameConfigsDisplay";
-import {FormTemplate} from "../components/config/FormTemplate";
+import {FormTemplate, TemplateStatus} from "../components/config/FormTemplate";
 import {AddTemplate, ModifyTemplate, Pull, RemoveTemplate} from "../util/APIUtil";
 import FormTemplateEditor from "../components/config/FormTemplateEditor";
 import {Button, Dimmer, Header, Input} from "semantic-ui-react";
@@ -11,6 +11,7 @@ import QRCode from "react-qr-code";
 import AppHeader from "../components/header/AppHeader";
 import SelectAPIType from "../components/config/SelectAPIType";
 import {ACTIVE_TEMPLATE, API_MOBILE_HOST_ADDRESS, CURRENT_EVENT, TBA_KEY} from "../util/LocalStorageConstants";
+import {FormPrompt} from "../components/FormPrompt";
 
 function ConfigPage() {
 
@@ -88,6 +89,10 @@ function ConfigPage() {
     return(
         <div>
             <AppHeader/>
+            <FormPrompt hasUnsavedChanges={templates.filter(e => {
+                console.log(e.status === TemplateStatus.Uploaded)
+                return e.status !== TemplateStatus.Uploaded
+            }).length > 0}/>
 
             <div className={"config-content"}>
                 <div className={"left-column"}>

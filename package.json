@@ -90,6 +90,7 @@
     "electron": "^25.2.0",
     "electron-is-dev": "^2.0.0",
     "wait-on": "^7.0.1",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7"
   }
 }

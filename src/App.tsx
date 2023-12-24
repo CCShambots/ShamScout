@@ -1,6 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {HashRouter, NavLink, Route, Routes} from "react-router-dom";
+import {
+    createHashRouter,
+    createRoutesFromElements,
+    Route,
+    RouterProvider,
+} from "react-router-dom";
 import OverviewPage from "./pages/MainPage";
 import SchedulingPage from "./pages/SchedulingPage";
 import MatchPage from "./pages/MatchPage";
@@ -16,6 +21,7 @@ import VSPage from "./pages/VSPage";
 import {useLocalStorage} from "usehooks-ts";
 import SelectAPIType from "./components/config/SelectAPIType";
 import {API_HOST_ADDRESS, USE_LOCAL_API} from "./util/LocalStorageConstants";
+import {createHash} from "node:crypto";
 
 function App() {
 
@@ -50,25 +56,44 @@ function App() {
     }
 
 
+    const router = createHashRouter(
+        createRoutesFromElements(
+
+            <Route>
+                <Route index path="/" element={<OverviewPage />}/>
+                <Route path='scan' element={ <ScanPage/>} />
+                <Route path='matches' element={ <MatchPage /> } />
+                <Route path='teams' element={ <TeamsPage /> } />
+                <Route path='team' element={<TeamViewPage/>}/>
+                <Route path='picklist' element={<PicklistPage/>}/>
+                <Route path='vs' element={<VSPage/>}/>
+                <Route path='scheduler' element={ <SchedulingPage /> } />
+                <Route path='config' element={ <ConfigPage /> } />
+            </Route>
+        )
+    )
+
 
   return (
       <div>
-          <HashRouter>
-            <Routes>
-                <Route path='/' element={ <OverviewPage /> } />
-                <Route path='/scan' element={ <ScanPage/>} />
-                <Route path='/matches' element={ <MatchPage /> } />
-                <Route path='/teams' element={ <TeamsPage /> } />
-                <Route path='/team' element={<TeamViewPage/>}/>
-                <Route path='/picklist' element={<PicklistPage/>}/>
-                <Route path='/vs' element={<VSPage/>}/>
-                <Route path='/scheduler' element={ <SchedulingPage /> } />
-                <Route path='/config' element={ <ConfigPage /> } />
+          {/*<HashRouter>*/}
+          {/*  <Routes>*/}
+          {/*      <Route path='/' element={ <OverviewPage /> } />*/}
+          {/*      <Route path='/scan' element={ <ScanPage/>} />*/}
+          {/*      <Route path='/matches' element={ <MatchPage /> } />*/}
+          {/*      <Route path='/teams' element={ <TeamsPage /> } />*/}
+          {/*      <Route path='/team' element={<TeamViewPage/>}/>*/}
+          {/*      <Route path='/picklist' element={<PicklistPage/>}/>*/}
+          {/*      <Route path='/vs' element={<VSPage/>}/>*/}
+          {/*      <Route path='/scheduler' element={ <SchedulingPage /> } />*/}
+          {/*      <Route path='/config' element={ <ConfigPage /> } />*/}
 
-                <Route path="/*" element={<NavLink to="/" />}  /> {/* navigate to default route if no url matched */}
-            </Routes>
+          {/*      <Route path="/*" element={<NavLink to="/" />}  /> /!* navigate to default route if no url matched *!/*/}
+          {/*  </Routes>*/}
 
-          </HashRouter>
+          {/*</HashRouter>*/}
+
+          <RouterProvider router={router} />
 
           <Dimmer page active={!apiAlive}>
               <div className={"api-message-icon"}>

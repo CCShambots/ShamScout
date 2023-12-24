@@ -144,7 +144,7 @@ function GridEntry({match, station, schedule, setSchedule,
                 trigger={
                     <div className={"content"}>
                         {
-                            !active ? <div className={"add " + (hovering ? "add-hovering" : "")}><b>+</b></div> : <div/>
+                            !active ? <div className={"add-cell " + (hovering ? "add-hovering" : "")}><b>+</b></div> : <div/>
                         }
                     </div>
                 }

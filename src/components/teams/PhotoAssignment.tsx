@@ -57,11 +57,9 @@ export default function PhotoAssignment({allTeams, teamsWithoutPhotos, teamsWith
                 break;
         }
 
-        console.log("did a thing")
     }, [currentTeamOption, allTeams, teamsWithoutPhotos, teamsWithOldPhotos]);
 
     useEffect(() => {
-        console.log("regenerating")
         let pitScoutArray:String[]= Array(numPitScouters).fill("")
 
         let index = 0;
