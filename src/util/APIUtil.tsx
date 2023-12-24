@@ -2,14 +2,16 @@ import {GameConfig} from "../components/config/GameConfig";
 import packageJson from "../../package.json";
 
 export let localAPIAddress = "http://localhost:8080/";
-export let remoteAPIAddress = "http://167.71.240.213:8080/";
+export let defaultRemoteAPIAddress = "http://167.71.240.213:8080/";
+export let remoteAPIAddress = defaultRemoteAPIAddress;
 
 export let apiHost = localAPIAddress;
 
 export function setApiHost(local:boolean) {
     apiHost = local ? localAPIAddress : remoteAPIAddress
-
-    console.log(apiHost)
+}
+export function setApiRemoteHost(newAddress:string) {
+    remoteAPIAddress = newAddress
 }
 
 let year=  parseInt(packageJson.version.substring(0, 4));

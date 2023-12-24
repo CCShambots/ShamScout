@@ -9,7 +9,7 @@ import ConfigPage from "./pages/ConfigPage";
 import ScanPage from "./pages/ScanPage";
 import TeamViewPage from "./pages/TeamViewPage";
 import PicklistPage from "./pages/PicklistPage";
-import {IsApiAlive, setApiHost} from "./util/APIUtil";
+import {IsApiAlive, remoteAPIAddress, setApiHost, setApiRemoteHost} from "./util/APIUtil";
 import {Button, Dimmer, Header, Icon} from "semantic-ui-react";
 import {NewVersionChecker} from "./components/NewVersionChecker";
 import VSPage from "./pages/VSPage";
@@ -21,6 +21,7 @@ function App() {
     const [apiAlive, setApiAlive] = useState(true)
 
     const [useLocalAPI] = useLocalStorage("use-local-api", true)
+    const [apiHostAddress] = useLocalStorage("api-host-address", remoteAPIAddress)
 
     useEffect(() => {
         let interval = setInterval(() =>{
@@ -37,9 +38,11 @@ function App() {
         setApiAlive(result);
     }
 
+
     useEffect(() => {
+        setApiRemoteHost(apiHostAddress)
         setApiHost(useLocalAPI)
-    }, [useLocalAPI]);
+    }, [useLocalAPI, apiHostAddress]);
 
   return (
       <div>
