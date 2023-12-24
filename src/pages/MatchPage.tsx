@@ -53,7 +53,7 @@ function MatchPage() {
     }
 
     return(
-        <div className={"page"}>
+        <div>
             <AppHeader/>
 
             <div className={"match-table"}>
