@@ -29,6 +29,7 @@
     justify-content: space-between;
 
     transition: 0.5s;
+
 }
 
 .picklist-item-display:hover {
@@ -40,6 +41,11 @@
     margin-bottom: 0;
 
     user-select: none;
+
+    overflow: clip;
+
+    max-width: 35vw;
+    white-space: nowrap;
 }
 
 .picklist-item-flex {

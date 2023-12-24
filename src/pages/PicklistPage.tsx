@@ -17,8 +17,6 @@ type ItemType =  {
     team:Team
 }
 
-
-
 function PicklistPage() {
 
     const [currentEvent] = useLocalStorage("current-event", "")
