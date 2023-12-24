@@ -160,132 +160,196 @@ function TeamViewPage() {
     return <div>
         <AppHeader/>
 
-        <div className={"top-row"}>
-            <div className={"top-text"}>
-                <h1>{teamNum} - {teamName}</h1>
-                <h1>{TeamEventInfo.getSeasonRecordString(events)}</h1>
-                <h1>{thisTeamForms.length} Forms on Record</h1>
-                <h1>{thisEventForms.length} Forms for This Event</h1>
-            </div>
-            <div>
-                <h1 className={"result-text"}>Results</h1>
-                <EventTable events={events}/>
-            </div>
-            <div className={"banners"}>
-                {
-                    events.filter(e => e.won).map(e => {
-                        return <Banner key={e.eventKey} event={e.eventName}/>
-                    })
-                }
-            </div>
-            <div className={"team-image-container"}>
-                {
-                    imageInAPI ?
-                    <img className={"team-view-pic"} src={getImagePath(teamNum, eventYear)} alt={teamNum.toString()}/> :
-                    <img className={"team-view-pic"} src={Picture} alt={teamNum.toString()}/>
-                }
-                <Button color={"red"} disabled={!imageInAPI} onClick={() => {
-                    setRemoveImageDimmer(true)
-                }}><Icon name={"erase"}/> Clear Image</Button>
-            </div>
-        </div>
-
-        <div className={"table-manager"}>
-
-            <Dropdown
-                placeholder={"Filter by Event"}
-                // fluid
-                multiple
-                selection
-                options={
-                    Array.from(thisTeamForms.reduce( (acc, e) => {
-                        acc.add(e.event)
-
-                        return acc;
-                    }, new Set<string>())).map(e => {
-                        return {
-                            key: e,
-                            text: e,
-                            value: e
-                        }
-                    })
-                }
-                onChange={(event, data) => {
-                    if(data.value) {
-                        setEventsInFilter(data.value as string[])
-                    } else {
-                        setEventsInFilter([])
+        <div className={"page"}>
+            <div className={"top-row"}>
+                <div className={"top-text"}>
+                    <h1>{teamNum} - {teamName}</h1>
+                    <h1>{TeamEventInfo.getSeasonRecordString(events)}</h1>
+                    <h1>{thisTeamForms.length} Forms on Record</h1>
+                    <h1>{thisEventForms.length} Forms for This Event</h1>
+                </div>
+                <div>
+                    <h1 className={"result-text"}>Results</h1>
+                    <EventTable events={events}/>
+                </div>
+                <div className={"banners"}>
+                    {
+                        events.filter(e => e.won).map(e => {
+                            return <Banner key={e.eventKey} event={e.eventName}/>
+                        })
                     }
-                }}
+                </div>
+                <div className={"team-image-container"}>
+                    {
+                        imageInAPI ?
+                        <img className={"team-view-pic"} src={getImagePath(teamNum, eventYear)} alt={teamNum.toString()}/> :
+                        <img className={"team-view-pic"} src={Picture} alt={teamNum.toString()}/>
+                    }
+                    <Button color={"red"} disabled={!imageInAPI} onClick={() => {
+                        setRemoveImageDimmer(true)
+                    }}><Icon name={"erase"}/> Clear Image</Button>
+                </div>
+            </div>
 
-            />
+            <div className={"table-manager"}>
 
-            <Button size={"huge"} color={"blue"} onClick={() => downloadCSVRef.current.link.click()}><Icon name={"table"}/>Download CSV</Button>
-        </div>
-        <CSVLink ref={downloadCSVRef} data={thisTeamForms} headers={thisTeamForms[0]?.generateHeader()} filename={`${teamNum}-data.csv`}/>
+                <Dropdown
+                    placeholder={"Filter by Event"}
+                    // fluid
+                    multiple
+                    selection
+                    options={
+                        Array.from(thisTeamForms.reduce( (acc, e) => {
+                            acc.add(e.event)
 
-        <Table>
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell>Match</Table.HeaderCell>
-                    <Table.HeaderCell>Event</Table.HeaderCell>
-                    <Table.HeaderCell>ID</Table.HeaderCell>
-                    <Table.HeaderCell>Del.</Table.HeaderCell>
-                    {thisTeamForms[0]?.fields.map(e =>
-                        <Table.HeaderCell key={e.label}>{e.label}</Table.HeaderCell>
-                    )}
-                </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-                {thisTeamForms.filter(e => {
-                    return eventsInFilter.length === 0 || eventsInFilter.indexOf(e.event) !== -1
-                }).map(e => {
-
-                    return <Table.Row key={thisTeamForms.indexOf(e)}>
-                        <Table.Cell>
-                            <Popup
-                                content={`Scouted by: ${e.scouter}`}
-                                trigger={
-                                    <p className={"non-selectable"}>{e.match_number}</p>
-                                }
-                            />
-                        </Table.Cell>
-                        <Table.Cell>{e.event}</Table.Cell>
-                        <Table.Cell>
-                            <Popup
-                                content={"Copy ID to clipboard"}
-                                trigger={
-                                    <Icon name={"copy outline"} color={"blue"} onClick={() => {
-                                        navigator.clipboard.writeText(idMap.get(e.toString()) ?? "NOT FOUND")
-                                    }}/>
-                                }
-                            />
-
-                        </Table.Cell>
-                        <Table.Cell>
-                            <Popup
-                                content={"Remove this form (dangerous)"}
-                                trigger={
-                                    <Icon color={"red"} name={"trash alternate"} onClick={() => {
-                                      setRemoveFormID(idMap.get(e.toString()) ?? "NOT FOUND")
-                                      setRemoveFormDimmer(true)
-                                    }}/>
-                                }
-                            />
-                        </Table.Cell>
-                        {
-                            thisTeamForms[0]?.fields.map(field => {
-                                return e.fields.filter(ele => ele.label === field.label).map((ele) =>
-                                    <Table.Cell key={ele.getValue().toString()}>{ele.getValue().toString()}</Table.Cell>
-                                )
-                            })
+                            return acc;
+                        }, new Set<string>())).map(e => {
+                            return {
+                                key: e,
+                                text: e,
+                                value: e
+                            }
+                        })
+                    }
+                    onChange={(event, data) => {
+                        if(data.value) {
+                            setEventsInFilter(data.value as string[])
+                        } else {
+                            setEventsInFilter([])
                         }
+                    }}
+
+                />
+
+                <Button size={"huge"} color={"blue"} onClick={() => downloadCSVRef.current.link.click()}><Icon name={"table"}/>Download CSV</Button>
+            </div>
+            <CSVLink ref={downloadCSVRef} data={thisTeamForms} headers={thisTeamForms[0]?.generateHeader()} filename={`${teamNum}-data.csv`}/>
+
+            <Table>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Match</Table.HeaderCell>
+                        <Table.HeaderCell>Event</Table.HeaderCell>
+                        <Table.HeaderCell>ID</Table.HeaderCell>
+                        <Table.HeaderCell>Del.</Table.HeaderCell>
+                        {thisTeamForms[0]?.fields.map(e =>
+                            <Table.HeaderCell key={e.label}>{e.label}</Table.HeaderCell>
+                        )}
                     </Table.Row>
-                }
-                )}
-            </Table.Body>
-        </Table>
+                </Table.Header>
+
+                <Table.Body>
+                    {thisTeamForms.filter(e => {
+                        return eventsInFilter.length === 0 || eventsInFilter.indexOf(e.event) !== -1
+                    }).map(e => {
+
+                        return <Table.Row key={thisTeamForms.indexOf(e)}>
+                            <Table.Cell>
+                                <Popup
+                                    content={`Scouted by: ${e.scouter}`}
+                                    trigger={
+                                        <p className={"non-selectable"}>{e.match_number}</p>
+                                    }
+                                />
+                            </Table.Cell>
+                            <Table.Cell>{e.event}</Table.Cell>
+                            <Table.Cell>
+                                <Popup
+                                    content={"Copy ID to clipboard"}
+                                    trigger={
+                                        <Icon name={"copy outline"} color={"blue"} onClick={() => {
+                                            navigator.clipboard.writeText(idMap.get(e.toString()) ?? "NOT FOUND")
+                                        }}/>
+                                    }
+                                />
+
+                            </Table.Cell>
+                            <Table.Cell>
+                                <Popup
+                                    content={"Remove this form (dangerous)"}
+                                    trigger={
+                                        <Icon color={"red"} name={"trash alternate"} onClick={() => {
+                                          setRemoveFormID(idMap.get(e.toString()) ?? "NOT FOUND")
+                                          setRemoveFormDimmer(true)
+                                        }}/>
+                                    }
+                                />
+                            </Table.Cell>
+                            {
+                                thisTeamForms[0]?.fields.map(field => {
+                                    return e.fields.filter(ele => ele.label === field.label).map((ele) =>
+                                        <Table.Cell key={ele.getValue().toString()}>{ele.getValue().toString()}</Table.Cell>
+                                    )
+                                })
+                            }
+                        </Table.Row>
+                    }
+                    )}
+                </Table.Body>
+
+                <Table.Footer fullWidth>
+                    <Table.Row>
+                        <Table.HeaderCell colSpan={'4'}>
+                            <Header>
+                                Averages
+                            </Header>
+                        </Table.HeaderCell>
+
+                        {thisTeamForms[0]?.fields.map(field => {
+                            let result =  thisTeamForms.filter(e => {
+                                return eventsInFilter.length === 0 || eventsInFilter.indexOf(e.event) !== -1
+                            }).map(e => e.fields.filter(ele => ele.label === field.label)[0]);
+
+                            let resultantVal = 0
+                            let percent = false
+
+                            switch (result[0].type) {
+                                case "CheckBox":
+                                    //Calculate a percentage
+                                    let total = 0
+                                    let successes = 0
+
+                                    percent = true
+
+                                    result.forEach(e => {
+                                        console.log(field.label + ": " + e.getValue())
+                                        if(e.getValue() as boolean) {
+                                            successes++
+                                        }
+                                        total++
+                                    })
+
+                                    resultantVal = Math.round((successes / total) * 100)
+                                    break;
+                                case "Rating":
+                                case "Number":
+                                    //Calculate an average value
+                                    let elements = 0
+                                    let totalValue = 0
+
+                                    result.forEach(e => {
+                                        elements++
+                                        totalValue += e.getValue() as number
+                                    })
+
+                                    resultantVal = Math.round(100 * totalValue / elements) / 100
+
+                                    break;
+                                default:
+                                    resultantVal = -1
+                                    break;
+                            }
+
+                            return <Table.HeaderCell>
+                                {resultantVal !== -1 ? (percent ? resultantVal + "%" : resultantVal) : "N/A"}
+                            </Table.HeaderCell>
+                        })}
+
+                    </Table.Row>
+                </Table.Footer>
+            </Table>
+        </div>
+
 
         <Dimmer page active={removeImageDimmer} onClickOutside={() => setRemoveImageDimmer(false)}>
             <Header inverted>

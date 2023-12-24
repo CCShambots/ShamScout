@@ -128,13 +128,6 @@ function TeamsPage() {
                         }
                     </div>
                 }
-                <hr/>
-                <hr/>
-                <hr/>
-                <hr/>
-                <hr/>
-                <hr/>
-                <hr/>
             </div>
 
             <div className={"primary-action-buttons"}>

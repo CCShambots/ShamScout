@@ -151,7 +151,6 @@ class Field {
             default: return "Failed to Load"
         }
     }
-
     public static fromJson(key:string, data:any):Field {
 
 

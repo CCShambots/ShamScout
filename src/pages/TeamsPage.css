@@ -10,6 +10,7 @@
 
 .page {
     max-height: 100vh;
+    padding-bottom: 12vh;
 
     overflow-y: scroll;
 }
