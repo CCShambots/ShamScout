@@ -2,10 +2,11 @@ import {Button, Icon, Input} from "semantic-ui-react";
 import React from "react";
 import {useLocalStorage} from "usehooks-ts";
 import {defaultRemoteAPIAddress, remoteAPIAddress} from "../../util/APIUtil";
+import {API_HOST_ADDRESS, USE_LOCAL_API} from "../../util/LocalStorageConstants";
 
 export default function SelectAPIType() {
-    const [useLocalAPI, setUseLocalAPI] = useLocalStorage("use-local-api", true)
-    const [apiHostAddress, setApiHostAddress] = useLocalStorage("api-host-address", remoteAPIAddress)
+    const [useLocalAPI, setUseLocalAPI] = useLocalStorage(USE_LOCAL_API, true)
+    const [apiHostAddress, setApiHostAddress] = useLocalStorage(API_HOST_ADDRESS, remoteAPIAddress)
 
     return (
         <div>

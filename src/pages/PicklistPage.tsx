@@ -6,6 +6,7 @@ import {useLocalStorage} from "usehooks-ts";
 import TeamLink from "../components/team-link/TeamLink";
 import {Button, Checkbox} from "semantic-ui-react";
 import {Link} from "react-router-dom";
+import {ACCEPT_LIST, CURRENT_EVENT, DECLINE_LIST, PICKLIST, TEAMS} from "../util/LocalStorageConstants";
 
 type Team = {
     name:string,
@@ -19,13 +20,13 @@ type ItemType =  {
 
 function PicklistPage() {
 
-    const [currentEvent] = useLocalStorage("current-event", "")
+    const [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
 
-    const [teams] = useLocalStorage<Team[]>(`teams-${currentEvent}`, [])
+    const [teams] = useLocalStorage<Team[]>(TEAMS(currentEvent), [])
 
-    const [savedPicks, setSavedPicks] = useLocalStorage<Team[]>(`pick-list-${currentEvent}`, teams)
-    const [savedAccepts, setSavedAccepts] = useLocalStorage<Team[]>(`accept-list-${currentEvent}`, [])
-    const [savedDeclines, setSavedDeclines] = useLocalStorage<Team[]>(`decline-list-${currentEvent}`, [])
+    const [savedPicks, setSavedPicks] = useLocalStorage<Team[]>(PICKLIST(currentEvent), teams)
+    const [savedAccepts, setSavedAccepts] = useLocalStorage<Team[]>(ACCEPT_LIST(currentEvent), [])
+    const [savedDeclines, setSavedDeclines] = useLocalStorage<Team[]>(DECLINE_LIST(currentEvent), [])
 
     const [pickList, setPickList] = useState<ItemType[]>([]);
 

@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {useLocalStorage} from "usehooks-ts";
 import {Button, Icon} from "semantic-ui-react";
 import "./Checklist.css"
+import {CHECKLIST, CURRENT_EVENT} from "../../util/LocalStorageConstants";
 
 function Checklist() {
 
@@ -29,9 +30,9 @@ function Checklist() {
         new ChecklistItem("Download data and analyze"),
     ]
 
-    let [currentEvent] = useLocalStorage("current-event", "")
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
     let [checkListState, setCheckListState] =
-        useLocalStorage<ChecklistItem[]>(`checklist-${currentEvent}`, [...defaultChecklist])
+        useLocalStorage<ChecklistItem[]>(CHECKLIST(currentEvent), [...defaultChecklist])
 
     return(
         <div className={"checklist-container"}>

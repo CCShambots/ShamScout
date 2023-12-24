@@ -8,13 +8,14 @@ import {Link} from "react-router-dom";
 import {ScoutForm} from "../components/ScoutForm";
 import Match from "../components/scheduling/matchDisplay/Match";
 import {QRDisplay, splitString} from "../util/QRUtil";
+import {ACTIVE_TEMPLATE, CURRENT_EVENT, MATCHES} from "../util/LocalStorageConstants";
 
 function MatchPage() {
     
-    let [currentEvent] = useLocalStorage("current-event", "")
-    let [currentTemplate] = useLocalStorage("active-template", "")
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
+    let [currentTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
     
-    let [matches, setMatches] = useLocalStorage<Match[]>(`matches-${currentEvent}`, [])
+    let [matches, setMatches] = useLocalStorage<Match[]>(MATCHES(currentEvent), [])
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
 
     let [qrDimmerActive, setQRDimmerActive] = useState(false)

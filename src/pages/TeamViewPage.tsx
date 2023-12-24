@@ -11,6 +11,7 @@ import Banner from "../components/teams/Banner";
 import { CSVLink } from "react-csv";
 import {FormTemplate} from "../components/config/FormTemplate";
 import AppHeader from "../components/header/AppHeader";
+import {ACTIVE_TEMPLATE, CURRENT_EVENT, TEAMS} from "../util/LocalStorageConstants";
 
 export type Team = {
     number:number,
@@ -19,11 +20,11 @@ export type Team = {
 
 function TeamViewPage() {
 
-    let [currentEvent] = useLocalStorage("current-event", "")
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
 
-    let [activeTemplate] = useLocalStorage("active-template", "")
+    let [activeTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
 
-    let [teams] = useLocalStorage<Team[]>(`teams-${currentEvent}`, []);
+    let [teams] = useLocalStorage<Team[]>(TEAMS(currentEvent), []);
 
     const [searchParams] = useSearchParams();
     let teamNum= parseInt(searchParams.get("number") || "0")

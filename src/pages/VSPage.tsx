@@ -14,6 +14,7 @@ import {
     XAxis, YAxis
 } from "recharts";
 import {Team} from "./TeamViewPage";
+import {ACTIVE_TEMPLATE, CURRENT_EVENT, TEAMS} from "../util/LocalStorageConstants";
 
 class PicklistTeamGraph {
     public teams:PicklistTeam[]
@@ -97,13 +98,13 @@ export type PicklistFight = {
 
 export default function VSPage() {
 
-    let [currentEvent] = useLocalStorage("current-event", "")
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
 
-    let [teams] = useLocalStorage<Team[]>(`teams-${currentEvent}`, []);
+    let [teams] = useLocalStorage<Team[]>(TEAMS(currentEvent), []);
 
     let [graph] = useState(() => new PicklistTeamGraph(teams))
 
-    let [activeTemplate] = useLocalStorage("active-template", "");
+    let [activeTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "");
 
     let [thisEventForms, setThisEventForms] = useState<ScoutForm[]>([])
 

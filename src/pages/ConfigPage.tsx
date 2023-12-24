@@ -10,19 +10,18 @@ import TeamsInEventDisplay from "../components/config/TeamsInEventDisplay";
 import QRCode from "react-qr-code";
 import AppHeader from "../components/header/AppHeader";
 import SelectAPIType from "../components/config/SelectAPIType";
+import {ACTIVE_TEMPLATE, API_MOBILE_HOST_ADDRESS, CURRENT_EVENT, TBA_KEY} from "../util/LocalStorageConstants";
 
 function ConfigPage() {
 
-    let [activeTemplateKey, setActiveTemplateKey] = useLocalStorage("active-template", "")
+    let [activeTemplateKey, setActiveTemplateKey] = useLocalStorage(ACTIVE_TEMPLATE, "")
 
     let [templates, setTemplates] = useState<FormTemplate[]>([]);
     let [activeTemplate, updateActiveTemplate] = useState<FormTemplate>(new FormTemplate("", 0, []));
 
-    let [event, setEvent] = useLocalStorage("current-event", "");
-    let [TBAKey, setTBAKey] = useLocalStorage("tba-key", "");
-    let [remoteAPIAddress, setRemoteAPIAddress] = useLocalStorage("api-address", "");
-
-    let [useLocalAPI, setUseLocalAPI] = useLocalStorage("use-local-api", true)
+    let [event, setEvent] = useLocalStorage(CURRENT_EVENT, "");
+    let [TBAKey, setTBAKey] = useLocalStorage(TBA_KEY, "");
+    let [remoteAPIAddress, setRemoteAPIAddress] = useLocalStorage(API_MOBILE_HOST_ADDRESS, "");
 
     let [eventCodeDimmerActive, setEventCodeDimmerActive] = useState(false)
     let [apiAddressDimmerActive, setApiAddressDimmerActive] = useState(false)

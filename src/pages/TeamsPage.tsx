@@ -9,6 +9,7 @@ import {ScoutForm} from "../components/ScoutForm";
 import TeamListDisplay from "../components/teams/TeamListDisplay";
 import PhotoAssignment from "../components/teams/PhotoAssignment";
 import {Link} from "react-router-dom";
+import {ACTIVE_TEMPLATE, CURRENT_EVENT, TEAMS, TEAMS_LIST_VIEW} from "../util/LocalStorageConstants";
 
 export type team = {
     number:number,
@@ -17,11 +18,11 @@ export type team = {
 
 function TeamsPage() {
 
-    let [currentEvent] = useLocalStorage("current-event", "");
-    let [currentTemplate] = useLocalStorage("active-template", "")
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "");
+    let [currentTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
 
-    let [listView, setListView] = useLocalStorage("teams-list-view", false)
-    let [teams] = useLocalStorage<team[]>(`teams-${currentEvent}`, []);
+    let [listView, setListView] = useLocalStorage(TEAMS_LIST_VIEW, false)
+    let [teams] = useLocalStorage<team[]>(TEAMS(currentEvent), []);
     let [teamsWithPhotos, setTeamsWithPhotos] = useState<number[]>([])
     let [teamsWithOldPhotos, setTeamsWithOldPhotos] = useState<number[]>([])
 

@@ -11,14 +11,15 @@ import {Schedule} from "../components/scheduling/matchDisplay/ScheduleData";
 import {Button, Icon, Statistic} from "semantic-ui-react";
 import {CSVLink} from "react-csv";
 import {FormTemplate} from "../components/config/FormTemplate";
+import {ACTIVE_TEMPLATE, CURRENT_EVENT, MATCHES} from "../util/LocalStorageConstants";
 
 function MainPage() {
 
-    let [currentEvent] = useLocalStorage("current-event", "")
-    let [activeTemplate] = useLocalStorage("active-template", "")
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
+    let [activeTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
 
-    let [matches] = useLocalStorage<Match[]>(`matches-${currentEvent}`, [])
+    let [matches] = useLocalStorage<Match[]>(MATCHES(currentEvent), [])
 
     let [schedule, setSchedule] = useState(new Schedule(["Quals 1"], ["test"], []));
 

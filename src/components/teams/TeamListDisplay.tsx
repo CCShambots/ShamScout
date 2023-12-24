@@ -3,9 +3,10 @@ import {Table} from "semantic-ui-react";
 import {ScoutForm} from "../ScoutForm";
 import {Link} from "react-router-dom";
 import {useLocalStorage} from "usehooks-ts";
+import {CURRENT_EVENT} from "../../util/LocalStorageConstants";
 
 function TeamListDisplay(props: {teamNum:number, teamName:string, submittedForms:ScoutForm[]}) {
-    let [currentEvent] = useLocalStorage("current-event", "")
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
 
     //Forms for this team
     let thisTeamForms = props.submittedForms.filter(e => e.team === props.teamNum)

@@ -6,6 +6,7 @@ import {Button, Dimmer, Dropdown, Icon, Progress, Statistic} from "semantic-ui-r
 import QRCode from "react-qr-code"
 import {Post, Put} from "../../../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
+import {CURRENT_EVENT} from "../../../util/LocalStorageConstants";
 
 type scheduleOverviewOptions = {
     schedule:Schedule,
@@ -15,7 +16,7 @@ type scheduleOverviewOptions = {
 
 function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverviewOptions) {
 
-    let [currentEvent] = useLocalStorage("current-event", "")
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
 
     let [warningDimmerActive, setWarningDimmerActive] = useState(false)
 

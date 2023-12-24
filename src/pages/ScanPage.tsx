@@ -5,12 +5,13 @@ import {Post} from "../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import {Dimmer, Icon} from "semantic-ui-react";
 import "./ScanPage.css";
+import {ACTIVE_TEMPLATE} from "../util/LocalStorageConstants";
 
 function ScanPage() {
 
     let [result, setResult] = useState("");
 
-    let [currentTemplate] = useLocalStorage("active-template", "")
+    let [currentTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
 
     let [saveSuccess, setSaveSuccess] = useState(true)
     let [saveDimmerActive, setSaveDimmerActive] = useState(false)

@@ -3,6 +3,7 @@ import {PullTBA} from "../../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import {Button, Dimmer, Icon, Input, Table} from "semantic-ui-react";
 import TeamLink from "../team-link/TeamLink";
+import {CURRENT_EVENT, MATCHES, TBA_KEY, TEAMS} from "../../util/LocalStorageConstants";
 
 
 type TeamInfo = {
@@ -12,12 +13,12 @@ type TeamInfo = {
 
 function TeamsInEventDisplay() {
 
-    let [event] = useLocalStorage("current-event", "");
-    let [TBAKey] = useLocalStorage("tba-key", "");
+    let [event] = useLocalStorage(CURRENT_EVENT, "");
+    let [TBAKey] = useLocalStorage(TBA_KEY, "");
 
-    let [teams, setTeams] = useLocalStorage<TeamInfo[]>(`teams-${event}`, [])
+    let [teams, setTeams] = useLocalStorage<TeamInfo[]>(TEAMS(event), [])
     //Whether we've made customizations to the event so that it can save across reloads
-    let [teamOverride, setTeamOverride] = useLocalStorage(`team-override-${event}`, false)
+    let [teamOverride, setTeamOverride] = useLocalStorage(MATCHES(event), false)
     let [addTeamDimmerActive, setAddTeamDimmerActive] = useState(false)
 
     let [addNumber, setAddNumber] = useState(0);

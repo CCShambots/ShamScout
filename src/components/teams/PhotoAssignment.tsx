@@ -3,6 +3,7 @@ import QRCode from "react-qr-code";
 import React, {useEffect, useState} from "react";
 import packageJson from "../../../package.json";
 import {useLocalStorage} from "usehooks-ts";
+import {CURRENT_EVENT} from "../../util/LocalStorageConstants";
 
 type assignmentOptions = {
     allTeams:number[],
@@ -31,7 +32,7 @@ export default function PhotoAssignment({allTeams, teamsWithoutPhotos, teamsWith
 
     let versionYear=  packageJson.version.substring(0, 4);
 
-    let [currentEvent] = useLocalStorage("current-event", "")
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
 
     let [yearToUse, setYearToUse] = useState(versionYear)
 

@@ -15,13 +15,14 @@ import {NewVersionChecker} from "./components/NewVersionChecker";
 import VSPage from "./pages/VSPage";
 import {useLocalStorage} from "usehooks-ts";
 import SelectAPIType from "./components/config/SelectAPIType";
+import {API_HOST_ADDRESS, USE_LOCAL_API} from "./util/LocalStorageConstants";
 
 function App() {
 
     const [apiAlive, setApiAlive] = useState(true)
 
-    const [useLocalAPI] = useLocalStorage("use-local-api", true)
-    const [apiHostAddress] = useLocalStorage("api-host-address", remoteAPIAddress)
+    const [useLocalAPI] = useLocalStorage(USE_LOCAL_API, true)
+    const [apiHostAddress] = useLocalStorage(API_HOST_ADDRESS, remoteAPIAddress)
 
     setApiRemoteHost(apiHostAddress)
     setApiHost(useLocalAPI)

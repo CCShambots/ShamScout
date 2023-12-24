@@ -3,10 +3,11 @@ import "./Header.css"
 import {Link} from "react-router-dom";
 import {useLocalStorage} from "usehooks-ts";
 import packageJson from "../../../package.json";
+import {CURRENT_EVENT} from "../../util/LocalStorageConstants";
 
 function AppHeader() {
 
-    let [currentEvent] = useLocalStorage("current-event", "")
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
 
     return(
         <div className={"header-container"}>

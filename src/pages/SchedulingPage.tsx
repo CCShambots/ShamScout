@@ -8,10 +8,11 @@ import "./SchedulingPage.css"
 import ScheduleOverview from "../components/scheduling/overview/ScheduleOverview";
 import {useLocalStorage} from "usehooks-ts";
 import {Pull, PullTBA} from "../util/APIUtil";
+import {CURRENT_EVENT} from "../util/LocalStorageConstants";
 
 function SchedulingPage() {
 
-    let [currentEvent] = useLocalStorage("current-event", "");
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "");
 
     let [schedule, setSchedule] = useState(new Schedule(["Quals 1"], ["test"], []));
 
