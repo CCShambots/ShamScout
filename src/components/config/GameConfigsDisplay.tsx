@@ -104,7 +104,7 @@ export default function GameConfigsDisplay(props: {
                                     <p>{e.getNumberInputFields()} Input Fields</p>
                                 </Table.Cell>
                                 <Table.Cell>
-                                    <Button icon={"trash"} color={"red"} onClick={() => {
+                                    <Button icon={"trash alternate"} color={"red"} onClick={() => {
                                         setRemoveTemplateName(e.name)
                                         setRemoveTemplateDimmer(true)
                                     }}></Button>
@@ -157,7 +157,7 @@ export default function GameConfigsDisplay(props: {
                         setDeleteConfirmationValue("")
                     }}
                 >
-                    <Icon name={"trash"}/>DELETE
+                    <Icon name={"trash alternate"}/>DELETE
                 </Button>
 
             </Dimmer>

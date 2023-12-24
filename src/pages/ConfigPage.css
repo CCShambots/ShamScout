@@ -50,7 +50,7 @@
 }
 
 .middle-column {
-    min-width: 23vw;
+    min-width: 15vw;
 
     max-height: 85vh;
     overflow: scroll;
@@ -76,4 +76,12 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+}
+
+.clip-cell {
+    max-width: 15vw;
+}
+
+.center-cell {
+
 }

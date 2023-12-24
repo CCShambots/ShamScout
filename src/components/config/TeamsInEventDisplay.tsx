@@ -84,7 +84,7 @@ function TeamsInEventDisplay() {
                             <Button animated={"vertical"} onClick={() => {
                                 setTeamOverride(false)
                                 syncTeamsInEvent()
-                                }}>
+                            }}>
                                 <Button.Content hidden>Sync</Button.Content>
                                 <Button.Content visible><Icon name={"sync"}/> </Button.Content>
                             </Button>
@@ -95,13 +95,13 @@ function TeamsInEventDisplay() {
                         teams.map(e =>
                             <Table.Row key={e.number}>
                                 <Table.Cell><TeamLink number={e.number} displayText={e.number}/></Table.Cell>
-                                <Table.Cell><TeamLink number={e.number} displayText={e.name}/></Table.Cell>
+                                <Table.Cell className={"clip-cell"}><TeamLink number={e.number} displayText={e.name}/></Table.Cell>
                                 <Table.Cell>
                                     <Button
+                                        fluid
                                         color={"red"}
-                                        icon={"trash alternate"}
                                         onClick={() => setTeams(teams.filter(ele => ele !== e))}
-                                    />
+                                    ><Icon name={"trash alternate"}/>Remove</Button>
                                 </Table.Cell>
                             </Table.Row>
                         )
