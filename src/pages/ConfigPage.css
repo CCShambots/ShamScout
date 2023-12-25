@@ -61,13 +61,12 @@
 
     margin-left: 2vw;
 
-    max-height: 85vh;
-    /*overflow: scroll;*/
+    height: 85vh;
 }
 
 .template-items {
-    max-height: 80vh;
-    overflow-y: scroll
+    height: 80vh;
+    overflow-y: auto
 }
 
 .inline-qr-code {
