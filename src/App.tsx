@@ -76,22 +76,6 @@ function App() {
 
   return (
       <div>
-          {/*<HashRouter>*/}
-          {/*  <Routes>*/}
-          {/*      <Route path='/' element={ <OverviewPage /> } />*/}
-          {/*      <Route path='/scan' element={ <ScanPage/>} />*/}
-          {/*      <Route path='/matches' element={ <MatchPage /> } />*/}
-          {/*      <Route path='/teams' element={ <TeamsPage /> } />*/}
-          {/*      <Route path='/team' element={<TeamViewPage/>}/>*/}
-          {/*      <Route path='/picklist' element={<PicklistPage/>}/>*/}
-          {/*      <Route path='/vs' element={<VSPage/>}/>*/}
-          {/*      <Route path='/scheduler' element={ <SchedulingPage /> } />*/}
-          {/*      <Route path='/config' element={ <ConfigPage /> } />*/}
-
-          {/*      <Route path="/*" element={<NavLink to="/" />}  /> /!* navigate to default route if no url matched *!/*/}
-          {/*  </Routes>*/}
-
-          {/*</HashRouter>*/}
 
           <RouterProvider router={router} />
 

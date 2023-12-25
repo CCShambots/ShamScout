@@ -25,7 +25,11 @@ export default function SelectAPIType() {
                 </Button>
             </Button.Group>
             <Input fluid placeholer={"Set API Host Address"} value={apiHostAddress} onChange={(e) => {
-                setApiHostAddress(e.target.value)
+                let value = e.target.value
+                if(value[value.length - 1] !== "/") {
+                    value+= "/"
+                }
+                setApiHostAddress(value)
             }}/>
             <Button fluid color={"red"} onClick={() => {
                 setApiHostAddress(defaultRemoteAPIAddress)
