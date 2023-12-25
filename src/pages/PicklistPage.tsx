@@ -4,11 +4,12 @@ import {ReactSortable} from "react-sortablejs";
 import "./PicklistPage.css"
 import {useLocalStorage} from "usehooks-ts";
 import TeamLink from "../components/team-link/TeamLink";
-import {Button, Checkbox, Dimmer, Header, Icon, Input} from "semantic-ui-react";
+import {Button, Checkbox, Dimmer, Header, Icon, Input, Popup} from "semantic-ui-react";
 import {ACCEPT_LIST, CURRENT_EVENT, DECLINE_LIST, PICKLIST, TEAMS} from "../util/LocalStorageConstants";
 import StatsPopoutManager from "../components/picklist/StatsPopoutManager";
 import {CSVLink} from "react-csv";
 import {upload} from "@testing-library/user-event/dist/upload";
+import {doesTeamHaveImage, getImagePath} from "../util/APIUtil";
 
 
 type Team = {
@@ -295,7 +296,28 @@ function PicklistPage() {
 
 function ItemDisplay(props: {item:ItemType, itemIndex:number, accept:boolean, decline:boolean, statsListLength:number, addSelfToStats:(team:Team) => void}) {
 
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
     let [taken, setTaken] = useState(false)
+
+    let [imageInAPI, setImageInAPI] = useState(false)
+
+    useEffect(() => {
+        doesTeamHaveImage(props.item.team.number).then((result) => {setImageInAPI(result)});
+    }, [props.item.team.number]);
+
+    const src = getImagePath(props.item.team.number, currentEvent.substring(0, 4))
+
+    const [imgSrc, setImgSrc] = useState(src);
+
+    useEffect(() => {
+            if(imageInAPI) {
+                const img = new Image();
+                img.src = src;
+                img.onload = () => {
+                    setImgSrc(src);
+                };
+            }
+        }, [src, imageInAPI]);
 
     return(
         <div className={"picklist-item-display " + (props.accept ? " accept " : "") + (props.decline ? " decline " : "") + (taken ? " crossed-off-item " : "") }>
@@ -308,10 +330,23 @@ function ItemDisplay(props: {item:ItemType, itemIndex:number, accept:boolean, de
                     <h2 className={"picklist-text"}>
                         <TeamLink number={props.item.team.number} displayText={`${props.itemIndex + 1}. ${props.item.team.number} - ${props.item.team.name}`}/>
                     </h2>
+                    <div>
+                        <Popup
+                            content={
+                                 <img className={`team-display-image radius-image`}
+                                      src={imgSrc} alt={props.item.team.number.toString()}/>
+                            }                                
+                            on={"click"}
+                            trigger={
+                                <Button icon={"image"} color={"blue"} size={"small"} disabled={!imageInAPI}/>
+                            }
+                        />
 
-                    <Button icon={"info"} color={"grey"} size={"small"} disabled={props.statsListLength >= 4} onClick={() => {
-                        props.addSelfToStats(props.item.team)
-                    }}/>
+                        <Button icon={"info"} color={"grey"} size={"small"} disabled={props.statsListLength >= 4} onClick={() => {
+                            props.addSelfToStats(props.item.team)
+                        }}/>
+                    </div>
+
                     <div className={"picklist-item-crossoff " + (taken ? "crossed-off" : "") }/>
                 </div>
             </div>

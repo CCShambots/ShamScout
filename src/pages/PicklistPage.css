@@ -165,3 +165,7 @@
     display: none;
 }
 
+.radius-image {
+    border-radius: 1vh;
+}
+
