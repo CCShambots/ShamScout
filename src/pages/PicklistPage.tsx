@@ -160,8 +160,20 @@ function PicklistPage() {
                 <StatsPopoutManager teamsArray={teamStatsList} setTeamsArray={setTeamStatsList}/>
             </div>
 
-            <Button className={"privacy-button"} size={"massive"}
-                    icon={"hide"} color={"red"} onClick={() => setPrivacyDimmer(true)}/>
+            {
+                teamStatsList.length <= 1 ?
+                    <Button className={"privacy-button"} size={"massive"}
+                            icon={"hide"} color={"red"} onClick={() => setPrivacyDimmer(true)}/>
+                    : <div/>
+            }
+
+            {
+                teamStatsList.length > 1 ?
+                    <div className={"privacy-button-centered"}>
+                        <Button size={"massive"}
+                                icon={"hide"} color={"red"} onClick={() => setPrivacyDimmer(true)}/>
+                    </div> : <div/>
+            }
 
             <div
                 className={(privacyDimmer) ? "privacy-active" : "privacy-inactive"}
