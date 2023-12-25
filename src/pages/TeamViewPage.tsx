@@ -3,9 +3,9 @@ import {useSearchParams} from "react-router-dom";
 import {useLocalStorage} from "usehooks-ts";
 import Picture from "../resources/team_placeholder.png";
 import "./TeamViewPage.css"
-import {ScoutForm} from "../components/ScoutForm";
+import {Field, ScoutForm} from "../components/ScoutForm";
 import {doesTeamHaveImage, EditForm, getImagePath, Pull, PullTBA, RemoveForm, RemoveImage} from "../util/APIUtil";
-import {Button, Dimmer, Dropdown, Header, Icon, Popup, Table} from "semantic-ui-react";
+import {Button, Dimmer, Dropdown, FormField, Header, Icon, Popup, Table} from "semantic-ui-react";
 import packageJson from '../../package.json';
 import Banner from "../components/teams/Banner";
 import { CSVLink } from "react-csv";
@@ -321,47 +321,10 @@ function TeamViewPage() {
                                 return eventsInFilter.length === 0 || eventsInFilter.indexOf(e.event) !== -1
                             }).map(e => e.fields.filter(ele => ele.label === field.label)[0]);
 
-                            let resultantVal = 0
-                            let percent = false
-
-                            switch (result[0].type) {
-                                case "CheckBox":
-                                    //Calculate a percentage
-                                    let total = 0
-                                    let successes = 0
-
-                                    percent = true
-
-                                    result.forEach(e => {
-                                        if(e.getValue() as boolean) {
-                                            successes++
-                                        }
-                                        total++
-                                    })
-
-                                    resultantVal = Math.round((successes / total) * 100)
-                                    break;
-                                case "Rating":
-                                case "Number":
-                                    //Calculate an average value
-                                    let elements = 0
-                                    let totalValue = 0
-
-                                    result.forEach(e => {
-                                        elements++
-                                        totalValue += e.getValue() as number
-                                    })
-
-                                    resultantVal = Math.round(100 * totalValue / elements) / 100
-
-                                    break;
-                                default:
-                                    resultantVal = -1
-                                    break;
-                            }
+                            let [value, percent] = Field.takeAverage(result)
 
                             return <Table.HeaderCell>
-                                {resultantVal !== -1 ? (percent ? resultantVal + "%" : resultantVal) : "N/A"}
+                                {value !== -1 ? (percent ? value + "%" : value) : "N/A"}
                             </Table.HeaderCell>
                         })}
 

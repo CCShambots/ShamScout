@@ -220,6 +220,51 @@ class Field {
         return `"${this.label}":{"${this.type}":${valueDisplay}}`
     }
 
+    public static takeAverage(result:Field[]): [value:number, percent:boolean] {
+
+        let resultantVal = 0
+        let percent = false
+
+        switch (result[0].type) {
+            case "CheckBox":
+                //Calculate a percentage
+                let total = 0
+                let successes = 0
+
+                percent = true
+
+                result.forEach(e => {
+                    if(e.getValue() as boolean) {
+                        successes++
+                    }
+                    total++
+                })
+
+                resultantVal = Math.round((successes / total) * 100)
+                break;
+            case "Rating":
+            case "Number":
+                //Calculate an average value
+                let elements = 0
+                let totalValue = 0
+
+                result.forEach(e => {
+                    elements++
+                    totalValue += e.getValue() as number
+                })
+
+                resultantVal = Math.round(100 * totalValue / elements) / 100
+
+                break;
+            default:
+                resultantVal = -1
+                break;
+        }
+
+        return [resultantVal, percent]
+
+    }
+
 }
 
 function CheckBoxElement(props: {label:string, form:ScoutForm, setForm:(form:ScoutForm) => void}) {
@@ -351,4 +396,4 @@ class MissingMatch {
     }
 }
 
-export {ScoutForm, MissingMatch}
+export {ScoutForm, Field, MissingMatch}
