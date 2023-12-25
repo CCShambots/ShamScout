@@ -1,0 +1,7 @@
+.inline-form-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 1vh 0vw;
+
+    align-items: center;
+}

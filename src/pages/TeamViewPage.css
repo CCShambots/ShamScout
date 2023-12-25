@@ -73,3 +73,23 @@
     background-color: #00ff00;
     border-radius: 1vw;
 }
+
+.match-id-copy {
+    cursor: pointer;
+    color: blue;
+}
+
+.editor-window {
+    position: relative;
+    width: 35vw;
+    max-height: 85vh;
+
+    overflow-y: scroll;
+
+    padding: 2vh;
+
+    color:black;
+
+    background-color: white;
+    border-radius: 2vh;
+}

@@ -1,5 +1,8 @@
 import Match from "./scheduling/matchDisplay/Match";
 import {Schedule} from "./scheduling/matchDisplay/ScheduleData";
+import {Checkbox, Header, Input, Popup} from "semantic-ui-react";
+import "./ScoutForm.css"
+import {useEffect, useState} from "react";
 
 type HeaderType = {
     label: string,
@@ -120,6 +123,37 @@ class ScoutForm {
             return acc + ele.name + (ele.multiples > 1 ? " (x" + ele.multiples + ")" : "") + (shouldComma ? ", " : "")
         }, "")
     }
+
+    public toElement(label:string, setForm:(ScoutForm:ScoutForm) => void) {
+        let field = this.fields.filter(e => e.label === label)[0]
+
+        switch(field.type) {
+            case "CheckBox": return <CheckBoxElement label={label} form={this} setForm={setForm}/>
+            case "Rating": return <RatingElement label={label} form={this} setForm={setForm}/>
+            case "Number": return <NumberElement label={label} form={this} setForm={setForm}/>
+            case "ShortText": return <ShortTextElement label={label} form={this} setForm={setForm}/>
+            default: return <Header>Error!</Header>
+        }
+    }
+
+    public setFields(fields:Field[]) {
+        this.fields = fields
+    }
+
+    public toJson() {
+
+        let temp = "{" +
+            `"match_number":${this.match_number},` +
+            `"team":${this.team},` +
+            `"scouter":"${this.scouter}",` +
+            `"event_key":"${this.event}",` +
+            `"fields":{${this.fields.map(e => e.toJson())}}}`
+
+        // temp = temp.substring(0, temp.length - 1)+ '}}';
+
+        return temp
+
+    }
 }
 
 class Field {
@@ -151,8 +185,21 @@ class Field {
             default: return "Failed to Load"
         }
     }
-    public static fromJson(key:string, data:any):Field {
 
+    public setValue(value:any) {
+        switch(this.type) {
+            case "Title": this.Title = value; break;
+            case "CheckBox": this.CheckBox = value; break;
+            case "Rating": this.Rating = value; break;
+            case "Number": this.Number = value; break;
+            case "ShortText": this.ShortText = value; break;
+            case "LongText": this.LongText = value; break;
+        }
+
+        this.value = this.getValue();
+    }
+
+    public static fromJson(key:string, data:any):Field {
 
         return new Field(
             key,
@@ -165,6 +212,134 @@ class Field {
             data["LongText"] ?? "",
         )
     }
+
+    public toJson() {
+        let useQuotes = this.type === "Title" || this.type === "ShortText" || this.type === "LongText"
+        let valueDisplay = useQuotes ? `"${this.value}"` : this.value
+
+        return `"${this.label}":{"${this.type}":${valueDisplay}}`
+    }
+
+}
+
+function CheckBoxElement(props: {label:string, form:ScoutForm, setForm:(form:ScoutForm) => void}) {
+
+    let [changed, setChanged] = useState(false)
+
+    let [field, setField] = useState(props.form.fields.filter(e => e.label === props.label)[0])
+
+    useEffect(() => {
+        setField(props.form.fields.filter(e => e.label === props.label)[0])
+    }, [props.form])
+
+    return (
+        <div className={"inline-form-item"}>
+            <Header>
+                {field.label}{changed ? "*" : ""}
+            </Header>
+
+            <Checkbox
+                toggle
+                checked={field.CheckBox}
+                onChange={(e, data) => {
+                    field.setValue(data.checked)
+
+                    props.setForm(Object.create(props.form))
+                    setChanged(true)
+                }}
+            />
+        </div>
+    )
+}
+
+function RatingElement(props: {label:string, form:ScoutForm, setForm:(form:ScoutForm) => void}) {
+
+    let [changed, setChanged] = useState(false)
+
+    let [field, setField] = useState(props.form.fields.filter(e => e.label === props.label)[0])
+
+    useEffect(() => {
+        setField(props.form.fields.filter(e => e.label === props.label)[0])
+    }, [props.form])
+
+    return (
+        <div className={"inline-form-item"}>
+            <Popup
+                content={"Make sure this isn't above the minimum or below the maximum!"}
+                trigger={
+                    <Header color={"yellow"}>
+                        {field.label}{changed ? "*" : ""}
+                    </Header>
+                }
+            />
+
+            <Input
+                type={"number"}
+                value={field.Rating}
+                onChange={(e, data) => {
+                    field.setValue(data.value)
+
+                    props.setForm(Object.create(props.form))
+                    setChanged(true)
+                }}/>
+        </div>
+    )
+}
+
+function NumberElement(props: {label:string, form:ScoutForm, setForm:(form:ScoutForm) => void}) {
+
+    let [changed, setChanged] = useState(false)
+
+    let [field, setField] = useState(props.form.fields.filter(e => e.label === props.label)[0])
+
+    useEffect(() => {
+        setField(props.form.fields.filter(e => e.label === props.label)[0])
+    }, [props.form])
+
+    return (
+        <div className={"inline-form-item"}>
+            <Header>
+                {field.label}{changed ? "*" : ""}
+            </Header>
+
+            <Input
+                type={"number"}
+                value={field.Number}
+                onChange={(e, data) => {
+                    field.setValue(data.value)
+
+                    props.setForm(Object.create(props.form))
+                    setChanged(true)
+                }}/>
+        </div>
+    )
+}
+
+function ShortTextElement(props: {label:string, form:ScoutForm, setForm:(form:ScoutForm) => void}) {
+    let [changed, setChanged] = useState(false)
+
+    let [field, setField] = useState(props.form.fields.filter(e => e.label === props.label)[0])
+
+    useEffect(() => {
+        setField(props.form.fields.filter(e => e.label === props.label)[0])
+    }, [props.form])
+
+    return (
+        <div className={"inline-form-item"}>
+            <Header>
+                {field.label}{changed ? "*" : ""}
+            </Header>
+
+            <Input
+                value={field.ShortText}
+                onChange={(e, data) => {
+                    field.setValue(data.value)
+
+                    props.setForm(Object.create(props.form))
+                    setChanged(true)
+                }}/>
+        </div>
+    )
 }
 
 class MissingMatch {

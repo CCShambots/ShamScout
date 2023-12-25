@@ -1,5 +1,6 @@
 import {FormTemplate} from "../components/config/FormTemplate";
 import packageJson from "../../package.json";
+import {ScoutForm} from "../components/ScoutForm";
 
 export let localAPIAddress = "http://localhost:8080/";
 export let defaultRemoteAPIAddress = "http://167.71.240.213:8080/";
@@ -135,6 +136,21 @@ export async function ModifyTemplate(config:FormTemplate) {
     return response.ok;
 }
 
+export async function EditForm(template:string, id:string, form:ScoutForm) {
+
+    const response = await fetch(apiHost + `forms/edit/template/${template}/id/${id}`, {
+            method: 'PUT',
+            body: form.toJson(),
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            }
+        }
+    )
+
+    return response.ok
+}
+
 export async function IsApiAlive() {
 
     try {
@@ -166,6 +182,7 @@ export function getImagePath(teamNum:number, yearToUse?:string) {
     return `${apiHost}bytes/get/key/${teamNum}-img-${yearToUse ? yearToUse : year}`
 }
 
+//TBA Pulling
 export function PullTBA(endpoint:string, callback:(e:any) => void) {
 
     const key:string = localStorage.getItem("tba-key") || "none";
@@ -185,6 +202,9 @@ export function PullTBA(endpoint:string, callback:(e:any) => void) {
 
     } catch (e) {}
 }
+
+
+//Updating from GitHub
 
 export type NewReleaseDetails = {
     isNew:boolean,

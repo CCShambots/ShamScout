@@ -4,7 +4,7 @@ import {useLocalStorage} from "usehooks-ts";
 import Picture from "../resources/team_placeholder.png";
 import "./TeamViewPage.css"
 import {ScoutForm} from "../components/ScoutForm";
-import {doesTeamHaveImage, getImagePath, Pull, PullTBA, RemoveForm, RemoveImage} from "../util/APIUtil";
+import {doesTeamHaveImage, EditForm, getImagePath, Pull, PullTBA, RemoveForm, RemoveImage} from "../util/APIUtil";
 import {Button, Dimmer, Dropdown, Header, Icon, Popup, Table} from "semantic-ui-react";
 import packageJson from '../../package.json';
 import Banner from "../components/teams/Banner";
@@ -48,6 +48,20 @@ function TeamViewPage() {
     let [removeFormID, setRemoveFormID] = useState("")
 
     let [eventsInFilter, setEventsInFilter] = useState<string[]>([])
+
+    let [editDimmerActive, setEditDimmerActive] = useState(false)
+    let [formToEdit, setFormToEdit] = useState<ScoutForm>(new ScoutForm("", -1, 0, "", []))
+
+    let [editSuccessDimmerActive, setEditSuccessDimmerActive] = useState(false)
+    let [editSuccess, setEditSuccess] = useState(false)
+
+    let [clickedSubmitOnce, setClickedSubmitOnce] = useState(false)
+
+    useEffect(() => {
+        if(!editDimmerActive) {
+            setClickedSubmitOnce(false)
+        }
+    }, [editDimmerActive]);
 
     const eventYear = currentEvent.substring(0, 4)
 
@@ -230,6 +244,7 @@ function TeamViewPage() {
                     <Table.Row>
                         <Table.HeaderCell>Match</Table.HeaderCell>
                         <Table.HeaderCell>Event</Table.HeaderCell>
+                        <Table.HeaderCell>Edit</Table.HeaderCell>
                         <Table.HeaderCell>ID</Table.HeaderCell>
                         <Table.HeaderCell>Del.</Table.HeaderCell>
                         {thisTeamForms[0]?.fields.map(e =>
@@ -254,10 +269,16 @@ function TeamViewPage() {
                             </Table.Cell>
                             <Table.Cell>{e.event}</Table.Cell>
                             <Table.Cell>
+                                <Icon name={"pencil"} color={"blue"} onClick={() => {
+                                    setFormToEdit(e)
+                                    setEditDimmerActive(true)
+                                }}/>
+                            </Table.Cell>
+                            <Table.Cell>
                                 <Popup
                                     content={"Copy ID to clipboard"}
                                     trigger={
-                                        <Icon name={"copy outline"} color={"blue"} onClick={() => {
+                                        <Icon name={"copy outline"} color={"yellow"} onClick={() => {
                                             navigator.clipboard.writeText(idMap.get(e.toString()) ?? "NOT FOUND")
                                         }}/>
                                     }
@@ -289,7 +310,7 @@ function TeamViewPage() {
 
                 <Table.Footer fullWidth>
                     <Table.Row>
-                        <Table.HeaderCell colSpan={'4'}>
+                        <Table.HeaderCell colSpan={'5'}>
                             <Header>
                                 Averages
                             </Header>
@@ -312,7 +333,6 @@ function TeamViewPage() {
                                     percent = true
 
                                     result.forEach(e => {
-                                        console.log(field.label + ": " + e.getValue())
                                         if(e.getValue() as boolean) {
                                             successes++
                                         }
@@ -372,6 +392,68 @@ function TeamViewPage() {
                 RemoveForm(activeTemplate, removeFormID).then(() => {})
                 window.location.reload()
             }}>Yes, I'm sure</Button>
+        </Dimmer>
+
+        <Dimmer page active={editDimmerActive} onClickOutside={() => setEditDimmerActive(false)}>
+            <div className={"editor-window"}>
+                <div className={"qr-code-header"}>
+                    <h1 className={"config-qr-code-header-text"}>Team {formToEdit.team} - Quals {formToEdit.match_number}</h1>
+                    <Button icon={"x"} color={"red"} onClick={() => setEditDimmerActive(false)}/>
+                </div>
+                <p>ID:⠀
+                    <Popup
+                        content={"Copy ID to clipboard"}
+                        trigger={
+                            <span className={"match-id-copy"} onClick={() => {
+                                navigator.clipboard.writeText(idMap.get(formToEdit.toString()) ?? "NOT FOUND")
+                            }}>{idMap.get(formToEdit.toString())}
+                            </span>
+                        }
+                />
+                </p>
+                {
+                    formToEdit.fields.map(e => {
+                        return formToEdit.toElement(e.label, (form:ScoutForm) => {setFormToEdit(form)})
+                    })
+                }
+
+                <Button.Group fluid>
+                    <Button color={"green"} onClick={() => {
+                        if(!clickedSubmitOnce) {
+                            setClickedSubmitOnce(true)
+                        } else {
+                            //Actually submit the form
+
+                            EditForm(activeTemplate, idMap.get(formToEdit.toString()) ?? "NOT FOUND", formToEdit).then(
+                                (r) => {
+                                    setEditSuccess(r)
+                                    setEditDimmerActive(false)
+                                    setEditSuccessDimmerActive(true)
+                                }
+                            )
+
+                        }
+
+                    }}>
+                        <Icon name={"save"}/> {!clickedSubmitOnce ? "Submit" : "Click again to Confirm"}
+                    </Button>
+                    <Button.Or/>
+                    <Button color={"red"} onClick={() => {
+                        setEditDimmerActive(false)
+                    }}>
+                        <Icon name={"cancel"}/> Cancel
+                    </Button>
+                </Button.Group>
+            </div>
+        </Dimmer>
+
+        <Dimmer active={editSuccessDimmerActive} onClickOutside={() => setEditSuccessDimmerActive(false)} page>
+            <div className={"vertical-center"}>
+                <div>
+                    <Icon name={editSuccess ? "check" : "delete"} color={editSuccess ? "green" : "red"} size={"massive"}/>
+                </div>
+                <h1>{editSuccess ? "Edit success!" : "Edit Failure! :("}</h1>
+            </div>
         </Dimmer>
 
     </div>
