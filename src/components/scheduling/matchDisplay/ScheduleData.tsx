@@ -74,18 +74,18 @@ class Scouter {
 }
 
 const colors:string[] = [
-    "#3498db", // Dodger Blue
-    "#2ecc71", // Emerald Green
-    "#9b59b6", // Amethyst Purple
-    "#1abc9c", // Turquoise
-    "#34495e", // Midnight Blue
-    "#27ae60", // Nephritis Green
-    "#2980b9", // Royal Blue
-    "#e74c3c", // Alizarin Red
-    "#2c3e50", // Charcoal
-    "#16a085", // Green Sea
-    "#2980b9", // Steel Blue
-    "#2ecc71"  // Chateau Green
+    "#add8e6", // Light Blue
+    "#87ceeb", // Sky Blue
+    "#1e90ff", // Dodger Blue
+    "#00bfff", // Deep Sky Blue
+    "#4682b4", // Steel Blue
+    "#87cefa", // Light Sky Blue
+    "#f0f8ff", // Alice Blue
+    "#c6e2ff", // Powder Blue
+    "#b0e0e6", // Powder Blue (a bit darker)
+    "#f8f8ff", // Ghost White
+    "#ffffff", // White
+    "#ecf0f1"  // Off White
 ];
 
 class Schedule {

@@ -1,11 +1,11 @@
 .top {
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 
 .bottom {
-    border-bottom-left-radius: 24px;
-    border-bottom-right-radius: 24px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 .grid-entry {
@@ -21,11 +21,12 @@
     font-size: 2vh;
 
     word-wrap: anywhere;
+
 }
 
 
 .add-cell {
-    border-radius: 10px;
+    border-radius: 5px;
     border: 5px dashed lightgray;
 
     margin: 0.5vh;

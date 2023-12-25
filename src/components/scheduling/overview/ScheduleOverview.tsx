@@ -59,18 +59,20 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverv
                         <Statistic.Value>{schedule.getScoutsOverScouting()}</Statistic.Value>
                         <Statistic.Label>Scouts over-scouting</Statistic.Label>
                     </Statistic>
-                    <Statistic>
-                        <Statistic.Value>{Math.round(1000 *schedule.getTargetMatchesPerScout()/schedule.matches.length)/10.0}%</Statistic.Value>
-                        <Statistic.Label>Uptime per Scout</Statistic.Label>
-                    </Statistic>
                 </Statistic.Group>
+
+                <Statistic>
+                    <Statistic.Value>{Math.round(1000 *schedule.getTargetMatchesPerScout()/schedule.matches.length)/10.0}%</Statistic.Value>
+                    <Statistic.Label>Uptime per Scout</Statistic.Label>
+                </Statistic>
+
                 <p/>
 
-                <Button onClick={handleClick} color={"purple"} disabled={schedule.scouters.length <= 6}>
+                <Button fluid onClick={handleClick} color={"purple"} disabled={schedule.scouters.length <= 6}>
                     <Icon name={"random"}/>Generate Schedule
                 </Button>
 
-                <Button color={"blue"} onClick={() => setQRCodeDimmerActive(true)}><Icon name={"qrcode"}/>Generate QR Codes</Button>
+                <Button fluid color={"blue"} onClick={() => setQRCodeDimmerActive(true)}><Icon name={"qrcode"}/>Generate QR Codes</Button>
 
                 <Button.Group>
                     <Button color={"green"} onClick={() => {

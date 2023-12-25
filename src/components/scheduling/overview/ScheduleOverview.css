@@ -10,7 +10,8 @@
 
     align-self: flex-start;
 
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: clip;
 }
 
 .overview-header {
