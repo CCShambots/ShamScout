@@ -56,24 +56,27 @@ export default function FormTemplateEditor(
                 </Button>
             </Button.Group>
 
-            <ReactSortable
-                list={props.template.items.map(e => {return {id: props.template.items.indexOf(e), name: e.label}})}
-                setList={(e) => {
-                    props.template.items = e.map(e => props.template.items.filter(ele => ele.label === e.name)[0])
+            <div className={"template-items"}>
 
-                    if(isMounted()) {
-                        props.setTemplate(Object.create(props.template))
+                <ReactSortable
+                    list={props.template.items.map(e => {return {id: props.template.items.indexOf(e), name: e.label}})}
+                    setList={(e) => {
+                        props.template.items = e.map(e => props.template.items.filter(ele => ele.label === e.name)[0])
+
+                        if(isMounted()) {
+                            props.setTemplate(Object.create(props.template))
+                        }
+                    }}
+                >
+                    {
+                        props.template.items.map(e => {
+                            return <FormItem key={props.template.items.indexOf(e)} item={e} options={options} config={props.template} setConfig={
+                                props.setTemplate
+                            }/>
+                        })
                     }
-                }}
-            >
-                {
-                    props.template.items.map(e => {
-                        return <FormItem key={props.template.items.indexOf(e)} item={e} options={options} config={props.template} setConfig={
-                            props.setTemplate
-                        }/>
-                    })
-                }
-            </ReactSortable>
+                </ReactSortable>
+            </div>
 
             <Dimmer page active={qrDimmer} onClickOutside={() => setQRDimmer(false)}>
                 <div className={"config-qr-code-window"}>
