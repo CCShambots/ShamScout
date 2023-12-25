@@ -1,5 +1,7 @@
 .picklist-flex {
     display: flex;
+
+    position: relative
 }
 
 .picklist-column {
@@ -7,7 +9,16 @@
     margin: 0.5vh 0.5vw;
 
     max-height: 91.5vh;
-    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: auto;
+
+}
+
+.picklist-sortable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
 }
 
 .picklist-title {
@@ -30,10 +41,18 @@
 
     transition: 0.5s;
 
+    align-self: center;
+
+    width: 45vw;
+
 }
 
 .picklist-item-display:hover {
-    background-color: #8a8787;
+    background-color: #a4a2a2;
+}
+
+.crossed-off-item {
+    opacity: 50%;
 }
 
 .picklist-text {
@@ -50,7 +69,10 @@
 
 .picklist-item-flex {
     display: flex;
-    width: auto;
+
+    align-items: center;
+
+    width: 45vw;
 }
 
 .picklist-check {
@@ -65,7 +87,9 @@
     display: flex;
     justify-content: space-between;
 
-    width: 45vw;
+    align-items: center;
+
+    width: 100%;
 
     position: relative;
 }

@@ -4,9 +4,9 @@ import {ReactSortable} from "react-sortablejs";
 import "./PicklistPage.css"
 import {useLocalStorage} from "usehooks-ts";
 import TeamLink from "../components/team-link/TeamLink";
-import {Button, Checkbox} from "semantic-ui-react";
-import {Link} from "react-router-dom";
+import {Button, Checkbox, Icon} from "semantic-ui-react";
 import {ACCEPT_LIST, CURRENT_EVENT, DECLINE_LIST, PICKLIST, TEAMS} from "../util/LocalStorageConstants";
+import StatsPopoutManager from "../components/picklist/StatsPopoutManager";
 
 type Team = {
     name:string,
@@ -35,6 +35,8 @@ function PicklistPage() {
     const [declineList, setDeclineList] = useState<ItemType[]>([]);
 
     const [privacyDimmer, setPrivacyDimmer] = useState(false)
+
+    const [teamStatsList, setTeamStatsList] = useState<{number: number, name:string}[]>([])
     
     //Load info
     useEffect(() => {
@@ -76,11 +78,15 @@ function PicklistPage() {
 
     }, [pickList, acceptList, declineList, setSavedPicks, setSavedAccepts, setSavedDeclines])
 
+    let addTeamToStatsList = (team:Team) => {
+        if(!teamStatsList.map(e => e.number).includes(team.number)) {
+            setTeamStatsList([...teamStatsList, team])
+        }
+    }
+
     return (
         <div>
             <AppHeader/>
-
-            <Link to={"/vs"}>VS</Link>
 
             <div className={"picklist-flex"}>
                 <div className={"picklist-column"}>
@@ -91,9 +97,18 @@ function PicklistPage() {
                         group={"picklist"}
                         list={pickList}
                         setList={(result) => setPickList(result)}
+                        className={"picklist-sortable"}
                     >
                         {pickList.map((item) => (
-                            <ItemDisplay item={item} itemIndex={pickList.indexOf(item)} accept={false} decline={false}/>
+                            <ItemDisplay
+                                item={item}
+                                itemIndex={pickList.indexOf(item)}
+                                accept={false}
+                                decline={false}
+                                addSelfToStats={addTeamToStatsList}
+                                statsListLength={teamStatsList.length}
+                                key={item.team.number}
+                            />
                         ))}
                     </ReactSortable>
                 </div>
@@ -105,9 +120,19 @@ function PicklistPage() {
                         group={"picklist"}
                         list={acceptList}
                         setList={setAcceptList}
+                        className={"picklist-sortable"}
+
                     >
                         {acceptList.map((item) => (
-                            <ItemDisplay item={item} itemIndex={acceptList.indexOf(item)} accept={true} decline={false}/>
+                            <ItemDisplay
+                                item={item}
+                                itemIndex={acceptList.indexOf(item)}
+                                accept={true}
+                                decline={false}
+                                statsListLength={teamStatsList.length}
+                                addSelfToStats={addTeamToStatsList}
+                                key={item.team.number}
+                            />
                         ))}
                     </ReactSortable>
 
@@ -117,12 +142,22 @@ function PicklistPage() {
                         group={"picklist"}
                         list={declineList}
                         setList={setDeclineList}
+                        className={"picklist-sortable"}
                     >
                         {declineList.map((item) => (
-                            <ItemDisplay item={item} itemIndex={declineList.indexOf(item)} accept={false} decline={true}/>
+                            <ItemDisplay
+                                item={item}
+                                itemIndex={declineList.indexOf(item)}
+                                accept={false}
+                                decline={true}
+                                statsListLength={teamStatsList.length}
+                                addSelfToStats={addTeamToStatsList}
+                                key={item.team.number}
+                            />
                         ))}
                     </ReactSortable>
                 </div>
+                <StatsPopoutManager teamsArray={teamStatsList} setTeamsArray={setTeamStatsList}/>
             </div>
 
             <Button className={"privacy-button"} size={"massive"}
@@ -132,26 +167,30 @@ function PicklistPage() {
                 className={(privacyDimmer) ? "privacy-active" : "privacy-inactive"}
                 onClick={() => setPrivacyDimmer(false)}
             />
+
         </div>
     )
 }
 
-function ItemDisplay(props: {item:ItemType, itemIndex:number, accept:boolean, decline:boolean}) {
+function ItemDisplay(props: {item:ItemType, itemIndex:number, accept:boolean, decline:boolean, statsListLength:number, addSelfToStats:(team:Team) => void}) {
 
     let [taken, setTaken] = useState(false)
 
     return(
-        <div className={"picklist-item-display " + (props.accept ? " accept " : "") + (props.decline ? " decline " : "") }>
+        <div className={"picklist-item-display " + (props.accept ? " accept " : "") + (props.decline ? " decline " : "") + (taken ? " crossed-off-item " : "") }>
             <div className={"picklist-item-flex"}>
+                <Icon name={"list"} size={"large"}/>
+
                 <Checkbox className={"picklist-check"} checked={taken} onChange={(e, data) => setTaken(data.checked!)} />
 
                 <div className={"picklist-item-content"}>
-                    <h1 className={"picklist-text"}>
-                        {props.itemIndex + 1}. {props.item.team.number} - {props.item.team.name}
-                    </h1>
-                    <h1 className={"picklist-text"}>
-                        <TeamLink number={props.item.team.number} displayText={"Team Page"}/>
-                    </h1>
+                    <h2 className={"picklist-text"}>
+                        <TeamLink number={props.item.team.number} displayText={`${props.itemIndex + 1}. ${props.item.team.number} - ${props.item.team.name}`}/>
+                    </h2>
+
+                    <Button icon={"info"} color={"grey"} size={"small"} disabled={props.statsListLength >= 4} onClick={() => {
+                        props.addSelfToStats(props.item.team)
+                    }}/>
                     <div className={"picklist-item-crossoff " + (taken ? "crossed-off" : "") }/>
                 </div>
             </div>

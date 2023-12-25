@@ -1,0 +1,80 @@
+.stats-container {
+
+    background-color: lightblue;
+    border-radius: 1vh;
+
+    height: 40.5vh;
+    width: 35vw;
+
+    margin: 1vh 1vw;
+
+    position: absolute;
+    z-index: 10;
+
+    align-items: center;
+    text-align: center;
+
+    overflow: clip;
+}
+
+.top-left {
+    left: 0;
+    top: 0;
+}
+
+.top-right {
+    right: 0;
+    top: 0;
+}
+
+.bottom-left {
+    bottom: 0;
+    left: 0;
+}
+
+.bottom-right {
+    bottom: 0;
+    right: 0;
+}
+
+.stat-lines {
+    overflow-y: auto;
+
+    max-height: 34.5vh;
+}
+
+.stat-line {
+    display: flex;
+    justify-content: space-between;
+
+    width: 100%;
+
+    padding: 0.25vh 0.5vw;
+
+    align-items: center;
+
+}
+
+.stat-line > h3 {
+    margin: 0;
+}
+
+.stats-container-header {
+    position: relative;
+}
+
+.stats-close-button{
+    position: absolute;
+    right: 1vh;
+    top: 1vh;
+}
+
+.hide-stats-button {
+    position: absolute;
+    right: 0;
+    width: 100vw;
+    top: 1vh;
+
+    display: flex;
+    justify-content: center;
+}
