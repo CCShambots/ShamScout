@@ -4,10 +4,15 @@ import {Link} from "react-router-dom";
 import {useLocalStorage} from "usehooks-ts";
 import packageJson from "../../../package.json";
 import {CURRENT_EVENT} from "../../util/LocalStorageConstants";
+import {Popup} from "semantic-ui-react";
 
 function AppHeader() {
 
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
+
+    let mobileVersion = require("../../../package.json").com_ccshambots.mobile_version
+    let shamPicVersion = require("../../../package.json").com_ccshambots.shampic_version
+
 
     return(
         <div className={"header-container"}>
@@ -25,9 +30,19 @@ function AppHeader() {
                     <h2 className={"header-text"}>
                             {currentEvent}
                     </h2>
-                    <h2 className={"header-text"}>
-                            v{packageJson.version}
-                    </h2>
+                    <Popup
+                        content={
+                        <div>
+                            <p>Minimum Mobile Version: {mobileVersion}</p>
+                            <p>Minimum ShamPic Version: {shamPicVersion}</p>
+                        </div>
+                    }
+                        trigger={
+                            <h2 className={"header-text"}>
+                                    v{packageJson.version}
+                            </h2>
+                        }
+                    />
                 </div>
         </div>
     )

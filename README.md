@@ -3,6 +3,7 @@
   - Ex. 2023.1.1 --> 2024.0.0 at the start of a new season
   - Ex. 2023.1.1 --> 2023.2.0 when adding new features
   - Ex. 2023.1.1 --> 2023.1.2 when patching bugs
+- Update the minimum version numbers of the other apps in the package.json file
 - Create and set your GitHub token as a path variable ("GITHUB_TOKEN")
 - Run `npm run publish`
 - Build and upload the most recent version of ShamScout Editor 
