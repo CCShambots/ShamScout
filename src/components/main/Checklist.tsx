@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useLocalStorage} from "usehooks-ts";
 import {Button, Icon} from "semantic-ui-react";
 import "./Checklist.css"
@@ -8,6 +8,7 @@ function Checklist() {
 
     const defaultChecklist:ChecklistItem[] = [
         new ChecklistItem("Ensure you're on the most recent version (check Github)"),
+        new ChecklistItem("Ensure all scouters and Pit Scouters are on the most recent version"),
         new ChecklistItem("Event Setup (in Config) - Before Event", [
             new ChecklistItem("Enter event key (From TBA)"),
             new ChecklistItem("Set TBA API key"),
@@ -15,6 +16,10 @@ function Checklist() {
             new ChecklistItem("Ensure team list is correct"),
             new ChecklistItem("Select game config"),
             new ChecklistItem("Make sure config fields are correct"),
+        ]),
+        new ChecklistItem("Photo Taking - At Load-in", [
+            new ChecklistItem("Assign pit scouters to teams"),
+            new ChecklistItem("Ensure all teams have photos in the database (Important! You can't miss any)"),
         ]),
         new ChecklistItem("Setup Scouters - At Event", [
             new ChecklistItem("(In Config) Have scouters scan current event key, etc."),
@@ -33,6 +38,17 @@ function Checklist() {
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
     let [checkListState, setCheckListState] =
         useLocalStorage<ChecklistItem[]>(CHECKLIST(currentEvent), [...defaultChecklist])
+
+    //Reload page if checklist does not have the same content as the default
+    useEffect(() => {
+        if(
+            ChecklistItem.arrayToString(ChecklistItem.convertBackToProperObjects(checkListState)) !== ChecklistItem.arrayToString(defaultChecklist)
+        ) {
+            console.log("reloading")
+            setCheckListState([...defaultChecklist])
+            window.location.reload()
+        }
+    }, []);
 
     return(
         <div className={"checklist-container"}>
@@ -128,6 +144,18 @@ class ChecklistItem {
 
             return acc
         }, 0);
+    }
+
+    public makeString():string {
+        return this.name + this.children.map((e) => e.makeString())
+    }
+
+    public static arrayToString(items:ChecklistItem[]):string {
+        return items.map((e) => e.makeString()).join("")
+    }
+
+    public static convertBackToProperObjects(items:ChecklistItem[]):ChecklistItem[] {
+        return items.map(e => new ChecklistItem(e.name, this.convertBackToProperObjects(e.children), e.checked))
     }
 }
 

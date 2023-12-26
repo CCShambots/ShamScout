@@ -14,7 +14,7 @@ type assignmentOptions = {
 
 const options = [
     {key: 'all', text:"Assign every team at the event", value: 'all'},
-    {key: 'old', text:"Assign only teams with old images", value: 'old'},
+    {key: 'old', text:"Assign only teams with old or no images", value: 'old'},
     {key: 'new', text:"Assign only teams with no image", value: 'new'},
 ]
 
