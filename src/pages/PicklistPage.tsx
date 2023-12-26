@@ -1,10 +1,10 @@
-import React, {createRef, useEffect, useRef, useState} from "react";
+import React, {createRef, useEffect, useState} from "react";
 import AppHeader from "../components/header/AppHeader";
 import {ReactSortable} from "react-sortablejs";
 import "./PicklistPage.css"
 import {useLocalStorage} from "usehooks-ts";
 import TeamLink from "../components/team-link/TeamLink";
-import {Button, Checkbox, Dimmer, Header, Icon, Input, Popup} from "semantic-ui-react";
+import {Button, Checkbox, Dimmer, Header, Icon, Popup} from "semantic-ui-react";
 import {ACCEPT_LIST, CURRENT_EVENT, DECLINE_LIST, PICKLIST, TEAMS} from "../util/LocalStorageConstants";
 import StatsPopoutManager from "../components/picklist/StatsPopoutManager";
 import {CSVLink} from "react-csv";
