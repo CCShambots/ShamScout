@@ -54,6 +54,14 @@
     margin: calc(var(--preview-margin)- var(--bigger-preview-size));
 }
 
+.old-icon {
+    position: absolute;
+
+    right: 1vh;
+    top: 1vh;
+
+}
+
 .loading {
     filter: blur(10px);
     /*clip-path: inset(5px);*/

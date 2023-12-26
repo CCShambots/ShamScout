@@ -178,6 +178,11 @@ export async function doesTeamHaveImage(teamNum:number) {
     }
 }
 
+//TODO: Actually implement an age of image check
+export async function getAgeOfImage(teamNum:number) {
+    return Math.round(Math.random() * 7)
+}
+
 export function getImagePath(teamNum:number, yearToUse?:string) {
     return `${apiHost}bytes/get/key/${teamNum}-img-${yearToUse ? yearToUse : year}`
 }

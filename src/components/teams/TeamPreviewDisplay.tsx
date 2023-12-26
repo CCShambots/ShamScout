@@ -6,8 +6,9 @@ import {Link} from "react-router-dom";
 import {doesTeamHaveImage, getImagePath} from "../../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import {CURRENT_EVENT} from "../../util/LocalStorageConstants";
+import {Icon, Popup} from "semantic-ui-react";
 
-function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumber:(val:number) => void}) {
+function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumber:(val:number) => void, isOldTeamImage:boolean}) {
 
     let [imageInAPI, setImageInAPI] = useState(false)
 
@@ -43,6 +44,16 @@ function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumb
     return (
         <Link to={`/team?number=${props.teamNum}`}>
             <div className={"team-display-container"}>
+                {
+                    props.isOldTeamImage ?
+                        <Popup
+                            content={"This image is old and may not be accurate!"}
+                            trigger={
+                            <Icon name={"history"} circular inverted className={"old-icon"} color={"red"}/>
+                        }
+                        />
+                    : <div/>
+                }
                 <div className={"team-display-image-container"}>
                     {
                         <img className={`team-display-image ${customClass}`}
