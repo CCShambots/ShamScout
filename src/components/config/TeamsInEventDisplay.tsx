@@ -3,7 +3,7 @@ import {PullTBA} from "../../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import {Button, Dimmer, Icon, Input, Table} from "semantic-ui-react";
 import TeamLink from "../team-link/TeamLink";
-import {CURRENT_EVENT, MATCHES, TBA_KEY, TEAM_OVERRIDE, TEAMS} from "../../util/LocalStorageConstants";
+import {CURRENT_EVENT, TBA_KEY, TEAM_OVERRIDE, TEAMS} from "../../util/LocalStorageConstants";
 
 
 type TeamInfo = {
