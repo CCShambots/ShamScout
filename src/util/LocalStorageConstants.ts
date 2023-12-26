@@ -5,6 +5,7 @@ export const API_HOST_ADDRESS = "api-host-address";
 export const API_MOBILE_HOST_ADDRESS = "api-mobile-address";
 export const TEAMS_LIST_VIEW = "teams-list-view";
 export const TBA_KEY = "tba-key";
+export const TEAM_OVERRIDE = "team-override";
 
 export const MATCHES = (eventKey: string) => `matches-${eventKey}`;
 export const TEAMS = (eventKey: string) => `teams-${eventKey}`;

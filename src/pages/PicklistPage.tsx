@@ -183,12 +183,6 @@ function PicklistPage() {
 
             let newPicklist:Team[] = []
 
-            // rankList.forEach((e:any) => {
-            //     let teamNum = e.team_key.substring(3)
-            //     console.log("parsing: " + teamNum)
-            //     newPicklist.push({number: teamNum, name: teams.filter(e => e.number === teamNum)[0].name ?? "ERROR - MISSING TEAM"})
-            // })
-
             let numberRankList = rankList.map((e:any) => {
                 return parseInt(e.team_key.substring(3))
             })
