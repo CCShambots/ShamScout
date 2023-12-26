@@ -8,8 +8,7 @@ import {Button, Checkbox, Dimmer, Header, Icon, Input, Popup} from "semantic-ui-
 import {ACCEPT_LIST, CURRENT_EVENT, DECLINE_LIST, PICKLIST, TEAMS} from "../util/LocalStorageConstants";
 import StatsPopoutManager from "../components/picklist/StatsPopoutManager";
 import {CSVLink} from "react-csv";
-import {upload} from "@testing-library/user-event/dist/upload";
-import {doesTeamHaveImage, getImagePath} from "../util/APIUtil";
+import {doesTeamHaveImage, getImagePath, PullTBA} from "../util/APIUtil";
 
 
 type Team = {
@@ -48,6 +47,8 @@ function PicklistPage() {
 
     let [downloadData, setDownloadData] = useState<string[][]>([])
     let [importConfirmationActive, setImportConfirmationActive] = useState(false)
+
+    let [resetToEventRankingsCofnirmationActive, setResetToEventTrankingsConfirmationActive] = useState(false)
 
     //Load info
     useEffect(() => {
@@ -129,8 +130,7 @@ function PicklistPage() {
 
     const fileReader = new FileReader();
 
-
-    const handleUploadChange = (e:any) => {
+    const handleFileUpload = (e:any) => {
 
         if (e.target.files[0]) {
             fileReader.onload = function (event) {
@@ -175,18 +175,56 @@ function PicklistPage() {
         }
     };
 
+    const resetToEventRankings = () => {
+        PullTBA("event/" + currentEvent + "/rankings", (data) => {
+
+            console.log(data.rankings)
+            let rankList = data.rankings
+
+            let newPicklist:Team[] = []
+
+            // rankList.forEach((e:any) => {
+            //     let teamNum = e.team_key.substring(3)
+            //     console.log("parsing: " + teamNum)
+            //     newPicklist.push({number: teamNum, name: teams.filter(e => e.number === teamNum)[0].name ?? "ERROR - MISSING TEAM"})
+            // })
+
+            let numberRankList = rankList.map((e:any) => {
+                return parseInt(e.team_key.substring(3))
+            })
+
+            savedPicks.sort((a, b) => {
+                let aIndex = numberRankList.indexOf(a.number)
+                let bIndex = numberRankList.indexOf(b.number)
+
+                if(aIndex === -1) aIndex= 90000
+                if(bIndex === -1) bIndex= 90000
+
+                return aIndex - bIndex
+            })
+
+            console.log(newPicklist)
+
+            setSavedPicks([...savedPicks])
+            setSavedAccepts([])
+            setSavedDeclines([])
+
+            window.location.reload()
+        })
+    }
+
     return (
         <div>
             <AppHeader/>
             <Button.Group fluid>
                 <Button color={"blue"} onClick={() => downloadCSVRef.current.link.click()}><Icon name={"download"}/>Export</Button>
                 <Button color={"green"} onClick={() => setImportConfirmationActive(true)}><Icon name={"upload"}/>Import</Button>
-                <Button color={"red"}><Icon name={"redo"}/>Reset to Event Rankings</Button>
+                <Button color={"red"} onClick={() => setResetToEventTrankingsConfirmationActive(true)}><Icon name={"redo"}/>Reset to Event Rankings</Button>
             </Button.Group>
 
             <CSVLink ref={downloadCSVRef} headers={["pick", "accept", "decline"]} data={downloadData} filename={`picklist-${currentEvent}.csv`}/>
 
-            <input ref={uploadCSVRef} className={"hide-csv-upload"} type={"file"} accept={".csv"} onChange={handleUploadChange}/>
+            <input ref={uploadCSVRef} className={"hide-csv-upload"} type={"file"} accept={".csv"} onChange={handleFileUpload}/>
 
             <div className={"picklist-flex"}>
                 <div className={"picklist-column"}>
@@ -284,9 +322,19 @@ function PicklistPage() {
                 <Header inverted>
                     This will overwrite your current picklist. Are you sure you want to continue?
                 </Header>
-                <Button color={"red"} onClick={() => {
+                <Button color={"green"} onClick={() => {
                     uploadCSVRef.current.click()
                     setImportConfirmationActive(false)
+                }}>Yes, I'm Sure</Button>
+            </Dimmer>
+
+            <Dimmer page active={resetToEventRankingsCofnirmationActive} onClickOutside={() => {setResetToEventTrankingsConfirmationActive(false)}}>
+                <Header inverted>
+                    This will overwrite your current picklist with the event rankings. Are you sure you want to continue?
+                </Header>
+                <Button color={"green"} onClick={() => {
+                    resetToEventRankings()
+                    setResetToEventTrankingsConfirmationActive(false)
                 }}>Yes, I'm Sure</Button>
             </Dimmer>
 
