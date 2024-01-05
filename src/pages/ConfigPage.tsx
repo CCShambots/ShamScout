@@ -244,9 +244,9 @@ function ConfigPage() {
     )
 }
 
-function getCorrectRemoteAddress(remoteAdress:string)  {
-    if(remoteAdress[remoteAdress.length-1] === "/") return remoteAdress.substring(0, remoteAdress.length-1)
-    return remoteAdress;
+function getCorrectRemoteAddress(remoteAddress:string)  {
+    if(remoteAddress[remoteAddress.length-1] === "/") return remoteAddress.substring(0, remoteAddress.length-1)
+    return remoteAddress;
 }
 
 export default ConfigPage
