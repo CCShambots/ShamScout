@@ -245,7 +245,7 @@ function ConfigPage() {
 }
 
 function getCorrectRemoteAddress(remoteAdress:string)  {
-    // if(remoteAdress[remoteAdress.length-1] !== "/") return remoteAdress + "/"
+    if(remoteAdress[remoteAdress.length-1] === "/") return remoteAdress.substring(0, remoteAdress.length-1)
     return remoteAdress;
 }
 
