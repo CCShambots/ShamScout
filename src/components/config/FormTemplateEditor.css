@@ -46,3 +46,9 @@
     height: 50vh;
     width: 50vh;
 }
+
+.align-min-max {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

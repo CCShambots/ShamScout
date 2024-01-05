@@ -10,6 +10,7 @@ import TeamListDisplay from "../components/teams/TeamListDisplay";
 import PhotoAssignment from "../components/teams/PhotoAssignment";
 import {Link} from "react-router-dom";
 import {ACTIVE_TEMPLATE, CURRENT_EVENT, TEAMS, TEAMS_LIST_VIEW} from "../util/LocalStorageConstants";
+import {bytesList, templateDetails} from "../util/APIConstants";
 
 export type team = {
     number:number,
@@ -19,7 +20,7 @@ export type team = {
 function TeamsPage() {
 
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "");
-    let [currentTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
+    let [activeTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
 
     let [listView, setListView] = useLocalStorage(TEAMS_LIST_VIEW, false)
     let [teams] = useLocalStorage<team[]>(TEAMS(currentEvent), []);
@@ -33,9 +34,17 @@ function TeamsPage() {
     let [lookupTeam, setLookupTeam] = useState("")
     let linkRef = useRef<HTMLAnchorElement>(null)
 
+    let [savedImages, setSavedImages] = useState<string[]>([])
+
+    useEffect(() => {
+        Pull(bytesList, (data) => {
+            setSavedImages(data as string[])
+        })
+    }, []);
+
     useEffect(() => {
 
-        Pull(`forms/get/template/${currentTemplate}`, (data) => {
+        Pull(templateDetails(activeTemplate), (data) => {
             setSubmittedForms(data.map((e:any) =>
                 ScoutForm.fromJson(e[0])
             ))
@@ -125,6 +134,7 @@ function TeamsPage() {
                     : <div className={"main-teams-display-grid"}>
                         {
                             teams.map(e => <TeamPreviewDisplay
+                                teamsInAPI={savedImages}
                                 key={e.number}
                                 teamName={e.name}
                                 teamNum={e.number}

@@ -9,11 +9,12 @@ import {ScoutForm} from "../components/ScoutForm";
 import Match from "../components/scheduling/matchDisplay/Match";
 import {QRDisplay, splitString} from "../util/QRUtil";
 import {ACTIVE_TEMPLATE, CURRENT_EVENT, MATCHES} from "../util/LocalStorageConstants";
+import {formsList} from "../util/APIConstants";
 
 function MatchPage() {
     
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
-    let [currentTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
+    let [activeTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
     
     let [matches, setMatches] = useLocalStorage<Match[]>(MATCHES(currentEvent), [])
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
@@ -39,9 +40,8 @@ function MatchPage() {
 
     useEffect(() => {
 
-        Pull(`forms/get/template/${currentTemplate}?event=${currentEvent}`, (data) => {
+        Pull(`${formsList(activeTemplate)}?event=${currentEvent}`, (data) => {
 
-            console.log(data)
             setSubmittedForms(data.map((e:any) =>
                 ScoutForm.fromJson(e[0])
             ))
@@ -147,7 +147,7 @@ function MatchPage() {
                             </Table.Header>
                             {
                                 matches.map((e) =>
-                                    <Table.Row>
+                                    <Table.Row key={e.match_number}>
                                         <Table.Cell>{e.match_number}</Table.Cell>
                                         <Table.Cell>
                                             <Input

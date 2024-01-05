@@ -6,12 +6,13 @@ import {useLocalStorage} from "usehooks-ts";
 import {Dimmer, Icon} from "semantic-ui-react";
 import "./ScanPage.css";
 import {ACTIVE_TEMPLATE} from "../util/LocalStorageConstants";
+import {formCreate} from "../util/APIConstants";
 
 function ScanPage() {
 
     let [result, setResult] = useState("");
 
-    let [currentTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
+    let [activeTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
 
     let [saveSuccess, setSaveSuccess] = useState(true)
     let [saveDimmerActive, setSaveDimmerActive] = useState(false)
@@ -25,7 +26,7 @@ function ScanPage() {
         if(data) {
             setResult(data.text);
 
-            Post(`forms/submit/template/${currentTemplate}`, `${data.text}`).then(r => {
+            Post(formCreate(activeTemplate), `${data.text}`).then(r => {
                 setSaveDimmerActive(true);
                 setSaveSuccess(r);
             })

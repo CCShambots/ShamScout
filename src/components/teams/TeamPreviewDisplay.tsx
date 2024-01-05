@@ -3,18 +3,21 @@ import Picture from "../../resources/team_placeholder.png"
 
 import "./TeamPreviewDisplay.css"
 import {Link} from "react-router-dom";
-import {doesTeamHaveImage, getImagePath} from "../../util/APIUtil";
+import {doesTeamHaveImage, getImage} from "../../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import {CURRENT_EVENT} from "../../util/LocalStorageConstants";
 import {Icon, Popup} from "semantic-ui-react";
 
-function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumber:(val:number) => void, isOldTeamImage:boolean}) {
+function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumber:(val:number) => void, isOldTeamImage:boolean, teamsInAPI:string[]}) {
 
-    let [imageInAPI, setImageInAPI] = useState(false)
+    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
+    let year = currentEvent.substring(0, 4)
+
+    let [imageInAPI, setImageInAPI] = useState(false);
 
     useEffect(() => {
-        doesTeamHaveImage(props.teamNum).then((result) => {setImageInAPI(result)});
-    }, [props.teamNum]);
+        setImageInAPI(props.teamsInAPI.includes(`${props.teamNum}-img-${year}`))
+    }, [props.teamsInAPI]);
 
     useEffect(() => {
         if(imageInAPI) {
@@ -22,24 +25,25 @@ function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumb
         }
     }, [imageInAPI]);
 
-    let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
-
-    const src = getImagePath(props.teamNum, currentEvent.substring(0, 4))
-
-    const [imgSrc, setImgSrc] = useState(Picture || src);
+    const [imgSrc, setImgSrc] = useState(Picture);
 
     useEffect(() => {
         if(imageInAPI) {
-            const img = new Image();
-            img.src = src;
-            img.onload = () => {
-                setImgSrc(src);
-            };
+            loadImage().then(r => {})
         }
-    }, [src, imageInAPI]);
+    }, [imageInAPI]);
 
     const customClass =
         imgSrc === Picture && imageInAPI ? "loading" : "loaded";
+
+    let loadImage = async () => {
+        const img = new Image();
+        let src = await getImage(props.teamNum, currentEvent.substring(0, 4))
+        img.src = src;
+        img.onload = () => {
+            setImgSrc(src);
+        };
+    }
 
     return (
         <Link to={`/team?number=${props.teamNum}`}>

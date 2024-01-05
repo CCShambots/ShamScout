@@ -147,7 +147,7 @@ function FormItem(props: {
                         <Button icon={"setting"}/>
                     }
                 >
-                    <SegmentInline>
+                    <SegmentInline className={"align-min-max"}>
                         <Checkbox
                             checked={useMin}
                             toggle
@@ -156,7 +156,8 @@ function FormItem(props: {
                                 setUseMin(data.checked ?? false)
                             }}
                         />
-                        <Input type={"number"} disabled={!useMin} placeholder={"min"} value={props.item.min}
+                        <Input type={"number"}
+                               disabled={!useMin} placeholder={"min"} value={props.item.min}
                             onChange={(event, data) => {
                                 props.item.min = +data.value
                                 props.setConfig(Object.create(props.config))
@@ -164,7 +165,7 @@ function FormItem(props: {
                         />
                     </SegmentInline>
                     <div></div>
-                    <SegmentInline>
+                    <SegmentInline className={"align-min-max"}>
                         <Checkbox
                             checked={useMax}
                             toggle

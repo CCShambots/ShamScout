@@ -83,7 +83,7 @@ function MatchSchedulingDisplay({schedule, setSchedule}: MatchSchedulingDisplayO
                             let index = schedule.matches.indexOf(e);
 
                            return  <tr className={"table-entry"} key={e}>
-                                <td>{e}</td>
+                                <td className={"match-number"}>{e}</td>
                                {generateGridEntry(index, 0)}
                                {generateGridEntry(index, 1)}
                                {generateGridEntry(index, 2)}

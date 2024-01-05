@@ -12,6 +12,7 @@ import AppHeader from "../components/header/AppHeader";
 import SelectAPIType from "../components/config/SelectAPIType";
 import {ACTIVE_TEMPLATE, API_MOBILE_HOST_ADDRESS, CURRENT_EVENT, TBA_KEY} from "../util/LocalStorageConstants";
 import {FormPrompt} from "../components/FormPrompt";
+import {templateDetails, templatesList} from "../util/APIConstants";
 
 function ConfigPage() {
 
@@ -62,12 +63,12 @@ function ConfigPage() {
     }
 
     useEffect(() => {
-        Pull("templates/get", async (e) => {
+        Pull(templatesList, async (e) => {
 
             let newTemplates:FormTemplate[] = []
 
             await Promise.all(e.map(async (element:any) =>
-                await Pull(`templates/get/name/${element}`,
+                await Pull(templateDetails(element),
                     (info) => {
                         newTemplates.push(FormTemplate.fromJson(info))
                     }
@@ -90,7 +91,6 @@ function ConfigPage() {
         <div>
             <AppHeader/>
             <FormPrompt hasUnsavedChanges={templates.filter(e => {
-                console.log(e.status === TemplateStatus.Uploaded)
                 return e.status !== TemplateStatus.Uploaded
             }).length > 0}/>
 
@@ -163,7 +163,7 @@ function ConfigPage() {
             >
                 <div className={"config-qr-code-window"}>
                     <div className={"qr-code-header"}>
-                        <h1 className={"config-qr-code-header-text"}>Even Setup QR Code</h1>
+                        <h1 className={"config-qr-code-header-text"}>Event Setup QR Code</h1>
                         <Button
                             className={"qr-code-close-button"}
                             icon={"x"}
@@ -245,7 +245,7 @@ function ConfigPage() {
 }
 
 function getCorrectRemoteAddress(remoteAdress:string)  {
-    if(remoteAdress[remoteAdress.length-1] !== "/") return remoteAdress + "/"
+    // if(remoteAdress[remoteAdress.length-1] !== "/") return remoteAdress + "/"
     return remoteAdress;
 }
 

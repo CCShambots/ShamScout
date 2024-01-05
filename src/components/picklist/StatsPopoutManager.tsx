@@ -6,6 +6,7 @@ import {useLocalStorage} from "usehooks-ts";
 import {ACTIVE_TEMPLATE, CURRENT_EVENT} from "../../util/LocalStorageConstants";
 import {FormTemplate} from "../config/FormTemplate";
 import {Button, Icon} from "semantic-ui-react";
+import {formsList, templateDetails} from "../../util/APIConstants";
 
 export default function StatsPopoutManager(props: {teamsArray:{number:number, name:string}[], setTeamsArray: (teams:{number:number, name:string}[]) => void}) {
 
@@ -21,14 +22,14 @@ export default function StatsPopoutManager(props: {teamsArray:{number:number, na
 
         let orderOfItems:string[] = [];
 
-        Pull(`templates/get/name/${activeTemplate}`, (data) => {
+        Pull(templateDetails(activeTemplate), (data) => {
             let config:FormTemplate = FormTemplate.fromJson(data)
 
             orderOfItems = config.items.map((e) => e.label);
         })
 
 
-        Pull(`forms/get/template/${activeTemplate}?event=${currentEvent}`, (data) => {
+        Pull(`${formsList(activeTemplate)}?event=${currentEvent}`, (data) => {
 
             let forms: ScoutForm[] = data.map((e: any) =>
                 ScoutForm.fromJson(e[0])

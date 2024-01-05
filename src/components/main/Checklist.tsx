@@ -124,7 +124,7 @@ class ChecklistItem {
 
     public static generateComponent(items:ChecklistItem[], updateState: () => void) {
         return items.map(e =>
-            <ChecklistItemComponent item={e} updateState={updateState}/>
+            <ChecklistItemComponent key={e.name} item={e} updateState={updateState}/>
         )
     }
 

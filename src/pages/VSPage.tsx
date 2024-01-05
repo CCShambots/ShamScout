@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import {Team} from "./TeamViewPage";
 import {ACTIVE_TEMPLATE, CURRENT_EVENT, TEAMS} from "../util/LocalStorageConstants";
+import {formsList, templateDetails} from "../util/APIConstants";
 
 class PicklistTeamGraph {
     public teams:PicklistTeam[]
@@ -195,14 +196,14 @@ export default function VSPage() {
     useEffect(() => {
         let orderOfItems:string[] = [];
 
-        Pull(`templates/get/name/${activeTemplate}`, (data) => {
+        Pull(templateDetails(activeTemplate), (data) => {
             let config:FormTemplate = FormTemplate.fromJson(data)
 
             orderOfItems = config.items.map((e) => e.label);
         }).then(() => {})
 
 
-        Pull(`forms/get/template/${activeTemplate}?event=${currentEvent}`, (data) => {
+        Pull(`${formsList(activeTemplate)}?event=${currentEvent}`, (data) => {
 
             let forms:ScoutForm[] = data.map((e:any) =>
                 ScoutForm.fromJson(e[0])

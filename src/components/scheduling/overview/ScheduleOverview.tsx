@@ -4,9 +4,10 @@ import {DropDownOptions, Schedule, Scouter} from "../matchDisplay/ScheduleData";
 import {Button, Dimmer, Dropdown, Icon, Progress, Statistic} from "semantic-ui-react";
 
 import QRCode from "react-qr-code"
-import {Post, Put} from "../../../util/APIUtil";
+import {Post, Patch} from "../../../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import {CURRENT_EVENT} from "../../../util/LocalStorageConstants";
+import {scheduleCreateEdit} from "../../../util/APIConstants";
 
 type scheduleOverviewOptions = {
     schedule:Schedule,
@@ -79,13 +80,17 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverv
 
                         let scheduleJson = schedule.generateJson(currentEvent)
 
+                        console.log(savedToDatabase)
+
                         savedToDatabase ?
                         //Post this schedule to the API
-                        Put(`schedules/get/edit`, scheduleJson).then(r => {
+                        Patch(scheduleCreateEdit, scheduleJson).then(r => {
                             setSaveScheduleDimmerActive(true);
+
+                            console.log(r)
                             setSaveSuccess(r);
                         }) :
-                        Post(`schedules/submit`, scheduleJson).then(r => {
+                        Post(scheduleCreateEdit, scheduleJson).then(r => {
                             setSaveScheduleDimmerActive(true);
                             setSaveSuccess(r);
                         })

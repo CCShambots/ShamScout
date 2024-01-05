@@ -36,6 +36,16 @@
 }
 
 .table-header {
+    height: 5vh;
+    font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
+    border-bottom: 3px solid black;
+}
+
+.match-number {
+    font-weight: bold;
+    font-size: 1.5em;
 }
 
 table, th, td {

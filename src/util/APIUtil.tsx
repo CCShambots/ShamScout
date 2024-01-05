@@ -1,12 +1,39 @@
 import {FormTemplate} from "../components/config/FormTemplate";
 import packageJson from "../../package.json";
 import {ScoutForm} from "../components/ScoutForm";
+import axios from "axios";
+import {bytesList, editFormPath, formDetails, templateCreateEdit, templateDetails} from "./APIConstants";
+import {JWT} from "./LocalStorageConstants";
 
-export let localAPIAddress = "http://localhost:8080/";
-export let defaultRemoteAPIAddress = "http://167.71.240.213:8080/";
+export let localAPIAddress = "https://localhost:8080/";
+export let defaultRemoteAPIAddress = "https://scout.voth.name:3000/protected/";
 export let remoteAPIAddress = defaultRemoteAPIAddress;
 
 export let apiHost = localAPIAddress;
+
+export let jwt = (localStorage.getItem(JWT) || "").replaceAll('"', "");
+
+let axiosHeaders = {
+    headers: {
+        'Authorization': jwt,
+        'Content-Type': 'application/json',
+    },
+    withCredentials: false
+}
+
+
+export function updateJWTValue(newJWT:string) {
+    jwt = newJWT;
+
+    axiosHeaders = {
+        headers: {
+            'Authorization': jwt,
+            'Content-Type': 'application/json',
+        },
+        withCredentials: false
+    }
+}
+
 
 export function setApiHost(local:boolean) {
     apiHost = local ? localAPIAddress : remoteAPIAddress
@@ -17,165 +44,172 @@ export function setApiRemoteHost(newAddress:string) {
 
 let year=  parseInt(packageJson.version.substring(0, 4));
 
+export function CheckJWT() {
+    //Post to the API without the end / at protected
+    return axios.get(apiHost.substring(0, apiHost.length-1), axiosHeaders)
+    .then((res) => {
+        return res.status
+    }).catch((e) => {
+        //Likely means there's no connection at all?
+        return 408
+    })
+}
+
+export function Authorize(code:string, email:string) {
+    let baseURL = apiHost.replace("protected/", "")
+    return fetch(`${baseURL}auth/${code}/${email}`, {
+        method: 'GET',
+    })
+        .then(response => response.text())
+}
+
 export async function Pull(endpoint:string, callback:(e:any) => void):Promise<void> {
+
     try {
-        await fetch(apiHost + endpoint)
-            .then(response => { return response.json()})
+        await axios.get(apiHost + endpoint, axiosHeaders)
+            .then(response => { return response.data})
             .then(callback)
             .catch(() => {})
     }catch (e) {
+        console.log(e)
+        console.log(endpoint)
     }
 }
 
 export async function Post(endpoint:string, body:string):Promise<boolean> {
-    const response = await fetch(apiHost + endpoint, {
-        method: 'POST',
-        body: body,
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        }
-        }
-    )
+    const response = await axios.post(apiHost + endpoint, body, axiosHeaders)
 
     console.log(response)
-    if(!response.ok) {
+    if(response.status !== 200) {
         console.log("failure: WOMP WOMP")
         console.log(response.status)
-        console.log(response.body)
+        console.log(response.data)
     }
 
-    return response.ok;
+    return response.status === 200;
 }
 
-export async function Put(endpoint:string, body:string):Promise<boolean> {
-    const response = await fetch(apiHost + endpoint, {
-            method: 'PUT',
-            body: body,
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            }
+export async function Patch(endpoint:string, body:string):Promise<boolean> {
+    try {
+        const response = await axios.patch(apiHost + endpoint, body, axiosHeaders)
+
+        if(response.status !== 200) {
+            console.log("failure: WOMP WOMP")
+            console.log(response.status)
+            console.log(response.data)
         }
-    )
 
-    console.log(response)
-    if(!response.ok) {
-        console.log("failure: WOMP WOMP")
-        console.log(response.status)
-        console.log(response.body)
+        return response.status === 200;
+
+    } catch (e) {
+        console.log(e)
+        return false;
     }
-
-    return response.ok;
 }
 
 export async function AddTemplate(config:FormTemplate) {
 
-    const response = await fetch(apiHost + "templates/submit", {
-            method: 'POST',
-            body: config.generateJson(),
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            }
-        }
-    )
+    try {
+        const response =
+            await axios.post(apiHost + templateCreateEdit, config.generateJson(), axiosHeaders)
 
-    return response.ok;
+        return response.status === 200;
+
+    } catch (e) {
+        console.log(e)
+        return false;
+    }
+}
+
+export async function ModifyTemplate(config:FormTemplate) {
+    try {
+        const response =
+            await axios.patch(apiHost + templateCreateEdit, config.generateJson(), axiosHeaders)
+
+        return response.status === 200;
+
+    } catch (e) {
+        console.log(e)
+        return false;
+    }
 }
 
 export async function RemoveTemplate(templateName:string) {
-    const response = await fetch(apiHost + `templates/remove/name/${templateName}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        },
-    })
+    try {
+        const response = await axios.delete(apiHost + templateDetails(templateName), axiosHeaders)
 
-    return response.ok;
+        return response.status === 200;
+
+    } catch (e) {
+        console.log(e)
+        return false;
+    }
 }
 
-export async function RemoveImage(teamNum:number) {
-    const response = await fetch(apiHost + `bytes/remove/key/${teamNum}-img-${year}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        },
-    })
+export async function RemoveImage(teamNum:number, yearToUse?:string) {
+    try {
+        const response = await axios.delete(getImagePath(teamNum, yearToUse), axiosHeaders)
 
-    return response.ok;
+        return response.status === 200;
+
+    } catch (e) {
+        console.log(e)
+        return false;
+    }
 }
 
 export async function RemoveForm(template:string, id:string) {
-    const response = await fetch(apiHost + `forms/remove/template/${template}/id/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        },
-    })
+    try {
+        const response = await axios.delete(apiHost + formDetails(template, id), axiosHeaders)
 
-    return response.ok;
-}
+        return response.status === 200;
 
-
-export async function ModifyTemplate(config:FormTemplate) {
-
-    const response = await fetch(apiHost + "templates/edit", {
-            method: 'PUT',
-            body: config.generateJson(),
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            }
-        }
-    )
-
-    return response.ok;
+    } catch (e) {
+        console.log(e)
+        return false;
+    }
 }
 
 export async function EditForm(template:string, id:string, form:ScoutForm) {
 
-    const response = await fetch(apiHost + `forms/edit/template/${template}/id/${id}`, {
-            method: 'PUT',
-            body: form.toJson(),
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            }
-        }
-    )
-
-    return response.ok
-}
-
-export async function IsApiAlive() {
-
     try {
-        const response = await fetch(apiHost + "status")
+        const response = await axios.put(apiHost + editFormPath(template, id), form.toJson(), axiosHeaders)
 
-        return response.ok;
+        return response.status === 200
 
-    } catch {
-        return false
+    } catch (e) {
+        console.log(e)
+        return false;
     }
 }
 
-export async function doesTeamHaveImage(teamNum:number) {
+export async function doesTeamHaveImage(teamNum:number, yearToUse?:string) {
     try {
-        let response = await fetch(apiHost + "bytes/get")
+        let response = await axios.get(apiHost + bytesList, axiosHeaders)
 
-        let outputString:string[] = await response.json()
+        let outputString:string[] = await response.data
 
-        let key = `${teamNum}-img-${year}`
+        let key = `${teamNum}-img-${yearToUse ?? year}`
 
-    return outputString.includes(key);
+        return outputString.includes(key);
 
     }catch {
         return false
     }
+}
+
+export async function getImage(teamNum:number, yearToUse?:string) {
+    const src = getImagePath(teamNum, yearToUse);
+
+    return fetch(src, axiosHeaders)
+        .then(res => res.blob())
+        .then(blob => {
+            return URL.createObjectURL(blob);
+        }).catch(e => {
+            console.log(e)
+            return ""
+        })
+    ;
 }
 
 //TODO: Actually implement an age of image check
@@ -184,7 +218,7 @@ export async function getAgeOfImage(teamNum:number) {
 }
 
 export function getImagePath(teamNum:number, yearToUse?:string) {
-    return `${apiHost}bytes/get/key/${teamNum}-img-${yearToUse ? yearToUse : year}`
+    return `${apiHost}bytes/${teamNum}-img-${yearToUse ? yearToUse : year}`
 }
 
 //TBA Pulling

@@ -4,14 +4,22 @@ import {useLocalStorage} from "usehooks-ts";
 import Picture from "../resources/team_placeholder.png";
 import "./TeamViewPage.css"
 import {Field, ScoutForm} from "../components/ScoutForm";
-import {doesTeamHaveImage, EditForm, getImagePath, Pull, PullTBA, RemoveForm, RemoveImage} from "../util/APIUtil";
+import {
+    doesTeamHaveImage,
+    EditForm,
+    getImage,
+    Pull,
+    PullTBA,
+    RemoveForm,
+    RemoveImage
+} from "../util/APIUtil";
 import {Button, Dimmer, Dropdown, FormField, Header, Icon, Popup, Table} from "semantic-ui-react";
-import packageJson from '../../package.json';
 import Banner from "../components/teams/Banner";
 import { CSVLink } from "react-csv";
 import {FormTemplate} from "../components/config/FormTemplate";
 import AppHeader from "../components/header/AppHeader";
 import {ACTIVE_TEMPLATE, CURRENT_EVENT, TEAMS} from "../util/LocalStorageConstants";
+import {formsList, templateDetails} from "../util/APIConstants";
 
 export type Team = {
     number:number,
@@ -36,7 +44,7 @@ function TeamViewPage() {
     let [thisTeamForms, setThisTeamForms] = useState<ScoutForm[]>([])
     let [thisEventForms, setThisEventForms] = useState<ScoutForm[]>([])
 
-    let year=  packageJson.version.substring(0, 4);
+    let year=  currentEvent.substring(0, 4);
 
     let [events, setEvents] = useState<TeamEventInfo[]>([])
 
@@ -57,16 +65,26 @@ function TeamViewPage() {
 
     let [clickedSubmitOnce, setClickedSubmitOnce] = useState(false)
 
+    const [imgSrc, setImgSrc] = useState(Picture);
+
+    useEffect(() => {
+        if(imageInAPI) {
+            loadImage().then(r => {})
+        }
+    }, [imageInAPI]);
+
+    let loadImage = async () => {
+        setImgSrc(await getImage(teamNum, year))
+    }
+
     useEffect(() => {
         if(!editDimmerActive) {
             setClickedSubmitOnce(false)
         }
     }, [editDimmerActive]);
 
-    const eventYear = currentEvent.substring(0, 4)
-
     useEffect(() => {
-        doesTeamHaveImage(teamNum).then((result) => {setImageInAPI(result)});
+        doesTeamHaveImage(teamNum, year).then((result) => {setImageInAPI(result)});
     }, [teamNum]);
 
     let downloadCSVRef:any = createRef()
@@ -76,14 +94,14 @@ function TeamViewPage() {
 
         let orderOfItems:string[] = [];
 
-        Pull(`templates/get/name/${activeTemplate}`, (data) => {
+        Pull(templateDetails(activeTemplate), (data) => {
             let config:FormTemplate = FormTemplate.fromJson(data)
 
             orderOfItems = config.items.map((e) => e.label);
         })
 
 
-        Pull(`forms/get/template/${activeTemplate}`, (data) => {
+        Pull(formsList(activeTemplate), (data) => {
 
             let forms:ScoutForm[] = data.map((e:any) =>
                 ScoutForm.fromJson(e[0])
@@ -194,11 +212,8 @@ function TeamViewPage() {
                     }
                 </div>
                 <div className={"team-image-container"}>
-                    {
-                        imageInAPI ?
-                        <img className={"team-view-pic"} src={getImagePath(teamNum, eventYear)} alt={teamNum.toString()}/> :
-                        <img className={"team-view-pic"} src={Picture} alt={teamNum.toString()}/>
-                    }
+                    <img className={"team-view-pic"} src={imgSrc} alt={teamNum.toString()}/>
+
                     <Button color={"red"} disabled={!imageInAPI} onClick={() => {
                         setRemoveImageDimmer(true)
                     }}><Icon name={"erase"}/> Clear Image</Button>
@@ -341,7 +356,7 @@ function TeamViewPage() {
 
             <Button size={"huge"} color={"red"} onClick={() => {
                 setRemoveImageDimmer(false)
-                RemoveImage(teamNum).then(() => {})
+                RemoveImage(teamNum, currentEvent.substring(0, 4)).then(() => {})
             }}>Yes, I'm sure</Button>
         </Dimmer>
 

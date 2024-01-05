@@ -12,6 +12,7 @@ import {Button, Icon, Statistic} from "semantic-ui-react";
 import {CSVLink} from "react-csv";
 import {FormTemplate} from "../components/config/FormTemplate";
 import {ACTIVE_TEMPLATE, CURRENT_EVENT, MATCHES} from "../util/LocalStorageConstants";
+import {formsList, scheduleDetails, templateDetails} from "../util/APIConstants";
 
 function MainPage() {
 
@@ -32,7 +33,7 @@ function MainPage() {
             schedule.setNumMatches(numQuals)
             setSchedule(schedule)
 
-            Pull(`schedules/get/event/${currentEvent}`, (data) => {
+            Pull(scheduleDetails(currentEvent), (data) => {
                 setSchedule(Schedule.fromJson(data, numQuals));
             }).then(() => {})
         })
@@ -43,13 +44,13 @@ function MainPage() {
 
         let orderOfItems:string[] = [];
 
-        Pull(`templates/get/name/${activeTemplate}`, (data) => {
+        Pull(templateDetails(activeTemplate), (data) => {
             let config:FormTemplate = FormTemplate.fromJson(data)
 
             orderOfItems = config.items.map((e) => e.label);
         })
 
-        Pull(`forms/get/template/${activeTemplate}?event=${currentEvent}`, (data) => {
+        Pull(`${formsList(activeTemplate)}?event=${currentEvent}`, (data) => {
 
             let forms:ScoutForm[] = data.map((e:any) =>
                 ScoutForm.fromJson(e[0])

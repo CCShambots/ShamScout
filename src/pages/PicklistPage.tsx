@@ -8,7 +8,7 @@ import {Button, Checkbox, Dimmer, Header, Icon, Popup} from "semantic-ui-react";
 import {ACCEPT_LIST, CURRENT_EVENT, DECLINE_LIST, PICKLIST, TEAMS} from "../util/LocalStorageConstants";
 import StatsPopoutManager from "../components/picklist/StatsPopoutManager";
 import {CSVLink} from "react-csv";
-import {doesTeamHaveImage, getImagePath, PullTBA} from "../util/APIUtil";
+import {doesTeamHaveImage, getImage, getImagePath, PullTBA} from "../util/APIUtil";
 
 
 type Team = {
@@ -339,27 +339,23 @@ function PicklistPage() {
 function ItemDisplay(props: {item:ItemType, itemIndex:number, accept:boolean, decline:boolean, statsListLength:number, addSelfToStats:(team:Team) => void}) {
 
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
+    let year = currentEvent.substring(0, 4)
     let [taken, setTaken] = useState(false)
 
     let [imageInAPI, setImageInAPI] = useState(false)
 
     useEffect(() => {
-        doesTeamHaveImage(props.item.team.number).then((result) => {setImageInAPI(result)});
+        doesTeamHaveImage(props.item.team.number, year).then((result) => {setImageInAPI(result)});
     }, [props.item.team.number]);
 
-    const src = getImagePath(props.item.team.number, currentEvent.substring(0, 4))
 
-    const [imgSrc, setImgSrc] = useState(src);
+    const [imgSrc, setImgSrc] = useState("");
 
     useEffect(() => {
             if(imageInAPI) {
-                const img = new Image();
-                img.src = src;
-                img.onload = () => {
-                    setImgSrc(src);
-                };
+                getImage(props.item.team.number, year).then(r => {setImgSrc(r)});
             }
-        }, [src, imageInAPI]);
+        }, [imageInAPI]);
 
     return(
         <div className={"picklist-item-display " + (props.accept ? " accept " : "") + (props.decline ? " decline " : "") + (taken ? " crossed-off-item " : "") }>

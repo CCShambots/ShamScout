@@ -10,6 +10,7 @@ import {useLocalStorage} from "usehooks-ts";
 import {Pull, PullTBA} from "../util/APIUtil";
 import {CURRENT_EVENT} from "../util/LocalStorageConstants";
 import {FormPrompt} from "../components/FormPrompt";
+import {scheduleDetails} from "../util/APIConstants";
 
 function SchedulingPage() {
 
@@ -35,7 +36,7 @@ function SchedulingPage() {
             schedule.setNumMatches(numQuals)
             setSchedule(schedule)
 
-            Pull(`schedules/get/event/${currentEvent}`, (data) => {
+            Pull(scheduleDetails(currentEvent), (data) => {
                 let loadedSchedule = Schedule.fromJson(data, numQuals)
                 if(loadedSchedule.shifts.length > 0) setSavedToDatabase(true)
                 setSchedule(loadedSchedule);
