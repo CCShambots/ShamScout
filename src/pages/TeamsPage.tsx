@@ -69,7 +69,7 @@ function TeamsPage() {
     useEffect(() => {
         loadOldPhotos().then(() => {})
 
-    }, [teams, savedImages, loadOldPhotos]);
+    }, [teams, savedImages])
 
 
     return(
