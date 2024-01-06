@@ -2,10 +2,10 @@
   "name": "sham-scout",
   "productName": "ShamScout",
   "description": "Application for managing FRC scouting data during events developed by FRC 5907",
-  "version": "2024.0.0",
+  "version": "2024.0.1",
   "com_ccshambots": {
-    "mobile_version": "2024.0.0",
-    "shampic_version": "1.5.1"
+    "mobile_version": "2024.1.0",
+    "shampic_version": "1.6.3"
   },
   "main": "public/electron.js",
   "homepage": "./",
