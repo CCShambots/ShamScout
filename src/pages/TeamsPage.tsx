@@ -4,7 +4,7 @@ import {Button, Dimmer, Icon, Input, Popup, Table} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import "./TeamsPage.css"
 import TeamPreviewDisplay from "../components/teams/TeamPreviewDisplay";
-import {doesTeamHaveImage, getAgeOfImage, Pull} from "../util/APIUtil";
+import {doesTeamHaveImage, getAgeOfImage, getImagePath, Pull} from "../util/APIUtil";
 import {ScoutForm} from "../components/ScoutForm";
 import TeamListDisplay from "../components/teams/TeamListDisplay";
 import PhotoAssignment from "../components/teams/PhotoAssignment";
@@ -53,23 +53,23 @@ function TeamsPage() {
         }).then(() => {})
     }, [currentEvent])
 
-    useEffect(() => {
-
-        loadOldPhotos()
-
-    }, [teams]);
-
     let loadOldPhotos = async () => {
         const results = await Promise.all(teams.map(async (e) => {
-            if(!await doesTeamHaveImage(e.number)) return ({old: false, number: e.number})
+            if(!savedImages.includes(`${e.number}-img-${year}`)) return ({old: false, number: e.number})
             let age = await getAgeOfImage(e.number, year)
-            return {old: age > 4, number: e.number}
+
+            return {old: age > 5, number: e.number}
         }))
 
         let olds = results.filter(e => e.old).map(e => e.number)
 
         setTeamsWithOldPhotos(olds)
     }
+
+    useEffect(() => {
+        loadOldPhotos().then(() => {})
+
+    }, [teams, savedImages, loadOldPhotos]);
 
 
     return(

@@ -8,7 +8,7 @@ export let templateDetails = (id:string) => `template/${id}`
 //Bytes
 export let bytesList = "bytes/"
 export let byteDetails = (id:string) => `byte/${id}`
-export let byteAgeEndpoint = (id:string) => `byte/${id}/age/?type=days`
+export let byteAgeEndpoint = (id:string) => `age/bytes/${id}?type=days`
 
 //Forms
 export let formsList = (template:string) => `forms/${template}/`

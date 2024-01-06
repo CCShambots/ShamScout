@@ -217,7 +217,7 @@ export async function getImage(teamNum:number, yearToUse?:string) {
 }
 
 export async function getAgeOfImage(teamNum:number, year:string) {
-
+    console.log("checking age")
     return axios.get(apiHost + byteAgeEndpoint(`${teamNum}-img-${year}`), axiosHeaders).then(res => {
         return res.data as number
     }).catch(e => {
