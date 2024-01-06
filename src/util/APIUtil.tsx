@@ -2,8 +2,8 @@ import {FormTemplate} from "../components/config/FormTemplate";
 import packageJson from "../../package.json";
 import {ScoutForm} from "../components/ScoutForm";
 import axios from "axios";
-import {byteAgeEndpoint, bytesList, formDetails, templateCreateEdit, templateDetails} from "./APIConstants";
 import {JWT} from "./LocalStorageConstants";
+import {byteAgeEndpoint, bytesList, formDetails, templateCreateEdit, templateDetails} from "./APIConstants";
 
 export let localAPIAddress = "https://localhost:8080/";
 export let defaultRemoteAPIAddress = "https://scout.voth.name:3000/protected/";
