@@ -53,7 +53,7 @@ function MainPage() {
         Pull(`${formsList(activeTemplate)}?event=${currentEvent}`, (data) => {
 
             let forms:ScoutForm[] = data.map((e:any) =>
-                ScoutForm.fromJson(e[0])
+                ScoutForm.fromJson(e)
             )
 
             forms.forEach((e) => {

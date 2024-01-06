@@ -43,7 +43,7 @@ function MatchPage() {
         Pull(`${formsList(activeTemplate)}?event=${currentEvent}`, (data) => {
 
             setSubmittedForms(data.map((e:any) =>
-                ScoutForm.fromJson(e[0])
+                ScoutForm.fromJson(e)
             ))
         }).then(() => {})
     }, [matches, currentEvent])

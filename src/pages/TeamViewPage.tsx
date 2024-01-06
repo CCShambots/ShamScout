@@ -104,11 +104,11 @@ function TeamViewPage() {
         Pull(formsList(activeTemplate), (data) => {
 
             let forms:ScoutForm[] = data.map((e:any) =>
-                ScoutForm.fromJson(e[0])
+                ScoutForm.fromJson(e)
             )
 
             for(let i = 0; i < forms.length; i++) {
-                idMap.set(forms[i].toString(), data[i][1])
+                idMap.set(forms[i].toString(), data[i]['id'])
             }
 
             setIdMap(idMap)

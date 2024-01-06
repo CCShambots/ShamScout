@@ -2,7 +2,7 @@ import {FormTemplate} from "../components/config/FormTemplate";
 import packageJson from "../../package.json";
 import {ScoutForm} from "../components/ScoutForm";
 import axios from "axios";
-import {bytesList, editFormPath, formDetails, templateCreateEdit, templateDetails} from "./APIConstants";
+import {byteAgeEndpoint, bytesList, formDetails, templateCreateEdit, templateDetails} from "./APIConstants";
 import {JWT} from "./LocalStorageConstants";
 
 export let localAPIAddress = "https://localhost:8080/";
@@ -172,8 +172,12 @@ export async function RemoveForm(template:string, id:string) {
 
 export async function EditForm(template:string, id:string, form:ScoutForm) {
 
+    console.log(template)
+    console.log(id)
+    console.log(form.toJson())
+
     try {
-        const response = await axios.put(apiHost + editFormPath(template, id), form.toJson(), axiosHeaders)
+        const response = await axios.patch(apiHost + formDetails(template, id), form.toJson(), axiosHeaders)
 
         return response.status === 200
 
@@ -212,9 +216,13 @@ export async function getImage(teamNum:number, yearToUse?:string) {
     ;
 }
 
-//TODO: Actually implement an age of image check
-export async function getAgeOfImage(teamNum:number) {
-    return Math.round(Math.random() * 7)
+export async function getAgeOfImage(teamNum:number, year:string) {
+
+    return axios.get(apiHost + byteAgeEndpoint(`${teamNum}-img-${year}`), axiosHeaders).then(res => {
+        return res.data as number
+    }).catch(e => {
+        return Math.random() * 7
+    })
 }
 
 export function getImagePath(teamNum:number, yearToUse?:string) {

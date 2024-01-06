@@ -10,7 +10,7 @@ import TeamListDisplay from "../components/teams/TeamListDisplay";
 import PhotoAssignment from "../components/teams/PhotoAssignment";
 import {Link} from "react-router-dom";
 import {ACTIVE_TEMPLATE, CURRENT_EVENT, TEAMS, TEAMS_LIST_VIEW} from "../util/LocalStorageConstants";
-import {bytesList, templateDetails} from "../util/APIConstants";
+import {bytesList, formsList, templateDetails} from "../util/APIConstants";
 
 export type team = {
     number:number,
@@ -21,6 +21,8 @@ function TeamsPage() {
 
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "");
     let [activeTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
+
+    let year = currentEvent.substring(0, 4)
 
     let [listView, setListView] = useLocalStorage(TEAMS_LIST_VIEW, false)
     let [teams] = useLocalStorage<team[]>(TEAMS(currentEvent), []);
@@ -44,9 +46,9 @@ function TeamsPage() {
 
     useEffect(() => {
 
-        Pull(templateDetails(activeTemplate), (data) => {
+        Pull(formsList(activeTemplate), (data) => {
             setSubmittedForms(data.map((e:any) =>
-                ScoutForm.fromJson(e[0])
+                ScoutForm.fromJson(e)
             ))
         }).then(() => {})
     }, [currentEvent])
@@ -60,7 +62,7 @@ function TeamsPage() {
     let loadOldPhotos = async () => {
         const results = await Promise.all(teams.map(async (e) => {
             if(!await doesTeamHaveImage(e.number)) return ({old: false, number: e.number})
-            let age = await getAgeOfImage(e.number)
+            let age = await getAgeOfImage(e.number, year)
             return {old: age > 4, number: e.number}
         }))
 
