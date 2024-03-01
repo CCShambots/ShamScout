@@ -125,7 +125,9 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverv
                         <Button onClick={() => setQRCodeDimmerActive(false)} icon={"x"}/>
                     </div>
 
-                    <QRCodeDisplay scouter={schedule.scouters[currentQRCodeIndex]} schedule={schedule}/>
+                    {schedule.scouters.length > 1 ?
+                    <QRCodeDisplay scouter={schedule.scouters[currentQRCodeIndex]} schedule={schedule}/> : <p>Not enough scouters in the schedule!!</p>
+                    }
 
                     <div className={"bottom-qr-code-content"}>
 
