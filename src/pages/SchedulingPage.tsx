@@ -38,7 +38,7 @@ function SchedulingPage() {
 
             Pull(scheduleDetails(currentEvent), (data) => {
                 let loadedSchedule = Schedule.fromJson(data, numQuals)
-                if(loadedSchedule.shifts.length > 0) setSavedToDatabase(true)
+                setSavedToDatabase(true)
                 setSchedule(loadedSchedule);
             }).then(() => {})
         })
