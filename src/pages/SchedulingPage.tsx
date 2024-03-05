@@ -52,7 +52,7 @@ function SchedulingPage() {
             <div className={"scheduling-page-container"}>
                 <MatchSchedulingDisplay schedule={schedule} setSchedule={setSchedule}/>
                 <ScouterDisplay schedule={schedule} setSchedule={setSchedule}/>
-                <ScheduleOverview schedule={schedule} setSchedule={setSchedule} savedToDatabase={savedToDatabase}/>
+                <ScheduleOverview schedule={schedule} setSchedule={setSchedule} savedToDatabase={savedToDatabase} onSaveHook={() => setTimeScheduleChanged(0)}/>
             </div>
 
         </div>

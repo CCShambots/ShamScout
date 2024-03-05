@@ -12,10 +12,11 @@ import {scheduleCreateEdit} from "../../../util/APIConstants";
 type scheduleOverviewOptions = {
     schedule:Schedule,
     setSchedule:(e:Schedule) => void,
-    savedToDatabase:boolean
+    savedToDatabase:boolean,
+    onSaveHook:() => void,
 }
 
-function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverviewOptions) {
+function ScheduleOverview({schedule, setSchedule, savedToDatabase, onSaveHook}:scheduleOverviewOptions) {
 
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
 
@@ -87,12 +88,15 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase}:scheduleOverv
                         Patch(scheduleCreateEdit, scheduleJson).then(r => {
                             setSaveScheduleDimmerActive(true);
 
-                            console.log(r)
                             setSaveSuccess(r);
+
+                            if(saveSuccess) onSaveHook();
                         }) :
                         Post(scheduleCreateEdit, scheduleJson).then(r => {
                             setSaveScheduleDimmerActive(true);
                             setSaveSuccess(r);
+
+                            if(saveSuccess) onSaveHook();
                         })
                     }}><Icon name={"save"}/>Save</Button>
                     <Button color={"red"}><Icon name={"x"}/>Cancel</Button>
