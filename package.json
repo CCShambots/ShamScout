@@ -5,7 +5,7 @@
   "version": "2024.0.5",
   "com_ccshambots": {
     "mobile_version": "2024.1.0",
-    "shampic_version": "1.6.3"
+    "shampic_version": "1.8.0"
   },
   "main": "public/electron.js",
   "homepage": "./",
