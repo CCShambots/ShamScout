@@ -13,7 +13,7 @@ import {
     RemoveForm,
     RemoveImage
 } from "../util/APIUtil";
-import {Button, Dimmer, Dropdown, FormField, Header, Icon, Popup, Table} from "semantic-ui-react";
+import {Button, Dimmer, Dropdown, Header, Icon, Popup, Table} from "semantic-ui-react";
 import Banner from "../components/teams/Banner";
 import { CSVLink } from "react-csv";
 import {FormTemplate} from "../components/config/FormTemplate";
@@ -433,7 +433,6 @@ function TeamViewPage() {
                 <h1>{editSuccess ? "Edit success!" : "Edit Failure! :("}</h1>
             </div>
         </Dimmer>
-
     </div>
 }
 

@@ -13,7 +13,7 @@ export let apiHost = localAPIAddress;
 
 export let jwt = (localStorage.getItem(JWT) || "").replaceAll('"', "");
 
-let axiosHeaders = {
+export let axiosHeaders = {
     headers: {
         'Authorization': jwt,
         'Content-Type': 'application/json',

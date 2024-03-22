@@ -11,14 +11,19 @@ import {Schedule} from "../components/scheduling/matchDisplay/ScheduleData";
 import {Button, Icon, Statistic} from "semantic-ui-react";
 import {CSVLink} from "react-csv";
 import {FormTemplate} from "../components/config/FormTemplate";
-import {ACTIVE_TEMPLATE, CURRENT_EVENT, MATCHES} from "../util/LocalStorageConstants";
+import {ACTIVE_TEMPLATE, CURRENT_EVENT, MATCHES, TEAMS} from "../util/LocalStorageConstants";
 import {formsList, scheduleDetails, templateDetails} from "../util/APIConstants";
+import {TeamDocuments} from "../components/teams/TeamDocument";
+import {PDFDownloadLink} from "@react-pdf/renderer";
+import {team} from "./TeamsPage";
 
 function MainPage() {
 
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
     let [activeTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
+
+    let [teams] = useLocalStorage<team[]>(TEAMS(currentEvent), []);
 
     let [matches] = useLocalStorage<Match[]>(MATCHES(currentEvent), [])
 
@@ -84,6 +89,14 @@ function MainPage() {
                     </div>
 
                     <Statistic value={submittedForms.length} label={"Forms Submitted"}/>
+
+                    <PDFDownloadLink document={
+                        <TeamDocuments data={submittedForms} teams={teams}/>
+                    } fileName="somename.pdf">
+                        {({ blob, url, loading, error }) =>
+                            loading ? 'Loading document...' : 'Download now!'
+                        }
+                    </PDFDownloadLink>
 
                 </div>
 

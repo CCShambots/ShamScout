@@ -20,7 +20,9 @@
   },
   "dependencies": {
     "@craco/craco": "^7.1.0",
+    "@david.kucsai/react-pdf-table": "^0.4.1",
     "@electron-forge/publisher-github": "^6.2.1",
+    "@react-pdf/renderer": "^3.4.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
