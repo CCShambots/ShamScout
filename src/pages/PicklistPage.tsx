@@ -98,7 +98,6 @@ function PicklistPage() {
             setSavedPicks(pickList.map((e) => e.team))
             setSavedAccepts(acceptList.map((e) => e.team))
             setSavedDeclines(declineList.map((e) => e.team))
-
             },
             50
         )
