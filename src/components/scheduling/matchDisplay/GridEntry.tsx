@@ -35,7 +35,7 @@ function GridEntry({match, station, schedule, setSchedule,
     let scoutOptions = schedule.scouters.map(e =>
          new DropDownOptions(e.name)
     )
-    
+
     let [hovering, setHovering] = useState(false)
 
     let [isMultiSelectOrigin, setIsMultiSelectOrigin] = useState(false)
