@@ -2,7 +2,7 @@ import React, {createRef, useEffect, useState} from "react";
 import AppHeader from "../components/header/AppHeader";
 import Checklist from "../components/main/Checklist";
 import MissingMatchesDisplay from "../components/main/MissingMatchesDisplay";
-import {Pull, PullTBA} from "../util/APIUtil";
+import {Pull} from "../util/APIUtil";
 import {ScoutForm} from "../components/ScoutForm";
 import {useLocalStorage} from "usehooks-ts";
 import Match from "../components/scheduling/matchDisplay/Match";
@@ -11,8 +11,9 @@ import {Schedule} from "../components/scheduling/matchDisplay/ScheduleData";
 import {Button, Icon, Statistic} from "semantic-ui-react";
 import {CSVLink} from "react-csv";
 import {FormTemplate} from "../components/config/FormTemplate";
-import {ACTIVE_TEMPLATE, CURRENT_EVENT, MATCHES} from "../util/LocalStorageConstants";
+import {ACTIVE_TEMPLATE, BLACKLIST, CURRENT_EVENT, MATCHES} from "../util/LocalStorageConstants";
 import {formsList, scheduleDetails, templateDetails} from "../util/APIConstants";
+import {team} from "./TeamsPage";
 
 function MainPage() {
 
@@ -21,22 +22,19 @@ function MainPage() {
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
 
     let [matches] = useLocalStorage<Match[]>(MATCHES(currentEvent), [])
+    let [blackList,] = useLocalStorage<team[]>(BLACKLIST(currentEvent),[])
 
-    let [schedule, setSchedule] = useState(new Schedule(["Quals 1"], ["test"], []));
+    let [schedule, setSchedule] = useState(new Schedule(["Quals 1"], ["test"], [], matches, blackList));
 
     //Load whatever schedule is currently saved to the API
     useEffect(() => {
-        PullTBA(`event/${currentEvent}/matches/keys`, (tbaData) => {
 
-            let numQuals = tbaData.filter((ele:any) => ele.indexOf(currentEvent+"_qm") !== -1).length;
+        schedule.setNumMatches(matches.length)
+        setSchedule(schedule)
 
-            schedule.setNumMatches(numQuals)
-            setSchedule(schedule)
-
-            Pull(scheduleDetails(currentEvent), (data) => {
-                setSchedule(Schedule.fromJson(data, numQuals));
-            }).then(() => {})
-        })
+        Pull(scheduleDetails(currentEvent), (data) => {
+            setSchedule(Schedule.fromJson(data, matches, blackList));
+        }).then(() => {})
     }, [currentEvent])
 
     //Load submitted forms

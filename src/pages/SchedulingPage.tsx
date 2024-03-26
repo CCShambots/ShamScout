@@ -7,11 +7,12 @@ import ScouterDisplay from "../components/scheduling/scouterDisplay/ScouterDispl
 import "./SchedulingPage.css"
 import ScheduleOverview from "../components/scheduling/overview/ScheduleOverview";
 import {useLocalStorage} from "usehooks-ts";
-import {Pull, PullTBA} from "../util/APIUtil";
-import {BLACKLIST, CURRENT_EVENT, TEAMS} from "../util/LocalStorageConstants";
+import {Pull} from "../util/APIUtil";
+import {BLACKLIST, CURRENT_EVENT, MATCHES, TEAMS} from "../util/LocalStorageConstants";
 import {FormPrompt} from "../components/FormPrompt";
 import {scheduleDetails} from "../util/APIConstants";
 import {team} from "./TeamsPage";
+import Match from "../components/scheduling/matchDisplay/Match";
 
 function SchedulingPage() {
 
@@ -21,7 +22,9 @@ function SchedulingPage() {
 
     let [blackList, setBlackList] = useLocalStorage<team[]>(BLACKLIST(currentEvent),[])
 
-    let [schedule, setSchedule] = useState(new Schedule(["Quals 1"], ["test"], []));
+    let [matches] = useLocalStorage<Match[]>(MATCHES(currentEvent), [])
+
+    let [schedule, setSchedule] = useState(new Schedule(["Quals 1"], ["test"], [], matches, blackList));
 
     //If the schedule changes more than twice, it should have been edited
     let [timesScheduleChanged, setTimeScheduleChanged] = useState(0)
@@ -34,19 +37,16 @@ function SchedulingPage() {
 
     //Load whatever schedule is currently saved to the API
     useEffect(() => {
-        PullTBA(`event/${currentEvent}/matches/keys`, (tbaData) => {
 
-            let numQuals = tbaData.filter((ele:any) => ele.indexOf(currentEvent+"_qm") !== -1).length;
+        schedule.setNumMatches(matches.length)
+        setSchedule(schedule)
 
-            schedule.setNumMatches(numQuals)
-            setSchedule(schedule)
+        Pull(scheduleDetails(currentEvent), (data) => {
+            let loadedSchedule = Schedule.fromJson(data, matches, blackList)
+            setSavedToDatabase(true)
+            setSchedule(loadedSchedule);
+        }).then(() => {})
 
-            Pull(scheduleDetails(currentEvent), (data) => {
-                let loadedSchedule = Schedule.fromJson(data, numQuals)
-                setSavedToDatabase(true)
-                setSchedule(loadedSchedule);
-            }).then(() => {})
-        })
     }, [currentEvent])
 
 

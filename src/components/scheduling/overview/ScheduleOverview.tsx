@@ -34,7 +34,6 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase, onSaveHook,
     let [saveScheduleDimmerActive, setSaveScheduleDimmerActive] = useState(false);
     let [saveSuccess, setSaveSuccess] = useState(true);
 
-
     let [blackListOpen, setBlackListOpen] = useState(false)
 
     let handleClick = () => {
