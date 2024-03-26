@@ -8,13 +8,18 @@ import "./SchedulingPage.css"
 import ScheduleOverview from "../components/scheduling/overview/ScheduleOverview";
 import {useLocalStorage} from "usehooks-ts";
 import {Pull, PullTBA} from "../util/APIUtil";
-import {CURRENT_EVENT} from "../util/LocalStorageConstants";
+import {BLACKLIST, CURRENT_EVENT, TEAMS} from "../util/LocalStorageConstants";
 import {FormPrompt} from "../components/FormPrompt";
 import {scheduleDetails} from "../util/APIConstants";
+import {team} from "./TeamsPage";
 
 function SchedulingPage() {
 
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "");
+
+    let [teams] = useLocalStorage<team[]>(TEAMS(currentEvent), []);
+
+    let [blackList, setBlackList] = useLocalStorage<team[]>(BLACKLIST(currentEvent),[])
 
     let [schedule, setSchedule] = useState(new Schedule(["Quals 1"], ["test"], []));
 
@@ -52,7 +57,14 @@ function SchedulingPage() {
             <div className={"scheduling-page-container"}>
                 <MatchSchedulingDisplay schedule={schedule} setSchedule={setSchedule}/>
                 <ScouterDisplay schedule={schedule} setSchedule={setSchedule}/>
-                <ScheduleOverview schedule={schedule} setSchedule={setSchedule} savedToDatabase={savedToDatabase} onSaveHook={() => setTimeScheduleChanged(0)}/>
+                <ScheduleOverview schedule={schedule}
+                                  setSchedule={setSchedule}
+                                  savedToDatabase={savedToDatabase}
+                                  onSaveHook={() => setTimeScheduleChanged(0)}
+                                  teams={teams}
+                                  blacklist={blackList}
+                                  setBlackList={setBlackList}
+                />
             </div>
 
         </div>

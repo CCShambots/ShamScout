@@ -3,7 +3,8 @@ import "./MatchSchedulingDisplay.css"
 import GridEntry from "./GridEntry";
 import {Schedule} from "./ScheduleData";
 import {Rectangle, RowCol} from "./MultiSelect";
-import {Button, Input, Popup} from "semantic-ui-react";
+import {Button, Dimmer, Header, Input, Popup} from "semantic-ui-react";
+import {team} from "../../../pages/TeamsPage";
 
 type MatchSchedulingDisplayOptions = {
     schedule:Schedule,
@@ -32,36 +33,41 @@ function MatchSchedulingDisplay({schedule, setSchedule}: MatchSchedulingDisplayO
             <div className={"scheduling-header"}>
                 <h1>Matches</h1>
 
-                <Popup
-                    trigger={
-                        <Button className={"match-number-button"} icon={"setting"} onClick={() => {
-                        }}/>
-                    }
-                    hoverable
-                >
-                    <Input
-                        value={newMatchNum !== -1 ? newMatchNum : ""}
-                        placeholder={"Set number of matches"}
-                        onChange={(e) => {
-                            if(parseInt(e.target.value)) {
-                                setNewMatchNum(parseInt(e.target.value))
-                            } else if(e.target.value === "") {
-                                setNewMatchNum(-1)
-                            }
-                        }}
-                    />
-                    <Button color={"green"} disabled={newMatchNum === -1} onClick={() => {
+                <div className={"match-number-button"}>
+                    <Popup
+                        trigger={
+                            <Button icon={"setting"}
+                                    onClick={() => {
+                                    }}
+                            />
+                        }
+                        hoverable
+                    >
+                        <Input
+                            value={newMatchNum !== -1 ? newMatchNum : ""}
+                            placeholder={"Set number of matches"}
+                            onChange={(e) => {
+                                if(parseInt(e.target.value)) {
+                                    setNewMatchNum(parseInt(e.target.value))
+                                } else if(e.target.value === "") {
+                                    setNewMatchNum(-1)
+                                }
+                            }}
+                        />
+                        <Button color={"green"} disabled={newMatchNum === -1} onClick={() => {
 
-                        schedule.setNumMatches(newMatchNum)
+                            schedule.setNumMatches(newMatchNum)
 
-                        setSchedule(Object.create(schedule))
-                        
-                        setNewMatchNum(-1)
-                    }}>
-                        Change
-                    </Button>
+                            setSchedule(Object.create(schedule))
 
-                </Popup>
+                            setNewMatchNum(-1)
+                        }}>
+                            Change
+                        </Button>
+
+                    </Popup>
+                </div>
+
             </div>
             <table className={"table"}
                 onMouseUp={() => {
