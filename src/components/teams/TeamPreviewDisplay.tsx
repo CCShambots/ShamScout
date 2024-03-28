@@ -8,7 +8,7 @@ import {useLocalStorage} from "usehooks-ts";
 import {CURRENT_EVENT} from "../../util/LocalStorageConstants";
 import {Icon, Popup} from "semantic-ui-react";
 
-function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumber:(val:number) => void, isOldTeamImage:boolean, teamsInAPI:string[]}) {
+function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumber:(val:number) => void, isOldTeamImage:boolean, teamsInAPI:string[], isBlacklisted:boolean}) {
 
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
     let year = currentEvent.substring(0, 4)
@@ -57,6 +57,16 @@ function TeamPreviewDisplay(props: {teamName:string, teamNum:number, setTeamNumb
                         }
                         />
                     : <div/>
+                }
+                {
+                    props.isBlacklisted ?
+                        <Popup
+                            content={"This team is blacklisted from being scouted!"}
+                            trigger={
+                                <Icon name={"list"} circular inverted className={"blacklist-icon"} color={"black"}/>
+                            }
+                        />
+                        : <div/>
                 }
                 <div className={"team-display-image-container"}>
                     {

@@ -5,10 +5,11 @@ import "./PicklistPage.css"
 import {useLocalStorage} from "usehooks-ts";
 import TeamLink from "../components/team-link/TeamLink";
 import {Button, Checkbox, Dimmer, Header, Icon, Popup} from "semantic-ui-react";
-import {ACCEPT_LIST, CURRENT_EVENT, DECLINE_LIST, PICKLIST, TEAMS} from "../util/LocalStorageConstants";
+import {ACCEPT_LIST, BLACKLIST, CURRENT_EVENT, DECLINE_LIST, PICKLIST, TEAMS} from "../util/LocalStorageConstants";
 import StatsPopoutManager from "../components/picklist/StatsPopoutManager";
 import {CSVLink} from "react-csv";
 import {doesTeamHaveImage, getImage, PullTBA} from "../util/APIUtil";
+import {team} from "./TeamsPage";
 
 
 type Team = {
@@ -50,6 +51,8 @@ function PicklistPage() {
     const [declineList, setDeclineList] = useState<ItemType[]>([]);
 
     const [privacyDimmer, setPrivacyDimmer] = useState(false)
+
+    let [blackList,] = useLocalStorage<team[]>(BLACKLIST(currentEvent),[])
 
     const [teamStatsList, setTeamStatsList] = useState<{number: number, name:string}[]>([])
 
@@ -252,6 +255,7 @@ function PicklistPage() {
                                 decline={false}
                                 addSelfToStats={addTeamToStatsList}
                                 statsListLength={teamStatsList.length}
+                                isBlacklisted={blackList.filter(e => e.number === item.team.number).length > 0}
                                 key={item.team.number}
                             />
                         ))}
@@ -277,6 +281,7 @@ function PicklistPage() {
                                 decline={false}
                                 statsListLength={teamStatsList.length}
                                 addSelfToStats={addTeamToStatsList}
+                                isBlacklisted={blackList.filter(e => e.number === item.team.number).length > 0}
                                 key={item.team.number}
                             />
                         ))}
@@ -301,6 +306,7 @@ function PicklistPage() {
                                 decline={true}
                                 statsListLength={teamStatsList.length}
                                 addSelfToStats={addTeamToStatsList}
+                                isBlacklisted={blackList.filter(e => e.number === item.team.number).length > 0}
                                 key={item.team.number}
                             />
                         ))}
@@ -353,7 +359,7 @@ function PicklistPage() {
     )
 }
 
-function ItemDisplay(props: {item:ItemType, setTaken:(val:boolean) => void, itemIndex:number, accept:boolean, decline:boolean, statsListLength:number, addSelfToStats:(team:Team) => void}) {
+function ItemDisplay(props: {item:ItemType, setTaken:(val:boolean) => void, itemIndex:number, accept:boolean, decline:boolean, statsListLength:number, addSelfToStats:(team:Team) => void, isBlacklisted:boolean}) {
 
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
     let year = currentEvent.substring(0, 4)
@@ -389,6 +395,15 @@ function ItemDisplay(props: {item:ItemType, setTaken:(val:boolean) => void, item
                         <TeamLink number={props.item.team.number} displayText={`${props.itemIndex + 1}. ${props.item.team.number} - ${props.item.team.name}`}/>
                     </h2>
                     <div>
+                        {props.isBlacklisted ?
+                            <Popup
+                                content={"This team is blacklisted from being scouted!"}
+                                trigger={
+                                    <Icon name={"list"} circular inverted color={"black"}/>
+                                }
+                            />
+                            : <div/>
+                        }
                         <Popup
                             content={
                                  <img className={`team-display-image radius-image`}
