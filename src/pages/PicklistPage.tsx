@@ -4,11 +4,20 @@ import {ReactSortable} from "react-sortablejs";
 import "./PicklistPage.css"
 import {useLocalStorage} from "usehooks-ts";
 import TeamLink from "../components/team-link/TeamLink";
-import {Button, Checkbox, Dimmer, Header, Icon, Popup} from "semantic-ui-react";
-import {ACCEPT_LIST, CURRENT_EVENT, DECLINE_LIST, PICKLIST, TEAMS} from "../util/LocalStorageConstants";
+import {Button, Checkbox, Dimmer, Header, Icon, Popup, TextArea} from "semantic-ui-react";
+import {
+    ACCEPT_LIST,
+    BLACKLIST,
+    COMMENTS,
+    CURRENT_EVENT,
+    DECLINE_LIST,
+    PICKLIST,
+    TEAMS
+} from "../util/LocalStorageConstants";
 import StatsPopoutManager from "../components/picklist/StatsPopoutManager";
 import {CSVLink} from "react-csv";
-import {doesTeamHaveImage, getImage, getImagePath, PullTBA} from "../util/APIUtil";
+import {doesTeamHaveImage, getImage, PullTBA} from "../util/APIUtil";
+import {team} from "./TeamsPage";
 
 
 type Team = {
@@ -16,9 +25,21 @@ type Team = {
     number:number
 }
 
+type PicklistTeam = {
+    name:string,
+    number:number,
+    taken:boolean
+}
+
+function teamsToPicklistTeams(teams:Team[]) {
+    return teams.map(e => {
+        return {name: e.name, number: e.number, taken: false}
+    })
+}
+
 type ItemType =  {
     id: number,
-    team:Team
+    team:PicklistTeam
 }
 
 function PicklistPage() {
@@ -27,9 +48,9 @@ function PicklistPage() {
 
     const [teams] = useLocalStorage<Team[]>(TEAMS(currentEvent), [])
 
-    const [savedPicks, setSavedPicks] = useLocalStorage<Team[]>(PICKLIST(currentEvent), teams)
-    const [savedAccepts, setSavedAccepts] = useLocalStorage<Team[]>(ACCEPT_LIST(currentEvent), [])
-    const [savedDeclines, setSavedDeclines] = useLocalStorage<Team[]>(DECLINE_LIST(currentEvent), [])
+    const [savedPicks, setSavedPicks] = useLocalStorage<PicklistTeam[]>(PICKLIST(currentEvent), teamsToPicklistTeams(teams))
+    const [savedAccepts, setSavedAccepts] = useLocalStorage<PicklistTeam[]>(ACCEPT_LIST(currentEvent), [])
+    const [savedDeclines, setSavedDeclines] = useLocalStorage<PicklistTeam[]>(DECLINE_LIST(currentEvent), [])
 
     const [pickList, setPickList] = useState<ItemType[]>([]);
 
@@ -38,6 +59,8 @@ function PicklistPage() {
     const [declineList, setDeclineList] = useState<ItemType[]>([]);
 
     const [privacyDimmer, setPrivacyDimmer] = useState(false)
+
+    let [blackList,] = useLocalStorage<team[]>(BLACKLIST(currentEvent),[])
 
     const [teamStatsList, setTeamStatsList] = useState<{number: number, name:string}[]>([])
 
@@ -57,8 +80,8 @@ function PicklistPage() {
         //Load picks into the saved picks if there are none present
         if(savedPicks.length === 0 && savedAccepts.length === 0 && savedDeclines.length === 0) {
 
-            setSavedPicks(teams)
-            picksToApply = teams
+            setSavedPicks(teamsToPicklistTeams(teams))
+            picksToApply = teamsToPicklistTeams(teams)
         }
 
         let id = 0
@@ -82,10 +105,14 @@ function PicklistPage() {
 
     //Save info on change
     useEffect(() => {
+        setTimeout(() => {
+            setSavedPicks(pickList.map((e) => e.team))
+            setSavedAccepts(acceptList.map((e) => e.team))
+            setSavedDeclines(declineList.map((e) => e.team))
+            },
+            50
+        )
 
-        setSavedPicks(pickList.map((e) => e.team))
-        setSavedAccepts(acceptList.map((e) => e.team))
-        setSavedDeclines(declineList.map((e) => e.team))
 
     }, [pickList, acceptList, declineList, setSavedPicks, setSavedAccepts, setSavedDeclines])
 
@@ -140,8 +167,6 @@ function PicklistPage() {
 
                 let splitEntries = splitRows.map(e => e.split(","))
 
-                console.log(splitEntries)
-
                 let pick:Team[] = []
                 let accept:Team[] = []
                 let decline:Team[] = []
@@ -163,9 +188,9 @@ function PicklistPage() {
                     }
                 }
 
-                setSavedPicks(pick)
-                setSavedAccepts(accept)
-                setSavedDeclines(decline)
+                setSavedPicks(teamsToPicklistTeams(pick))
+                setSavedAccepts(teamsToPicklistTeams(accept))
+                setSavedDeclines(teamsToPicklistTeams(decline))
 
                 window.location.reload()
             };
@@ -196,8 +221,6 @@ function PicklistPage() {
 
                 return aIndex - bIndex
             })
-
-            console.log(newPicklist)
 
             setSavedPicks([...savedPicks])
             setSavedAccepts([])
@@ -234,11 +257,13 @@ function PicklistPage() {
                         {pickList.map((item) => (
                             <ItemDisplay
                                 item={item}
+                                setTaken={(val) => item.team.taken = val}
                                 itemIndex={pickList.indexOf(item)}
                                 accept={false}
                                 decline={false}
                                 addSelfToStats={addTeamToStatsList}
                                 statsListLength={teamStatsList.length}
+                                isBlacklisted={blackList.filter(e => e.number === item.team.number).length > 0}
                                 key={item.team.number}
                             />
                         ))}
@@ -258,11 +283,13 @@ function PicklistPage() {
                         {acceptList.map((item) => (
                             <ItemDisplay
                                 item={item}
+                                setTaken={(val) => item.team.taken = val}
                                 itemIndex={acceptList.indexOf(item)}
                                 accept={true}
                                 decline={false}
                                 statsListLength={teamStatsList.length}
                                 addSelfToStats={addTeamToStatsList}
+                                isBlacklisted={blackList.filter(e => e.number === item.team.number).length > 0}
                                 key={item.team.number}
                             />
                         ))}
@@ -279,11 +306,15 @@ function PicklistPage() {
                         {declineList.map((item) => (
                             <ItemDisplay
                                 item={item}
+                                setTaken={(val) => {
+                                    item.team.taken = val
+                                }}
                                 itemIndex={declineList.indexOf(item)}
                                 accept={false}
                                 decline={true}
                                 statsListLength={teamStatsList.length}
                                 addSelfToStats={addTeamToStatsList}
+                                isBlacklisted={blackList.filter(e => e.number === item.team.number).length > 0}
                                 key={item.team.number}
                             />
                         ))}
@@ -336,11 +367,10 @@ function PicklistPage() {
     )
 }
 
-function ItemDisplay(props: {item:ItemType, itemIndex:number, accept:boolean, decline:boolean, statsListLength:number, addSelfToStats:(team:Team) => void}) {
+function ItemDisplay(props: {item:ItemType, setTaken:(val:boolean) => void, itemIndex:number, accept:boolean, decline:boolean, statsListLength:number, addSelfToStats:(team:Team) => void, isBlacklisted:boolean}) {
 
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
     let year = currentEvent.substring(0, 4)
-    let [taken, setTaken] = useState(false)
 
     let [imageInAPI, setImageInAPI] = useState(false)
 
@@ -351,6 +381,8 @@ function ItemDisplay(props: {item:ItemType, itemIndex:number, accept:boolean, de
 
     const [imgSrc, setImgSrc] = useState("");
 
+    const [comments, setCommants] = useLocalStorage(COMMENTS(props.item.team.number.toString(), year), "")
+
     useEffect(() => {
             if(imageInAPI) {
                 getImage(props.item.team.number, year).then(r => {setImgSrc(r)});
@@ -358,17 +390,46 @@ function ItemDisplay(props: {item:ItemType, itemIndex:number, accept:boolean, de
         }, [imageInAPI]);
 
     return(
-        <div className={"picklist-item-display " + (props.accept ? " accept " : "") + (props.decline ? " decline " : "") + (taken ? " crossed-off-item " : "") }>
+        <div className={"picklist-item-display " + (props.accept ? " accept " : "") + (props.decline ? " decline " : "") + (props.item.team.taken ? " crossed-off-item " : "") }>
             <div className={"picklist-item-flex"}>
                 <Icon name={"list"} size={"large"}/>
 
-                <Checkbox className={"picklist-check"} checked={taken} onChange={(e, data) => setTaken(data.checked!)} />
+                <Checkbox
+                    className={"picklist-check"}
+                    checked={props.item.team.taken}
+                    onChange={(e, data) => props.setTaken(data.checked!)}
+                />
 
                 <div className={"picklist-item-content"}>
                     <h2 className={"picklist-text"}>
                         <TeamLink number={props.item.team.number} displayText={`${props.itemIndex + 1}. ${props.item.team.number} - ${props.item.team.name}`}/>
                     </h2>
                     <div>
+                        {props.isBlacklisted ?
+                            <Popup
+                                content={"This team is blacklisted from being scouted!"}
+                                trigger={
+                                    <Icon name={"list"} circular inverted color={"black"}/>
+                                }
+                            />
+                            : <div/>
+                        }
+
+                        <Popup
+                            content={
+                                <TextArea
+                                    value={comments}
+                                    onChange={(e, data) => setCommants(data.value as string)}
+                                    placeholder={`Coments on ${props.item.team.number}...`}
+                                    style={{width: "25vw"}}
+                                />
+                            }
+                            on={"click"}
+                            trigger={
+                                <Button icon={"comment alternate"} color={"purple"} size={"small"}/>
+                            }
+                        />
+
                         <Popup
                             content={
                                  <img className={`team-display-image radius-image`}
@@ -385,7 +446,7 @@ function ItemDisplay(props: {item:ItemType, itemIndex:number, accept:boolean, de
                         }}/>
                     </div>
 
-                    <div className={"picklist-item-crossoff " + (taken ? "crossed-off" : "") }/>
+                    <div className={"picklist-item-crossoff " + (props.item.team.taken ? "crossed-off" : "") }/>
                 </div>
             </div>
         </div>

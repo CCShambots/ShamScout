@@ -2,3 +2,45 @@
     display: flex;
     justify-content: space-between;
 }
+
+.blacklist-container {
+    background-color: white;
+    border-radius: 10px;
+
+    padding: 1vw;
+
+    min-width: 20vw;
+    max-width: 50vw;
+
+    position: relative;
+}
+
+
+.header-button {
+    position: absolute;
+    right: 1vh;
+    top: 1vh;
+}
+
+.blacklist-teams {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.blacklist-team {
+    border-radius: 10px;
+    border: 1px solid blue;
+    padding: 1vh;
+    margin: 1vh;
+    color: black;
+
+    transition: 0.25s;
+
+    user-select: none;
+}
+
+.blacklisted {
+    background-color: black;
+    color: white;
+}

@@ -4,13 +4,13 @@ import {Button, Dimmer, Icon, Input, Popup, Table} from "semantic-ui-react";
 import {useLocalStorage} from "usehooks-ts";
 import "./TeamsPage.css"
 import TeamPreviewDisplay from "../components/teams/TeamPreviewDisplay";
-import {doesTeamHaveImage, getAgeOfImage, getImagePath, Pull} from "../util/APIUtil";
+import {getAgeOfImage, Pull} from "../util/APIUtil";
 import {ScoutForm} from "../components/ScoutForm";
 import TeamListDisplay from "../components/teams/TeamListDisplay";
 import PhotoAssignment from "../components/teams/PhotoAssignment";
 import {Link} from "react-router-dom";
-import {ACTIVE_TEMPLATE, CURRENT_EVENT, TEAMS, TEAMS_LIST_VIEW} from "../util/LocalStorageConstants";
-import {bytesList, formsList, templateDetails} from "../util/APIConstants";
+import {ACTIVE_TEMPLATE, BLACKLIST, CURRENT_EVENT, TEAMS, TEAMS_LIST_VIEW} from "../util/LocalStorageConstants";
+import {bytesList, formsList} from "../util/APIConstants";
 
 export type team = {
     number:number,
@@ -37,6 +37,8 @@ function TeamsPage() {
     let linkRef = useRef<HTMLAnchorElement>(null)
 
     let [savedImages, setSavedImages] = useState<string[]>([])
+
+    let [blackList, setBlackList] = useLocalStorage<team[]>(BLACKLIST(currentEvent),[])
 
     useEffect(() => {
         Pull(bytesList, (data) => {
@@ -145,6 +147,7 @@ function TeamsPage() {
                                     teamsWithPhotos.push(val)
                                     setTeamsWithPhotos([...teamsWithPhotos])
                                 }}
+                                isBlacklisted={blackList.filter(item => item.number === e.number).length > 0}
                             />)
                         }
                     </div>

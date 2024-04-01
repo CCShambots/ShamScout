@@ -1,22 +1,27 @@
 import React, {useState} from "react";
 import "./ScheduleOverview.css"
 import {DropDownOptions, Schedule, Scouter} from "../matchDisplay/ScheduleData";
-import {Button, Dimmer, Dropdown, Icon, Progress, Statistic} from "semantic-ui-react";
+import {Button, Dimmer, Dropdown, Header, Icon, Popup, Progress, Statistic} from "semantic-ui-react";
 
 import QRCode from "react-qr-code"
 import {Post, Patch} from "../../../util/APIUtil";
 import {useLocalStorage} from "usehooks-ts";
 import {CURRENT_EVENT} from "../../../util/LocalStorageConstants";
 import {scheduleCreateEdit} from "../../../util/APIConstants";
+import {team} from "../../../pages/TeamsPage";
 
 type scheduleOverviewOptions = {
     schedule:Schedule,
     setSchedule:(e:Schedule) => void,
     savedToDatabase:boolean,
     onSaveHook:() => void,
+    teams:team[],
+    blacklist:team[],
+    setBlackList:(teams:team[]) => void
 }
 
-function ScheduleOverview({schedule, setSchedule, savedToDatabase, onSaveHook}:scheduleOverviewOptions) {
+function ScheduleOverview({schedule, setSchedule, savedToDatabase, onSaveHook,
+                              teams, blacklist, setBlackList}:scheduleOverviewOptions) {
 
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
 
@@ -28,6 +33,8 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase, onSaveHook}:s
 
     let [saveScheduleDimmerActive, setSaveScheduleDimmerActive] = useState(false);
     let [saveSuccess, setSaveSuccess] = useState(true);
+
+    let [blackListOpen, setBlackListOpen] = useState(false)
 
     let handleClick = () => {
         if(schedule.shifts.length > 0) setWarningDimmerActive(true)
@@ -69,6 +76,12 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase, onSaveHook}:s
                 </Statistic>
 
                 <p/>
+
+
+                <Button fluid onClick={() => setBlackListOpen(true)} color={"black"}>
+                    <Icon name={"list"}/>Adjust Blacklist
+                </Button>
+
 
                 <Button fluid onClick={handleClick} color={"purple"} disabled={schedule.scouters.length <= 6}>
                     <Icon name={"random"}/>Generate Schedule
@@ -169,6 +182,33 @@ function ScheduleOverview({schedule, setSchedule, savedToDatabase, onSaveHook}:s
                 </div>
             </Dimmer>
 
+            <Dimmer
+                page
+                active={blackListOpen}
+                onClickOutside={() => {
+                    setBlackListOpen(false)
+                }}
+            >
+                <div className={"blacklist-container"}>
+                    <Header size={"huge"}>Team Blacklist</Header>
+                    <Button
+                        className={"header-button"}
+                        color={"red"}
+                        icon={"close"}
+                        onClick={() => {
+                            setBlackListOpen(false)
+                        }}
+                    />
+
+                    <div className={"blacklist-teams"}>
+                        {
+                            teams.map((e) => <BlacklistItem team={e} blacklist={blacklist} setBlackList={setBlackList}/>)
+                        }
+                    </div>
+
+                </div>
+            </Dimmer>
+
         </div>
     )
 }
@@ -202,6 +242,38 @@ function QRCodeDisplay({scouter, schedule}:qrCodeOptions) {
             </Statistic.Group>
         </div>
     )
+}
+
+function BlacklistItem(props: {team:team, blacklist:team[], setBlackList:(teams:team[]) => void}) {
+    let [blacklisted, setBlacklisted] = useState(props.blacklist.filter(e => e.number === props.team.number).length>0)
+
+    return <Popup
+        hoverable
+        trigger={
+            <div
+                className={"blacklist-team "  + (blacklisted ? "blacklisted" : "")}
+                key={props.team.number}
+                onClick={() => {
+
+                    if (blacklisted) {
+                        props.setBlackList(props.blacklist.filter((ele) => ele.number !== props.team.number))
+                    } else {
+                        props.setBlackList(props.blacklist.concat(props.team))
+                    }
+
+                    setBlacklisted(!blacklisted);
+                }}
+            >
+                <h1>{props.team.number}</h1>
+            </div>
+
+        }
+        inverted={blacklisted}
+        content={props.team.name}
+
+    />
+
+
 }
 
 export default ScheduleOverview

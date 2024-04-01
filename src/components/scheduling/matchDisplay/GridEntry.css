@@ -24,7 +24,6 @@
 
 }
 
-
 .add-cell {
     border-radius: 5px;
     border: 5px dashed lightgray;
@@ -32,6 +31,10 @@
     margin: 0.5vh;
 
     height: 8vh;
+
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
 
     transition: 0.25s;
 }

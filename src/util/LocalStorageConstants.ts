@@ -11,7 +11,10 @@ export const EMAIL = "email";
 
 export const MATCHES = (eventKey: string) => `matches-${eventKey}`;
 export const TEAMS = (eventKey: string) => `teams-${eventKey}`;
+export const BLACKLIST = (eventKey: string) => `blacklist-${eventKey}`;
 export const PICKLIST = (eventKey: string) => `pick-list-${eventKey}`;
 export const ACCEPT_LIST = (eventKey: string) => `accept-list-${eventKey}`;
 export const DECLINE_LIST = (eventKey: string) => `decline-list-${eventKey}`;
 export const CHECKLIST = (eventKey: string) => `checklist-${eventKey}`;
+
+export const COMMENTS = (teamNumber:string, year:string) => `comments-${teamNumber}-${year}`;

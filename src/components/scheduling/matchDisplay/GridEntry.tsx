@@ -3,6 +3,7 @@ import "./GridEntry.css"
 import {DropDownOptions, Schedule} from "./ScheduleData";
 import {Button, Checkbox, Dropdown, Popup} from "semantic-ui-react";
 import {Rectangle, RowCol} from "./MultiSelect";
+import {getTeamNumberFromStation} from "./Match";
 
 type entryOptions = {
     match:number, //index of match number
@@ -34,7 +35,6 @@ function GridEntry({match, station, schedule, setSchedule,
     let scoutOptions = schedule.scouters.map(e =>
          new DropDownOptions(e.name)
     )
-
 
     let [hovering, setHovering] = useState(false)
 
