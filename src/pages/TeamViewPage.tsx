@@ -13,12 +13,12 @@ import {
     RemoveForm,
     RemoveImage
 } from "../util/APIUtil";
-import {Button, Dimmer, Dropdown, FormField, Header, Icon, Popup, Table} from "semantic-ui-react";
+import {Button, Dimmer, Dropdown, Header, Icon, Popup, Table, TextArea} from "semantic-ui-react";
 import Banner from "../components/teams/Banner";
 import { CSVLink } from "react-csv";
 import {FormTemplate} from "../components/config/FormTemplate";
 import AppHeader from "../components/header/AppHeader";
-import {ACTIVE_TEMPLATE, CURRENT_EVENT, TEAMS} from "../util/LocalStorageConstants";
+import {ACTIVE_TEMPLATE, COMMENTS, CURRENT_EVENT, TEAMS} from "../util/LocalStorageConstants";
 import {formsList, templateDetails} from "../util/APIConstants";
 
 export type Team = {
@@ -66,6 +66,8 @@ function TeamViewPage() {
     let [clickedSubmitOnce, setClickedSubmitOnce] = useState(false)
 
     const [imgSrc, setImgSrc] = useState(Picture);
+
+    let [comments, setComments] = useLocalStorage(COMMENTS(teamNum.toString(), year), "")
 
     useEffect(() => {
         if(imageInAPI) {
@@ -203,6 +205,14 @@ function TeamViewPage() {
                 <div>
                     <h1 className={"result-text"}>Results</h1>
                     <EventTable events={events}/>
+
+                    <h1 className={"result-text"}>Comments</h1>
+                    <TextArea
+                        value={comments}
+                        onChange={(e, data) => {
+                            setComments(data.value as string)
+                        }}
+                        className={"comments"} placeholder={`Comments on Team ${teamNum}`}/>
                 </div>
                 <div className={"banners"}>
                     {

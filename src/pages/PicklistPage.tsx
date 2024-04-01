@@ -4,8 +4,16 @@ import {ReactSortable} from "react-sortablejs";
 import "./PicklistPage.css"
 import {useLocalStorage} from "usehooks-ts";
 import TeamLink from "../components/team-link/TeamLink";
-import {Button, Checkbox, Dimmer, Header, Icon, Popup} from "semantic-ui-react";
-import {ACCEPT_LIST, BLACKLIST, CURRENT_EVENT, DECLINE_LIST, PICKLIST, TEAMS} from "../util/LocalStorageConstants";
+import {Button, Checkbox, Dimmer, Header, Icon, Popup, TextArea} from "semantic-ui-react";
+import {
+    ACCEPT_LIST,
+    BLACKLIST,
+    COMMENTS,
+    CURRENT_EVENT,
+    DECLINE_LIST,
+    PICKLIST,
+    TEAMS
+} from "../util/LocalStorageConstants";
 import StatsPopoutManager from "../components/picklist/StatsPopoutManager";
 import {CSVLink} from "react-csv";
 import {doesTeamHaveImage, getImage, PullTBA} from "../util/APIUtil";
@@ -373,6 +381,8 @@ function ItemDisplay(props: {item:ItemType, setTaken:(val:boolean) => void, item
 
     const [imgSrc, setImgSrc] = useState("");
 
+    const [comments, setCommants] = useLocalStorage(COMMENTS(props.item.team.number.toString(), year), "")
+
     useEffect(() => {
             if(imageInAPI) {
                 getImage(props.item.team.number, year).then(r => {setImgSrc(r)});
@@ -404,6 +414,22 @@ function ItemDisplay(props: {item:ItemType, setTaken:(val:boolean) => void, item
                             />
                             : <div/>
                         }
+
+                        <Popup
+                            content={
+                                <TextArea
+                                    value={comments}
+                                    onChange={(e, data) => setCommants(data.value as string)}
+                                    placeholder={`Coments on ${props.item.team.number}...`}
+                                    style={{width: "25vw"}}
+                                />
+                            }
+                            on={"click"}
+                            trigger={
+                                <Button icon={"comment alternate"} color={"purple"} size={"small"}/>
+                            }
+                        />
+
                         <Popup
                             content={
                                  <img className={`team-display-image radius-image`}

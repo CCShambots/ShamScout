@@ -16,3 +16,5 @@ export const PICKLIST = (eventKey: string) => `pick-list-${eventKey}`;
 export const ACCEPT_LIST = (eventKey: string) => `accept-list-${eventKey}`;
 export const DECLINE_LIST = (eventKey: string) => `decline-list-${eventKey}`;
 export const CHECKLIST = (eventKey: string) => `checklist-${eventKey}`;
+
+export const COMMENTS = (teamNumber:string, year:string) => `comments-${teamNumber}-${year}`;
