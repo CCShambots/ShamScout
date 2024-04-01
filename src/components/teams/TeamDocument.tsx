@@ -48,9 +48,6 @@ export function TeamDocument(props: {team:team, filteredData:ScoutForm[]})  {
                     style={styles.image}
                 />
 
-                <ZebraTable>
-
-                </ZebraTable>
             </View>
         </Page>
 }
