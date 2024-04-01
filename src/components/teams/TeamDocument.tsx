@@ -19,6 +19,9 @@ const styles = StyleSheet.create({
     image: {
         width: 100,
         height: 100
+    },
+    rowView: {
+        display: 'flex', flexDirection: 'row', borderTop: '1px solid #EEE', paddingTop: 8, paddingBottom: 8, textAlign: "center"
     }
 });
 
@@ -40,6 +43,12 @@ export function TeamDocument(props: {team:team, filteredData:ScoutForm[]})  {
 
     let year=  currentEvent.substring(0, 4);
 
+    // let [comments] = useLocalStorage(COMMENTS())
+
+    const tableData = ScoutForm.convertToPDFExport(props.filteredData)
+
+    console.log(tableData)
+
     return <Page size={"A4"}>
             <View>
                 <Text style={styles.header}>{props.team.number} - {props.team.name}</Text>
@@ -47,6 +56,20 @@ export function TeamDocument(props: {team:team, filteredData:ScoutForm[]})  {
                     src={{ uri: getImagePath(props.team.number, year), method: 'GET', headers: axiosHeaders.headers, body: '' }}
                     style={styles.image}
                 />
+
+                <View style={styles.rowView}>
+                    {tableData["column"].map((c) => <Text style={{
+                        width: `${100 / tableData["column"].length}%`,
+                        fontSize: 10,
+                    }}>{c}</Text>)}
+                </View>
+                {tableData["data"].map((rowData) => <>
+                    <View style={styles.rowView}>
+                        {tableData["column"].map((c) =>
+                            <Text style={{ width: `${100 / tableData["column"].length}%` }}>{rowData[tableData.column.indexOf(c)].toString()}</Text>
+                        )}
+                    </View>
+                </>)}
 
             </View>
         </Page>

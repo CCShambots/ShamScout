@@ -42,6 +42,26 @@ class ScoutForm {
         return missingArr
     }
 
+    public static convertToPDFExport(data:ScoutForm[]) {
+
+        if(data.length > 0) {
+            console.log(data)
+
+            const column = data[0].generateHeader().map(e => e.label)
+
+            column.splice(0, 4)
+
+            return {
+                "column": column,
+                "data": data.map(e => e.fields.map(f => {
+                    return f.value
+                }))
+            }
+        } else {
+            return {"column": [], "data": []}
+        }
+    }
+
     public static getTeamNumbers(match:Match):number[] {
         return [
             match.red1,
