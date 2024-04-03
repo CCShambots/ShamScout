@@ -47,30 +47,30 @@ export function TeamDocument(props: {team:team, filteredData:ScoutForm[]})  {
 
     const tableData = ScoutForm.convertToPDFExport(props.filteredData)
 
-    console.log(tableData)
 
     return <Page size={"A4"}>
-            <View>
-                <Text style={styles.header}>{props.team.number} - {props.team.name}</Text>
-                <Image
-                    src={{ uri: getImagePath(props.team.number, year), method: 'GET', headers: axiosHeaders.headers, body: '' }}
-                    style={styles.image}
-                />
+                <View key={"title"}>
+                    <Text style={styles.header}>{props.team.number} - {props.team.name}</Text>
+                </View>
+                <View key={"image"}>
+                    <Image
+                        src={{ uri: getImagePath(props.team.number, year), method: 'GET', headers: axiosHeaders.headers, body: '' }}
+                        style={styles.image}
+                    />
+                </View>
 
-                <View style={styles.rowView}>
+                <View key={"header"}  style={styles.rowView}>
                     {tableData["column"].map((c) => <Text style={{
                         width: `${100 / tableData["column"].length}%`,
                         fontSize: 10,
                     }}>{c}</Text>)}
                 </View>
                 {tableData["data"].map((rowData) => <>
-                    <View style={styles.rowView}>
+                    <View key={`data-${tableData["data"].indexOf(rowData)}`} style={styles.rowView}>
                         {tableData["column"].map((c) =>
-                            <Text style={{ width: `${100 / tableData["column"].length}%` }}>{rowData[tableData.column.indexOf(c)].toString()}</Text>
+                            <Text style={{ width: `${100 / tableData["column"].length}%`, fontSize: 10 }}>{rowData[tableData.column.indexOf(c)].toString()}</Text>
                         )}
                     </View>
                 </>)}
-
-            </View>
-        </Page>
+     </Page>
 }

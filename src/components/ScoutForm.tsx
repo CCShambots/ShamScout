@@ -45,9 +45,8 @@ class ScoutForm {
     public static convertToPDFExport(data:ScoutForm[]) {
 
         if(data.length > 0) {
-            console.log(data)
 
-            const column = data[0].generateHeader().map(e => e.label)
+            const column = data[0].generateHeader().map(e => e.label.replace(/\([^)]*\)/g, ''))
 
             column.splice(0, 4)
 
