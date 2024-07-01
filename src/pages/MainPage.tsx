@@ -3,7 +3,7 @@ import AppHeader from "../components/header/AppHeader";
 import Checklist from "../components/main/Checklist";
 import MissingMatchesDisplay from "../components/main/MissingMatchesDisplay";
 import {Pull, PullTBA} from "../util/APIUtil";
-import {ScoutForm} from "../components/ScoutForm";
+import {CombinedForm, ScoutForm} from "../components/ScoutForm";
 import {useLocalStorage} from "usehooks-ts";
 import Match from "../components/scheduling/matchDisplay/Match";
 import "./MainPage.css"
@@ -19,6 +19,7 @@ function MainPage() {
     let [currentEvent] = useLocalStorage(CURRENT_EVENT, "")
     let [activeTemplate] = useLocalStorage(ACTIVE_TEMPLATE, "")
     let [submittedForms, setSubmittedForms] = useState<ScoutForm[]>([])
+    let [combinedForms, setCombinedForms] = useState<CombinedForm[]>([]);
 
     let [matches] = useLocalStorage<Match[]>(MATCHES(currentEvent), [])
 
@@ -64,7 +65,19 @@ function MainPage() {
         }).then(() => {})
     }, [currentEvent])
 
-    let downloadCSVRef:any = createRef()
+    useEffect(() => {
+        setCombinedForms(ScoutForm.takeAverages(submittedForms))
+    }, [submittedForms])
+
+    useEffect(() => {
+        console.log(combinedForms)
+        if(combinedForms.length > 0) {
+            console.log(combinedForms[0].generateHeader())
+        }
+    }, [combinedForms]);
+
+    let rawCSVRef:any = createRef()
+    let combinedCSVRef:any = createRef()
 
     return (
         <div>
@@ -77,10 +90,22 @@ function MainPage() {
                         <Button
                             size={"huge"}
                             color={"blue"}
-                            onClick={() => downloadCSVRef.current.link.click()}>
-                            <Icon name={"table"}/>Download CSV for {currentEvent}
+                            onClick={() => rawCSVRef.current.link.click()}>
+                            <Icon name={"table"}/>Raw CSV for {currentEvent}
                         </Button>
-                        <CSVLink ref={downloadCSVRef} data={submittedForms} headers={submittedForms[0]?.generateHeader()} filename={`${currentEvent}-data.csv`}/>
+                        <CSVLink ref={rawCSVRef} data={submittedForms}
+                                 headers={submittedForms[0]?.generateHeader()} filename={`${currentEvent}-raw-data.csv`}/>
+                    </div>
+
+                    <div className={"table-manager"}>
+                        <Button
+                            size={"huge"}
+                            color={"blue"}
+                            onClick={() => combinedCSVRef.current.link.click()}>
+                            <Icon name={"table"}/>Combined CSV for {currentEvent}
+                        </Button>
+                        <CSVLink ref={combinedCSVRef} data={combinedForms}
+                                 headers={combinedForms[0]?.generateHeader()} filename={`${currentEvent}-combined-data.csv`}/>
                     </div>
 
                     <Statistic value={submittedForms.length} label={"Forms Submitted"}/>

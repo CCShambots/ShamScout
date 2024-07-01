@@ -1,8 +1,8 @@
 import Match from "./scheduling/matchDisplay/Match";
 import {Schedule} from "./scheduling/matchDisplay/ScheduleData";
-import {Checkbox, Header, Input, Popup} from "semantic-ui-react";
+import {Checkbox, Header, Input, Popup, Table} from "semantic-ui-react";
 import "./ScoutForm.css"
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 type HeaderType = {
     label: string,
@@ -154,6 +154,69 @@ class ScoutForm {
         return temp
 
     }
+
+    public static takeAverages(forms:ScoutForm[]):CombinedForm[] {
+        let byTeam:Map<number, ScoutForm[]> = new Map();
+
+        forms.forEach(e => {
+            if(byTeam.has(e.team)) {
+                byTeam.get(e.team)?.push(e)
+            } else {
+                byTeam.set(e.team, [e])
+            }
+        })
+
+        let values:CombinedForm[] = [];
+
+        byTeam.forEach(e => {
+            let theseFields:CombinedField[] = [];
+
+            e[0]?.fields.map(field => {
+                let result =  e.map(e => e.fields.filter(ele => ele.label === field.label)[0]);
+
+                let [value, percent] = Field.takeAverage(result)
+
+                theseFields.push(new CombinedField(field.label, value))
+
+            })
+
+            values.push(new CombinedForm(e[0]?.team, e.length, theseFields))
+        })
+
+        return values;
+
+    }
+
+}
+
+export class CombinedForm {
+    constructor(
+        public team:number,
+        public number_of_matches:number,
+        public fields:CombinedField[]
+    ) {
+    }
+
+    public generateHeader():HeaderType[] {
+
+        return [
+            {label: "Team", key: "team"},
+            {label: "Matches Recorded", key: "number_of_matches"},
+            ...this.fields.map(e =>
+                {
+                    return {label: e.label, key: `fields[${this.fields.indexOf(e)}].value`}
+                }
+            )
+        ]
+    }
+}
+
+class CombinedField {
+    constructor(
+        public label:string,
+        public value:number
+    ) {
+    }
 }
 
 class Field {
@@ -264,7 +327,6 @@ class Field {
         return [resultantVal, percent]
 
     }
-
 }
 
 function CheckBoxElement(props: {label:string, form:ScoutForm, setForm:(form:ScoutForm) => void}) {
