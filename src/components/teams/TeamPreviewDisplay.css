@@ -62,6 +62,14 @@
 
 }
 
+.blacklist-icon {
+    position: absolute;
+
+    left: 1vh;
+    top: 1vh;
+
+}
+
 .loading {
     filter: blur(10px);
     /*clip-path: inset(5px);*/

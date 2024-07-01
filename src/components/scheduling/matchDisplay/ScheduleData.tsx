@@ -1,3 +1,6 @@
+import Match, {getTeamNumberFromStation} from "./Match";
+import {team} from "../../../pages/TeamsPage";
+
 class Scouter {
     public unavailableMatches:number[] = []
 
@@ -95,12 +98,14 @@ class Schedule {
     constructor(
         public matches:string[],
         scouterNames:string[],
-        public shifts:Shift[]
+        public shifts:Shift[],
+        public matchesWithTeams:Match[],
+        public blackList:team[]
     ) {
         this.addScouters(scouterNames)
     }
 
-    public static fromJson(data:any, numQuals:number):Schedule {
+    public static fromJson(data:any, matches:Match[], blacklist:team[]):Schedule {
 
         let scoutNames = new Set<string>();
 
@@ -108,9 +113,9 @@ class Schedule {
             scoutNames.add(e.scouter);
         })
 
-        let matchArray = Schedule.generateMatchLabels(numQuals)
+        let matchArray = Schedule.generateMatchLabels(matches.length)
 
-        let schedule = new Schedule(matchArray, Array.from(scoutNames.values()), [])
+        let schedule = new Schedule(matchArray, Array.from(scoutNames.values()), [], matches, blacklist)
 
         data.shifts.forEach((e:any) => {
             for(let i:number = e["match_start"]; i<=e["match_end"]; i++) {
@@ -218,11 +223,17 @@ class Schedule {
             currentScoutPool.push(...this.scouters)
         }
 
-        console.log(currentScoutPool)
-
        for(let match = 0; match<this.matches.length; match ++) {
 
             for(let station = 0; station<6; station++) {
+
+                //Determine if this is a blacklisted team using the getTeamNumberFromStation function
+                let isBlacklisted = this.blackList.filter(e => e.number === getTeamNumberFromStation(this.matchesWithTeams[match], station)).length > 0
+
+                //Just skip it if this team is blacklisted
+                if(isBlacklisted) {
+                    continue
+                }
 
                 //Generate 0 to 5 for stations
                 let thisScoutIndex = Math.floor(Math.random() * currentScoutPool.length)
